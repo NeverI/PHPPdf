@@ -1,19 +1,15 @@
 <?php
 
-/*
- * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
- *
- * License information is in LICENSE file
- */
+declare(strict_types=1);
 
 namespace PHPPdf\Util;
 
-/**
- * String filter container
- *
- * @author Piotr Śliwa <peter.pl7@gmail.com>
- */
 interface StringFilterContainer
 {
-    public function setStringFilters(array $filters);
+    /**
+     * @param StringFilter[] $filters
+     */
+    public function setStringFilters(array $filters): void;
+
+    public function addStringFilter(StringFilter $filter): void;
 }

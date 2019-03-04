@@ -1,33 +1,32 @@
 <?php
 
-/*
- * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
- *
- * License information is in LICENSE file
- */
+declare(strict_types=1);
 
 namespace PHPPdf\Util;
 
-/**
- * Abstract string filter container
- *
- * @author Piotr Śliwa <peter.pl7@gmail.com>
- */
 class AbstractStringFilterContainer implements StringFilterContainer
 {
-    protected $stringFilters = array();
-    
-    public function setStringFilters(array $filters)
+    /**
+     * @var StringFilter[]
+     */
+    protected $stringFilters = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStringFilters(array $filters): void
     {
-        $this->stringFilters = array();
-        
-        foreach($filters as $filter)
-        {
+        $this->stringFilters = [];
+
+        foreach ($filters as $filter) {
             $this->addStringFilter($filter);
         }
     }
-    
-    protected function addStringFilter(StringFilter $filter)
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addStringFilter(StringFilter $filter): void
     {
         $this->stringFilters[] = $filter;
     }

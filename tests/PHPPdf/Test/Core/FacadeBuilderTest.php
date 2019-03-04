@@ -5,6 +5,7 @@ namespace PHPPdf\Test\Core;
 use PHPPdf\Core\FacadeBuilder,
     PHPPdf\Cache\CacheImpl,
     PHPPdf\Core\FacadeConfiguration;
+use PHPPdf\Util\StringFilter;
 
 class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -149,25 +150,22 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('type', array('some-options')),
         );
     }
-    
-    /**
-     * @test
-     */
-    public function addStringFilter()
+
+    public function testAddStringFilter(): void
     {
-        $filter = $this->getMock('PHPPdf\Util\StringFilter');
-        
+        $filter = $this->getMock(StringFilter::class);
+
         $this->builder->addStringFilter($filter);
-        
+
         $facade = $this->builder->build();
-        
+
         $document = $facade->getDocument();
-        
+
         $builderStringFilters = $this->readAttribute($this->builder, 'stringFilters');
         $documentStringFilters = $this->readAttribute($document, 'stringFilters');
         $facadeStringFilters = $this->readAttribute($facade, 'stringFilters');
-        
-        $this->assertEquals(2, count($builderStringFilters));
+
+        $this->assertSame(2, count($builderStringFilters));
         $this->assertEquals($builderStringFilters, $documentStringFilters);
         $this->assertEquals($builderStringFilters, $facadeStringFilters);
     }

@@ -8,6 +8,7 @@
 
 namespace PHPPdf\Core;
 
+use PHPPdf\Core\Parser\DocumentParser;
 use PHPPdf\Util\AbstractStringFilterContainer;
 use PHPPdf\Util\StringFilter;
 use PHPPdf\Util\ResourcePathStringFilter;
@@ -21,6 +22,7 @@ use PHPPdf\Core\Parser\StylesheetParser;
 use PHPPdf\Core\Configuration\LoaderImpl;
 use PHPPdf\Core\Configuration\Loader;
 use PHPPdf\Cache\CacheImpl;
+use PHPPdf\Util\StringFilterContainer;
 
 /**
  * Facade builder.
@@ -63,26 +65,6 @@ class FacadeBuilder extends AbstractStringFilterContainer
         
         $this->engineFactory = $engineFactory;
         $this->setConfigurationLoader($configurationLoader);
-    }
-    
-    /**
-     * @return FacadeBuilder
-     */    
-    public function addStringFilter(StringFilter $filter)
-    {
-        parent::addStringFilter($filter);
-        
-        return $this;
-    }
-    
-    /**
-     * @return FacadeBuilder
-     */ 
-    public function setStringFilters(array $filters)
-    {
-        parent::setStringFilters($filters);
-        
-        return $this;
     }
 
     /**
@@ -149,26 +131,22 @@ class FacadeBuilder extends AbstractStringFilterContainer
 
         return $facade;
     }
-    
-    private function addStringFiltersTo($obj)
+
+    private function addStringFiltersTo(StringFilterContainer $obj): void
     {
         $obj->setStringFilters($this->stringFilters);
     }
-    
-    /**
-     * @return DocumentParser
-     */
-    private function createDocumentParser()
+
+    private function createDocumentParser(): DocumentParser
     {
         $parser = new XmlDocumentParser($this->configurationLoader->createComplexAttributeFactory());
-        
-        if($this->documentParserType === self::PARSER_MARKDOWN)
-        {
+
+        if ($this->documentParserType === self::PARSER_MARKDOWN) {
             $parser = new MarkdownDocumentParser($parser);
             $parser->setStylesheetFilepath($this->markdownStylesheetFilepath);
             $parser->setDocumentTemplateFilepath($this->markdownDocumentTemplateFilepath);
         }
-        
+
         return $parser;
     }
 

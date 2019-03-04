@@ -1,10 +1,6 @@
 <?php
 
-/*
- * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
- *
- * License information is in LICENSE file
- */
+declare(strict_types=1);
 
 namespace PHPPdf;
 
@@ -12,12 +8,10 @@ use PHPPdf\Exception\BadMethodCallException;
 
 /**
  * Current version of this library
- *
- * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 final class Version
 {
-    const VERSION = '1.3.0-DEV';
+    public const VERSION = '1.3.0-DEV';
 
     private function __construct()
     {
