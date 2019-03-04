@@ -1,36 +1,27 @@
 <?php
 
-/*
- * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
- *
- * License information is in LICENSE file
- */
+declare(strict_types=1);
 
 namespace PHPPdf\Util;
 
 /**
- * Resource path string filter
- * 
  * Replaces %resources% string to path to Resources directory
- * 
- * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
-class ResourcePathStringFilter implements StringFilter
+final class ResourcePathStringFilter implements StringFilter
 {
     private $path;
-    
-    public function filter($value)
+
+    public function __construct(?string $path = null)
     {
-        return str_replace('%resources%', $this->getPathToResources(), $value);;
-    }
-    
-    private function getPathToResources()
-    {
-        if($this->path === null)
-        {
-            $this->path = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
+        if ($path === null) {
+            $path = str_replace('\\', '/', realpath(__DIR__.'/../Resources'));
         }
-        
-        return $this->path;
+
+        $this->path = $path;
+    }
+
+    public function filter(string $value): string
+    {
+        return str_replace('%resources%', $this->path, $value);
     }
 }

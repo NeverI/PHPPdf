@@ -1,21 +1,13 @@
 <?php
 
-/*
- * Copyright 2011 Piotr Śliwa <peter.pl7@gmail.com>
- *
- * License information is in LICENSE file
- */
+declare(strict_types=1);
 
 namespace PHPPdf\Util;
 
 /**
- * String filter.
- * 
  * Modifies and filters string variable
- *
- * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface StringFilter
 {
-    public function filter($value); 
+    public function filter(string $value): string;
 }
