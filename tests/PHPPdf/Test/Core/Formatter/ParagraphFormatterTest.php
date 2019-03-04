@@ -40,8 +40,7 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->formatter->format($paragraph, $this->document);
         
-        foreach($paragraph->getChildren() as $i => $textNode)
-        {
+        foreach ($paragraph->getChildren() as $i => $textNode) {
             $this->assertPointEquals($expectedPositions[$i][0], $textNode->getFirstPoint(), sprintf('%%sfirst point of "%d" text is invalid', $i));
             $this->assertPointEquals($expectedPositions[$i][1], $textNode->getDiagonalPoint(), sprintf('%%sdiagonal point of "%d" text is invalid', $i));
         }
@@ -61,18 +60,18 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array(
                 2,
-                25, 
+                25,
                 200,
                 array(15, 12),
                 array(
                     array(
                         array('some', 'another'),
                         array(10, 12),
-                    ),                    
+                    ),
                     array(
                         array('some', 'another', 'anotherYet'),
                         array(10, 12, 15),
-                    ),                    
+                    ),
                 ),
                 array(
                     //expected position for 1st text
@@ -158,8 +157,7 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private function createTextNodesAndAddToParagraph(array $wordsSizes, array $fontSizes, Paragraph $paragraph)
     {
-        foreach($wordsSizes as $index => $wordsSizesForNode)
-        {
+        foreach ($wordsSizes as $index => $wordsSizesForNode) {
             $this->createTextNode($wordsSizesForNode, $fontSizes[$index], $paragraph);
         }
     }
@@ -187,8 +185,8 @@ class ParagraphFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function useWidthOfAncestorIfParagraphParentsWidthIsNull()
     {
-        $width = 300;        
-        $grandparent = $this->objectMother->getNodeStub(0, 500, $width, 100);        
+        $width = 300;
+        $grandparent = $this->objectMother->getNodeStub(0, 500, $width, 100);
         $paragraph = $this->createParagraph(0, 500, 0, 100);
 
         $grandparent->add($paragraph->getParent());

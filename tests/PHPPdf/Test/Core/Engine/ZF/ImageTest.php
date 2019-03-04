@@ -9,8 +9,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
-        if(!class_exists('ZendPdf\PdfDocument', true))
-        {
+        if (!class_exists('ZendPdf\PdfDocument', true)) {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
     }
@@ -58,7 +57,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                           
         $image = new Image(TEST_RESOURCES_DIR.'/domek.png', $converter);
         
-        $this->assertEquals($size, $image->getOriginalWidth());        
-        $this->assertEquals($size, $image->getOriginalHeight());        
+        $this->assertEquals($size, $image->getOriginalWidth());
+        $this->assertEquals($size, $image->getOriginalHeight());
     }
 }

@@ -2,10 +2,10 @@
 
 namespace PHPPdf\Test\Core\Node\Behaviour;
 
-use PHPPdf\Core\Point,
-    PHPPdf\ObjectMother\NodeObjectMother,
-    PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Node\Behaviour\GoToInternal;
+use PHPPdf\Core\Point;
+use PHPPdf\ObjectMother\NodeObjectMother;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Node\Behaviour\GoToInternal;
 
 class GoToInternalTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -81,7 +81,7 @@ class GoToInternalTest extends \PHPPdf\PHPUnit\Framework\TestCase
                     ->will($this->returnValue(null));
 
         $gc = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-                   ->getMock();      
+                   ->getMock();
                     
         $behaviour =  new GoToInternal($destination);
         

@@ -51,8 +51,7 @@ class Facade extends AbstractStringFilterContainer
         $this->setCache(NullCache::getInstance());
         $documentParser->setDocument($document);
         $nodeManager = $documentParser->getNodeManager();
-        if($nodeManager)
-        {
+        if ($nodeManager) {
             $documentParser->addListener($nodeManager);
         }
         $this->setDocumentParser($documentParser);
@@ -61,11 +60,11 @@ class Facade extends AbstractStringFilterContainer
     }
     
     public function setEngineType($engineType)
-	{
-		$this->engineType = $engineType;
-	}
+    {
+        $this->engineType = $engineType;
+    }
 
-	public function setCache(Cache $cache)
+    public function setCache(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -94,23 +93,22 @@ class Facade extends AbstractStringFilterContainer
     }
     
     public function setColorPaletteParser(Parser $colorPaletteParser)
-	{
-		$this->colorPaletteParser = $colorPaletteParser;
-	}
-	
-	protected function getColorPaletteParser()
-	{
-	    if(!$this->colorPaletteParser)
-	    {
-	        $this->colorPaletteParser = new ColorPaletteParser();
-	    }
-	    
-	    return $this->colorPaletteParser;
-	}
+    {
+        $this->colorPaletteParser = $colorPaletteParser;
+    }
+    
+    protected function getColorPaletteParser()
+    {
+        if (!$this->colorPaletteParser) {
+            $this->colorPaletteParser = new ColorPaletteParser();
+        }
+        
+        return $this->colorPaletteParser;
+    }
 
-	/**
+    /**
      * Returns pdf document object
-     * 
+     *
      * @return PHPPdf\Core\Document
      */
     public function getDocument()
@@ -138,21 +136,20 @@ class Facade extends AbstractStringFilterContainer
 
     /**
      * Convert text document to pdf document
-     * 
+     *
      * @param string|DataSource $documentContent Source document content
      * @param DataSource[]|string[]|DataSource|string $stylesheetContents Stylesheet source(s)
      * @param string|DataSource $colorPaletteContent Palette of colors source
-     * 
+     *
      * @return string Content of pdf document
-     * 
+     *
      * @throws PHPPdf\Exception\Exception
      */
     public function render($documentContent, $stylesheetContents = array(), $colorPaletteContent = null)
     {
         $colorPalette = new ColorPalette((array) $this->configurationLoader->createColorPalette());
         
-        if($colorPaletteContent)
-        {
+        if ($colorPaletteContent) {
             $colorPalette->merge($this->parseColorPalette($colorPaletteContent));
         }
         
@@ -168,8 +165,7 @@ class Facade extends AbstractStringFilterContainer
 
         $stylesheetConstraint = $this->retrieveStylesheetConstraint($stylesheetContents);
 
-        foreach($this->stringFilters as $filter)
-        {
+        foreach ($this->stringFilters as $filter) {
             $documentContent = $filter->filter($documentContent);
         }
 
@@ -181,20 +177,16 @@ class Facade extends AbstractStringFilterContainer
     }
     
     private function parseColorPalette($colorPaletteContent)
-    {        
-        if(!$colorPaletteContent instanceof DataSource)
-        {
+    {
+        if (!$colorPaletteContent instanceof DataSource) {
             $colorPaletteContent = DataSource::fromString($colorPaletteContent);
         }
         
         $id = $colorPaletteContent->getId();
         
-        if($this->cache->test($id))
-        {
+        if ($this->cache->test($id)) {
             $colors = (array) $this->cache->load($id);
-        }
-        else
-        {
+        } else {
             $colors = (array) $this->getColorPaletteParser()->parse($colorPaletteContent->read());
             $this->cache->save($colors, $id);
         }
@@ -216,48 +208,33 @@ class Facade extends AbstractStringFilterContainer
 
     public function retrieveStylesheetConstraint($stylesheetContents)
     {
-        if($stylesheetContents === null)
-        {
+        if ($stylesheetContents === null) {
             return null;
-        }
-        elseif(is_string($stylesheetContents))
-        {
+        } elseif (is_string($stylesheetContents)) {
             $stylesheetContents = array(DataSource::fromString($stylesheetContents));
-        }
-        elseif($stylesheetContents instanceof DataSource)
-        {
+        } elseif ($stylesheetContents instanceof DataSource) {
             $stylesheetContents = array($stylesheetContents);
-        }
-        elseif(!is_array($stylesheetContents))
-        {
+        } elseif (!is_array($stylesheetContents)) {
             throw new InvalidArgumentException('$stylesheetContents must be an array, null or DataSource object.');
         }
         
         $constraints = array();
         
-        foreach($stylesheetContents as $stylesheetContent)
-        {
-            if(!$stylesheetContent instanceof DataSource)
-            {
+        foreach ($stylesheetContents as $stylesheetContent) {
+            if (!$stylesheetContent instanceof DataSource) {
                 $stylesheetContent = DataSource::fromString($stylesheetContent);
             }
 
-            if(!$this->useCacheForStylesheetConstraint)
-            {
+            if (!$this->useCacheForStylesheetConstraint) {
                 $constraints[] = $this->parseStylesheet($stylesheetContent);
-            }
-            else
-            {
+            } else {
                 $constraints[] = $this->loadStylesheetConstraintFromCache($stylesheetContent);
             }
         }
         
-        if(!$constraints)
-        {
+        if (!$constraints) {
             return null;
-        }
-        elseif(count($constraints) === 1)
-        {
+        } elseif (count($constraints) === 1) {
             return current($constraints);
         }
 
@@ -275,12 +252,9 @@ class Facade extends AbstractStringFilterContainer
     private function loadStylesheetConstraintFromCache(DataSource $ds)
     {
         $id = $ds->getId();
-        if($this->cache->test($id))
-        {
+        if ($this->cache->test($id)) {
             $stylesheetConstraint = $this->cache->load($id);
-        }
-        else
-        {
+        } else {
             $csc = new CachingStylesheetConstraint();
             $csc->setCacheId($id);
             $this->getStylesheetParser()->setRoot($csc);
@@ -294,8 +268,7 @@ class Facade extends AbstractStringFilterContainer
 
     private function updateStylesheetConstraintCacheIfNecessary(StylesheetConstraint $constraint = null)
     {
-        if($constraint && $this->useCacheForStylesheetConstraint && $constraint->isResultMapModified())
-        {
+        if ($constraint && $this->useCacheForStylesheetConstraint && $constraint->isResultMapModified()) {
             $this->cache->save($constraint, $constraint->getCacheId());
         }
     }

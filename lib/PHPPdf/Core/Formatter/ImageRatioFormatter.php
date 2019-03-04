@@ -8,7 +8,6 @@
 
 namespace PHPPdf\Core\Formatter;
 
-
 use PHPPdf\Core\Document;
 use PHPPdf\Core\Node\Node;
 
@@ -19,18 +18,14 @@ class ImageRatioFormatter extends BaseFormatter
         $originalRatio = $node->getOriginalRatio();
         $currentRatio = $node->getCurrentRatio();
 
-        if(!$this->floatEquals($originalRatio, $currentRatio))
-        {
+        if (!$this->floatEquals($originalRatio, $currentRatio)) {
             $width = $node->getWidth();
             $height = $node->getHeight();
 
-            if($originalRatio > $currentRatio)
-            {
+            if ($originalRatio > $currentRatio) {
                 $height = $originalRatio ? $width/$originalRatio : 0;
                 $node->setHeight($height);
-            }
-            else
-            {
+            } else {
                 $width = $height * $originalRatio;
                 $node->setWidth($width);
             }

@@ -3,10 +3,10 @@
 namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Formatter\ImageConvertAttributesFormatter;
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Image,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Image;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Node\Container;
 
 class ImageConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -132,8 +132,7 @@ class ImageConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\Test
 
         $ratio = $imageWidth / $imageHeight;
 
-        if(!$height)
-        {
+        if (!$height) {
             $ratio = 1/$ratio;
         }
 

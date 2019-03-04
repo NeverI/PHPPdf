@@ -10,12 +10,12 @@ namespace PHPPdf\Core\Node\BasicList;
 
 use PHPPdf\Core\Document;
 
-use PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\BasicList;
 
 /**
  * Enumeration strategy that draws text as enumeration element
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
@@ -34,13 +34,10 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         
         $xTranslation = 0;
         
-        if($list->getAttribute('list-position') == BasicList::LIST_POSITION_OUTSIDE)
-        {
+        if ($list->getAttribute('list-position') == BasicList::LIST_POSITION_OUTSIDE) {
             $widthOfEnumerationText = $this->getWidthOfText($enumerationText, $font, $fontSize);
             $xTranslation -= $widthOfEnumerationText;
-        }
-        else
-        {
+        } else {
             $widthOfEnumerationText = $this->getWidthOfTheBiggestPosibleEnumerationElement($document, $list) - $this->getWidthOfText($enumerationText, $font, $fontSize);
             $xTranslation += $widthOfEnumerationText;
         }
@@ -58,8 +55,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         
         $color = $list->getRecurseAttribute('color');
         
-        if($color)
-        {
+        if ($color) {
             $gc->setLineColor($color);
             $gc->setFillColor($color);
         }
@@ -67,8 +63,7 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
         $font = $list->getFont($document);
         $size = $list->getFontSizeRecursively();
         
-        if($font && $size)
-        {
+        if ($font && $size) {
             $gc->setFont($font, $size);
         }
 
@@ -81,12 +76,11 @@ abstract class TextEnumerationStrategy extends AbstractEnumerationStrategy
     
     protected function getWidthOfText($text, $font, $fontSize)
     {
-        if(!isset($this->widthOfTextCache[$text]))
-        {
+        if (!isset($this->widthOfTextCache[$text])) {
             $this->widthOfTextCache[$text] = $font->getWidthOfText($text, $fontSize);
         }
 
-        return $this->widthOfTextCache[$text];        
+        return $this->widthOfTextCache[$text];
     }
     
     protected function splitTextIntoChars($text)

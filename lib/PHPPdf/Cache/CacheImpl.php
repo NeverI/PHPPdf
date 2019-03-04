@@ -33,15 +33,13 @@ class CacheImpl implements Cache
 
     public function __construct($engine = self::ENGINE_FILE, array $options = array())
     {
-        if(!$engine instanceof StorageInterface)
-        {
+        if (!$engine instanceof StorageInterface) {
             $engine = $this->createAdapter($engine);
         }
         
         $this->adapter = $engine;
         
-        if(isset($options['automatic_serialization']))
-        {
+        if (isset($options['automatic_serialization'])) {
             $this->automaticSerialization = $options['automatic_serialization'];
             unset($options['automatic_serialization']);
         }
@@ -53,14 +51,12 @@ class CacheImpl implements Cache
     {
         $name = ucfirst(strtolower($name));
 
-        if($name === self::ENGINE_FILE)
-        {
+        if ($name === self::ENGINE_FILE) {
             $name = self::ENGINE_FILESYSTEM;
         }
         
         $const = 'PHPPdf\Cache\CacheImpl::ENGINE_'.strtoupper($name);
-        if(!defined($const))
-        {
+        if (!defined($const)) {
             throw $this->cacheEngineDosntExistException($name);
         }
         
@@ -76,25 +72,20 @@ class CacheImpl implements Cache
 
     public function load($id)
     {
-        try
-        {
+        try {
             $data = $this->adapter->getItem($id);
             
-            if($this->automaticSerialization)
-            {
+            if ($this->automaticSerialization) {
                 $data = @unserialize($data);
                 
-                if($data === false)
-                {
+                if ($data === false) {
                     $this->remove($id);
                     throw new RuntimeException(sprintf('Invalid data under "%s" key. Cache has been remove.', $id));
                 }
             }
             
             return $data;
-        }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
-        {
+        } catch (\Zend\Cache\Exception\ExceptionInterface $e) {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }
@@ -106,47 +97,37 @@ class CacheImpl implements Cache
 
     public function test($id)
     {
-        try
-        {
+        try {
             return $this->adapter->hasItem($id);
-        }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
-        {
+        } catch (\Zend\Cache\Exception\ExceptionInterface $e) {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }
 
     /**
      * @TODO change params order
-     * 
+     *
      * @param mixed $data Data to save in cache. Attention: false value is not supported!
      * @param string $id Identifier of cache
      */
     public function save($data, $id)
     {
-        try
-        {
-            if($this->automaticSerialization)
-            {
+        try {
+            if ($this->automaticSerialization) {
                 $data = serialize($data);
             }
             
             return $this->adapter->setItem($id, $data);
-        }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
-        {
+        } catch (\Zend\Cache\Exception\ExceptionInterface $e) {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }
 
     public function remove($id)
     {
-        try
-        {
+        try {
             return $this->adapter->removeItem($id);
-        }
-        catch(\Zend\Cache\Exception\ExceptionInterface $e)
-        {
+        } catch (\Zend\Cache\Exception\ExceptionInterface $e) {
             $this->wrapLowLevelException($e, __METHOD__);
         }
     }

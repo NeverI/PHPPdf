@@ -12,7 +12,7 @@ use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Occurs when element with specyfic id dosn't exist
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class IdNotFoundException extends ParseException

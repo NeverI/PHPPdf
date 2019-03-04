@@ -17,7 +17,7 @@ use PHPPdf\Core\Engine\GraphicsContext as BaseGraphicsContext;
 
 /**
  * Engine implementation for Imagine library
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Engine extends AbstractEngine
@@ -64,8 +64,7 @@ class Engine extends AbstractEngine
     {
         $contents = array();
 
-        foreach($this->graphicsContexts as $gc)
-        {
+        foreach ($this->graphicsContexts as $gc) {
             $gc->commit();
             $contents[] = $gc->render($this->outputFormat, $this->renderOptions);
         }
@@ -75,8 +74,7 @@ class Engine extends AbstractEngine
     
     public function loadEngine($file, $encoding)
     {
-        try
-        {
+        try {
             $image = $this->imagine->open($file);
             
             $gc = new GraphicsContext($this->imagine, $image);
@@ -86,9 +84,7 @@ class Engine extends AbstractEngine
             $engine->attachGraphicsContext($gc);
             
             return $engine;
-        }
-        catch(\Imagine\Exception\RuntimeException $e)
-        {
+        } catch (\Imagine\Exception\RuntimeException $e) {
             throw InvalidResourceException::invalidImageException($file, $e);
         }
     }

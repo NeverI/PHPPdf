@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Node;
 
 /**
  * Context of page
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageContext

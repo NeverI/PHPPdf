@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
 
 class RowDimensionFormatter extends BaseFormatter
 {
@@ -26,8 +26,7 @@ class RowDimensionFormatter extends BaseFormatter
 
         $node->setHeight($newHeight);
 
-        foreach((array) $node->getChildren() as $cell)
-        {
+        foreach ((array) $node->getChildren() as $cell) {
             $heightDiff = $node->getMaxHeightOfCells() - $cell->getHeight();
             $cell->setHeight($node->getMaxHeightOfCells());
             $cell->getBoundary()->pointTranslate(2, 0, $heightDiff)

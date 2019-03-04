@@ -3,7 +3,6 @@
 
 namespace PHPPdf\Core\Parser;
 
-
 class DocumentParsingContext
 {
     private $inPlaceholder = false;
@@ -38,4 +37,4 @@ class DocumentParsingContext
     {
         $this->inBehaviour = false;
     }
-} 
+}

@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Formatter\Formatter,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Formatter\Chain;
+use PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\Chain;
 
 /**
  * Base formatter class

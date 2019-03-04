@@ -12,7 +12,7 @@ use PHPPdf\Core\UnitConverter;
 
 /**
  * Abstract engine
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractEngine implements Engine
@@ -26,8 +26,7 @@ abstract class AbstractEngine implements Engine
     
     public function convertUnit($value, $unit = null)
     {
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             return $this->unitConverter->convertUnit($value, $unit);
         }
 
@@ -36,8 +35,7 @@ abstract class AbstractEngine implements Engine
 
     public function convertPercentageValue($percent, $value)
     {
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             return $this->unitConverter->convertPercentageValue($percent, $value);
         }
         

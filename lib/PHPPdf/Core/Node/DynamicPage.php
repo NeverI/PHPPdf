@@ -16,7 +16,7 @@ use PHPPdf\Core\Document;
 
 /**
  * Page being able to break
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class DynamicPage extends Page
@@ -53,8 +53,7 @@ class DynamicPage extends Page
 
     public function getCurrentPage($createIfNotExists = true)
     {
-        if($createIfNotExists && $this->currentPage === null)
-        {
+        if ($createIfNotExists && $this->currentPage === null) {
             $this->createNextPage();
         }
 
@@ -136,8 +135,7 @@ class DynamicPage extends Page
 
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->getPages() as $page)
-        {
+        foreach ($this->getPages() as $page) {
             $page->collectOrderedDrawingTasks($document, $tasks);
         }
     }
@@ -149,8 +147,7 @@ class DynamicPage extends Page
 
     public function setAttribute($name, $value)
     {
-        foreach($this->pages as $page)
-        {
+        foreach ($this->pages as $page) {
             $page->setAttribute($name, $value);
         }
 
@@ -205,8 +202,7 @@ class DynamicPage extends Page
     protected function beforeFormat(Document $document)
     {
         $gc = $this->getGraphicsContextFromSourceDocument($document);
-        if($gc)
-        {
+        if ($gc) {
             $this->setPageSize($gc->getWidth().':'.$gc->getHeight());
             $this->getPrototypePage()->setPageSize($gc->getWidth().':'.$gc->getHeight());
             $this->getPrototypePage()->setGraphicsContext($gc->copy());
@@ -242,8 +238,7 @@ class DynamicPage extends Page
 
     public function flush()
     {
-        foreach($this->pages as $page)
-        {
+        foreach ($this->pages as $page) {
             $page->flush();
         }
 
@@ -255,16 +250,14 @@ class DynamicPage extends Page
 
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->getPages() as $page)
-        {
+        foreach ($this->getPages() as $page) {
             $page->collectUnorderedDrawingTasks($document, $tasks);
         }
     }
 
     public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->pagesHistory as $page)
-        {
+        foreach ($this->pagesHistory as $page) {
             $page->collectPostDrawingTasks($document, $tasks);
         }
     }

@@ -10,12 +10,12 @@ namespace PHPPdf\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Paragraph\Line;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Paragraph\Line;
 
 /**
  * Paragraph element
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Paragraph extends Container
@@ -30,8 +30,7 @@ class Paragraph extends Container
     
     public function getWidth()
     {
-        if($this->getParent())
-        {
+        if ($this->getParent()) {
             //paragraph hasn't his own width, his width is equal to parent's one
             return $this->getParent()->getWidth();
         }
@@ -44,8 +43,7 @@ class Paragraph extends Container
         $parent = $this->getParent();
         
         //paragraph hasn't his own width, his width is equal to parent's one
-        if($parent && !$parent instanceof Page)
-        {
+        if ($parent && !$parent instanceof Page) {
             $parent->setWidth($width);
         }
         return $this;
@@ -74,10 +72,9 @@ class Paragraph extends Container
 
         $text->setText(preg_replace('/[ \t]+/', ' ', $text->getText()));
 
-        if(!$previousText || $this->startsWithWhiteChars($text) && $this->endsWithWhiteChars($previousText))
-        {
+        if (!$previousText || $this->startsWithWhiteChars($text) && $this->endsWithWhiteChars($previousText)) {
             $text->setText(ltrim($text->getText()));
-        }        
+        }
         
         return $this;
     }
@@ -85,8 +82,7 @@ class Paragraph extends Container
     private function getLastChild()
     {
         $lastIndex = count($this->getChildren()) - 1;
-        if($lastIndex >= 0)
-        {
+        if ($lastIndex >= 0) {
             return $this->getChild($lastIndex);
         }
         
@@ -116,20 +112,17 @@ class Paragraph extends Container
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
         $lastIndex = count($this->lines) - 1;
-        foreach($this->lines as $i => $line)
-        {
+        foreach ($this->lines as $i => $line) {
             $line->format($i != $lastIndex);
         }
         
-        foreach($this->getChildren() as $text)
-        {
+        foreach ($this->getChildren() as $text) {
             $text->collectOrderedDrawingTasks($document, $tasks);
         }
         
         $this->getDrawingTasksFromComplexAttributes($document, $tasks);
         
-        if($this->getAttribute('dump'))
-        {
+        if ($this->getAttribute('dump')) {
             $tasks->insert($this->createDumpTask());
         }
 
@@ -140,18 +133,15 @@ class Paragraph extends Container
     {
         $linesToMove = array();
         $numberOfLines = count($this->lines);
-        foreach($this->lines as $i => $line)
-        {
+        foreach ($this->lines as $i => $line) {
             $lineEnd = $line->getYTranslation() + $line->getHeight();
-            if($lineEnd > $height)
-            {
+            if ($lineEnd > $height) {
                 $linesToMove[] = $line;
                 unset($this->lines[$i]);
             }
         }
         
-        if(!$linesToMove || count($linesToMove) == $numberOfLines)
-        {
+        if (!$linesToMove || count($linesToMove) == $numberOfLines) {
             return null;
         }
         
@@ -166,29 +156,24 @@ class Paragraph extends Container
         $replaceText = array();
         $textsToMove = array();
         
-        foreach($firstLineToMove->getParts() as $part)
-        {
+        foreach ($firstLineToMove->getParts() as $part) {
             $text = $part->getText();
             
             $textHeight = $text->getFirstPoint()->getY() - ($this->getFirstPoint()->getY() - $height);
             
             $textProduct = $text->breakAt($textHeight);
             
-            if($textProduct)
-            {
+            if ($textProduct) {
                 $replaceText[spl_object_hash($text)] = $textProduct;
                 $paragraphProduct->add($textProduct);
                 $part->setText($textProduct);
-            }
-            else
-            {
+            } else {
                 $replaceText[spl_object_hash($text)] = $text;
                 $textsToMove[spl_object_hash($text)] = $text;
             }
-        }        
+        }
         
-        foreach($linesToMove as $line)
-        {
+        foreach ($linesToMove as $line) {
             $line->setYTranslation($line->getYTranslation() - $height);
             $line->setParagraph($paragraphProduct);
             $paragraphProduct->addLine($line);
@@ -196,26 +181,20 @@ class Paragraph extends Container
         
         array_shift($linesToMove);
         
-        foreach($linesToMove as $line)
-        {
-            foreach($line->getParts() as $part)
-            {
+        foreach ($linesToMove as $line) {
+            foreach ($line->getParts() as $part) {
                 $text = $part->getText();
                 $hash = spl_object_hash($text);
                 
-                if(isset($replaceText[$hash]))
-                {
+                if (isset($replaceText[$hash])) {
                     $part->setText($replaceText[$hash]);
-                }
-                else
-                {
+                } else {
                     $textsToMove[$hash] = $text;
                 }
             }
         }
         
-        foreach($textsToMove as $text)
-        {
+        foreach ($textsToMove as $text) {
             $this->remove($text);
             $paragraphProduct->add($text);
         }
@@ -239,8 +218,7 @@ class Paragraph extends Container
     {
         $minWidth = 0;
         
-        foreach($this->lines as $line)
-        {
+        foreach ($this->lines as $line) {
             $minWidth = max($line->getTotalWidth(), $minWidth);
         }
         
@@ -249,8 +227,7 @@ class Paragraph extends Container
     
     public function flush()
     {
-        foreach($this->lines as $line)
-        {
+        foreach ($this->lines as $line) {
             $line->flush();
         }
         

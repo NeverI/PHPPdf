@@ -6,9 +6,9 @@ use PHPPdf\Core\Node\Circle;
 use PHPPdf\Core\Engine\GraphicsContext;
 use PHPPdf\ObjectMother\NodeObjectMother;
 use PHPPdf\Core\Document;
-use PHPPdf\Core\ComplexAttribute\Background,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Point;
+use PHPPdf\Core\ComplexAttribute\Background;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Point;
 
 class BackgroundTest extends ComplexAttributeTest
 {
@@ -41,7 +41,7 @@ class BackgroundTest extends ComplexAttributeTest
         $imagePath = 'image/path';
         $background = new Background(null, $imagePath);
         
-        $image = $this->createImageMock($imageWidth, $imageHeight);        
+        $image = $this->createImageMock($imageWidth, $imageHeight);
         $document = $this->createDocumentMock($imagePath, $image);
 
         $x = 0;
@@ -91,8 +91,7 @@ class BackgroundTest extends ComplexAttributeTest
     {
         $methods = array('createImage');
         
-        if($mockUnitConverterInterface)
-        {
+        if ($mockUnitConverterInterface) {
             $methods = array_merge($methods, array('convertUnit', 'convertPercentageValue'));
         }
         
@@ -122,27 +121,25 @@ class BackgroundTest extends ComplexAttributeTest
         $imageHeight = 120;
         $imagePath = 'image/path';
 
-        $image = $this->createImageMock($imageWidth, $imageHeight);        
+        $image = $this->createImageMock($imageWidth, $imageHeight);
         $document = $this->createDocumentMock($imagePath, $image);
         
         $background = new Background(null, $imagePath, $repeat);
 
         $x = 1;
-        if($repeat & Background::REPEAT_X)
-        {
+        if ($repeat & Background::REPEAT_X) {
             $x = ceil($width / $imageWidth);
         }
 
         $y = 1;
-        if($repeat & Background::REPEAT_Y)
-        {
+        if ($repeat & Background::REPEAT_Y) {
             $y = ceil($height / $imageHeight);
         }
 
         $count = (int) ($x*$y);
 
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        			   ->getMock();
+                       ->getMock();
 
         $nodeMock = $this->getNodeMock($x, $y, $width, $height, $gcMock);
 
@@ -206,8 +203,7 @@ class BackgroundTest extends ComplexAttributeTest
             Point::getInstance($x, $y - $height),
         );
 
-        foreach($points as $point)
-        {
+        foreach ($points as $point) {
             $boundaryMock->setNext($point);
         }
         $boundaryMock->close();
@@ -282,7 +278,7 @@ class BackgroundTest extends ComplexAttributeTest
                       ->getMock();
 
         $height = 100;
-        $width = 100;        
+        $width = 100;
         $boundary = $this->getBoundaryStub(0, 100, $width, $height);
                       
         $node->expects($this->atLeastOnce())
@@ -352,7 +348,7 @@ class BackgroundTest extends ComplexAttributeTest
     {
         $imagePath = 'image/path';
 
-        $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);        
+        $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);
         $document = $this->createDocumentMock($imagePath, $image);
                
         $x = 0;
@@ -378,7 +374,7 @@ class BackgroundTest extends ComplexAttributeTest
         $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $percentWidth, $percentHeight);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        			   ->getMock();
+                       ->getMock();
 
         $nodeMock = $this->getNodeMock($x, $y, $nodeWidth, $nodeHeight, $gcMock);
         
@@ -407,18 +403,18 @@ class BackgroundTest extends ComplexAttributeTest
     {
         $imagePath = 'image/path';
 
-        $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);        
+        $image = $this->createImageMock(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);
         $document = $this->createDocumentMock($imagePath, $image, false);
         
         $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, null, null, $positionX, $positionY);
         
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        			   ->getMock();
+                       ->getMock();
 
         $y = self::IMAGE_HEIGHT*2;
         $nodeWidth = 100;
         $nodeHeight = $y;
-        			   
+                       
         $nodeMock = $this->getNodeMock($nodeXCoord, $y, $nodeWidth, $nodeHeight, $gcMock);
         
         $gcMock->expects($this->once())
@@ -469,6 +465,6 @@ class BackgroundTest extends ComplexAttributeTest
         $centerPoint = Point::getInstance(100, 100);
         $background = new Background('#ffffff');
         
-        $this->assertDrawCircle($background, $color, $radius, $centerPoint, GraphicsContext::SHAPE_DRAW_FILL);       
+        $this->assertDrawCircle($background, $color, $radius, $centerPoint, GraphicsContext::SHAPE_DRAW_FILL);
     }
 }

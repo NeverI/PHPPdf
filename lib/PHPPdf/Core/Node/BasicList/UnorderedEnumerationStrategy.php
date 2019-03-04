@@ -10,12 +10,12 @@ namespace PHPPdf\Core\Node\BasicList;
 
 use PHPPdf\Core\Document;
 
-use PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\BasicList;
 
 /**
  * Enumeration strategy that draws constant text as enumeration element
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class UnorderedEnumerationStrategy extends TextEnumerationStrategy

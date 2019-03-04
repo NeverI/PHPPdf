@@ -29,28 +29,22 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     /**
      * Add next point to boundary
-     * 
+     *
      * @return Boundary Self
      */
     public function setNext($param1, $param2 = null)
     {
-        if($this->closed)
-        {
+        if ($this->closed) {
             throw new LogicException('Boundary has been already closed.');
         }
 
         $numberOfArgs = func_num_args();
         
-        if($numberOfArgs === 2)
-        {
+        if ($numberOfArgs === 2) {
             $point = Point::getInstance($param1, $param2);
-        }
-        elseif($param1 instanceof Point)
-        {
+        } elseif ($param1 instanceof Point) {
             $point = $param1;
-        }
-        else
-        {
+        } else {
             throw new InvalidArgumentException('Passed argument(s) should be coordinations or Point object.');
         }
 
@@ -60,13 +54,11 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
         $diagonalPoint = $this->getDiagonalPoint();
 
-        if(!$diagonalPoint || $diagonalPoint->compareYCoord($point) >= 0)
-        {
+        if (!$diagonalPoint || $diagonalPoint->compareYCoord($point) >= 0) {
             $this->diagonalPointYIndex = $oldNumberOfPoints;
         }
         
-        if(!$diagonalPoint || $diagonalPoint->compareXCoord($point) <= 0)
-        {
+        if (!$diagonalPoint || $diagonalPoint->compareXCoord($point) <= 0) {
             $this->diagonalPointXIndex = $oldNumberOfPoints;
         }
 
@@ -78,8 +70,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function close()
     {
-        if($this->numberOfPoints <= 2)
-        {
+        if ($this->numberOfPoints <= 2) {
             throw new LogicException('Boundary must have at last three points.');
         }
 
@@ -91,7 +82,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     /**
      * Checks if boundaries have common points
-     * 
+     *
      * @param Boundary $boundary
      * @return boolean
      */
@@ -103,47 +94,39 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $compareFirstPoint = $boundary->getFirstPoint();
         $compareDiagonalPoint = $boundary->getDiagonalPoint();
 
-        foreach($boundary->points as $point)
-        {
-            if($this->contains($point))
-            {
+        foreach ($boundary->points as $point) {
+            if ($this->contains($point)) {
                 return true;
             }
         }
         
-        foreach($this->points as $point)
-        {
-            if($boundary->contains($point))
-            {
+        foreach ($this->points as $point) {
+            if ($boundary->contains($point)) {
                 return true;
             }
         }
 
         $centerPoint = $this->getPointBetween($firstPoint, $diagonalPoint);
 
-        if($boundary->contains($centerPoint))
-        {
+        if ($boundary->contains($centerPoint)) {
             return true;
         }
 
         $centerPoint = $this->getPointBetween($compareFirstPoint, $compareDiagonalPoint);
 
-        if($this->contains($centerPoint))
-        {
+        if ($this->contains($centerPoint)) {
             return true;
         }
 
         $centerPoint = $this->getPointBetween($firstPoint, $compareDiagonalPoint);
 
-        if($this->contains($centerPoint) && $boundary->contains($centerPoint))
-        {
+        if ($this->contains($centerPoint) && $boundary->contains($centerPoint)) {
             return true;
         }
         
         $centerPoint = $this->getPointBetween($compareFirstPoint, $diagonalPoint);
 
-        if($this->contains($centerPoint) && $boundary->contains($centerPoint))
-        {
+        if ($this->contains($centerPoint) && $boundary->contains($centerPoint)) {
             return true;
         }
 
@@ -216,19 +199,17 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     /**
      * Translate boundary by vector ($x, $y)
-     * 
+     *
      * @param integer $x First vector's coordinate
      * @param integer $y Second vector's coordinate
      */
     public function translate($x, $y)
     {
-        if(!$x && !$y)
-        {
+        if (!$x && !$y) {
             return $this;
         }
         
-        for($i=0; $i<$this->numberOfPoints; $i++)
-        {
+        for ($i=0; $i<$this->numberOfPoints; $i++) {
             $this->points[$i] = $this->points[$i]->translate($x, $y);
         }
 
@@ -244,8 +225,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function pointTranslate($pointIndex, $x, $y)
     {
-        if($x || $y)
-        {
+        if ($x || $y) {
             $this->points[$pointIndex] = $this->points[$pointIndex]->translate($x, $y);
         }
 
@@ -257,8 +237,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function getFirstPoint()
     {
-        if(isset($this->points[0]))
-        {
+        if (isset($this->points[0])) {
             return $this->points[0];
         }
 
@@ -270,8 +249,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
      */
     public function getDiagonalPoint()
     {
-        if($this->diagonalPointXIndex !== null && $this->diagonalPointYIndex !== null)
-        {
+        if ($this->diagonalPointXIndex !== null && $this->diagonalPointYIndex !== null) {
             return Point::getInstance($this->points[$this->diagonalPointXIndex]->getX(), $this->points[$this->diagonalPointYIndex]->getY());
         }
 
@@ -285,8 +263,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     {
         $diagonalPoint = $this->getDiagonalPoint();
         
-        if($diagonalPoint === null)
-        {
+        if ($diagonalPoint === null) {
             return null;
         }
         
@@ -321,8 +298,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
 
     public function offsetGet($offset)
     {
-        if(!$this->offsetExists($offset))
-        {
+        if (!$this->offsetExists($offset)) {
             throw new OutOfBoundsException(sprintf('Point of index "%s" dosn\'t exist. Index should be in range 0-%d.', $offset, $this->numberOfPoints - 1));
         }
 
@@ -346,8 +322,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
     public function serialize()
     {
         $points = array();
-        foreach($this->getPoints() as $point)
-        {
+        foreach ($this->getPoints() as $point) {
             $points[] = $point->toArray();
         }
 
@@ -362,8 +337,7 @@ class Boundary implements \Countable, \Iterator, \ArrayAccess, \Serializable
         $data = unserialize($serialized);
         $points = $data['points'];
 
-        foreach($points as $point)
-        {
+        foreach ($points as $point) {
             $this->setNext($point[0], $point[1]);
         }
 

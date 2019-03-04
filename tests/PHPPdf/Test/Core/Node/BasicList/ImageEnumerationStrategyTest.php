@@ -30,14 +30,12 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $imageHeight = 100;
         $image = $this->createImageMock($imageWidth, $imageHeight);
         
-        if($imageWidth > $fontSize)
-        {
+        if ($imageWidth > $fontSize) {
             $imageHeight = $imageHeight * $fontSize/$imageWidth;
             $imageWidth = $fontSize;
         }
         
-        if($imageHeight > $fontSize)
-        {
+        if ($imageHeight > $fontSize) {
             $imageWidth = $imageWidth * $fontSize/$imageHeight;
             $imageHeight = $fontSize;
         }
@@ -70,8 +68,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->will($this->returnValue($child));
               
         $xTranslation = 0;
-        if($position === BasicList::LIST_POSITION_OUTSIDE)
-        {
+        if ($position === BasicList::LIST_POSITION_OUTSIDE) {
             $xTranslation = $imageWidth;
         }
                  

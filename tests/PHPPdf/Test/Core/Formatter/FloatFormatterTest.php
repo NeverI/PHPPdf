@@ -2,12 +2,12 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\FloatFormatter,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Formatter\Chain,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Formatter\FloatFormatter;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Formatter\Chain;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\Page;
 
 class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -19,7 +19,7 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->formatter = new FloatFormatter();        
+        $this->formatter = new FloatFormatter();
         $this->document = $this->createDocumentStub();
     }
 
@@ -29,9 +29,11 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function correctNodesPositionIfHasFloatSetToLeft()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 700, 700, 700),
-                array(0, 700, 300, 300), 'left',
-                array(0, 400, 200, 200), 'left'
+            array(0, 700, 700, 700),
+            array(0, 700, 300, 300),
+            'left',
+            array(0, 400, 200, 200),
+            'left'
         );
 
         $this->formatter->format($containers[0], $this->document);
@@ -49,10 +51,8 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $children = array();
 
-        for($i=1; $i<$numArgs; $i+=2)
-        {
+        for ($i=1; $i<$numArgs; $i+=2) {
             $children[] = $this->getNodeMockWithFloatAndParent($args[$i][0], $args[$i][1], $args[$i][2], $args[$i][3], $args[$i+1], $container);
-
         }
 
         $container->expects($this->atLeastOnce())
@@ -96,9 +96,11 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function correctNodePositionIfHasFloatSetToRight()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 700, 700, 700),
-                array(0, 500, 300, 300), 'left',
-                array(0, 200, 200, 200), 'right'
+            array(0, 700, 700, 700),
+            array(0, 500, 300, 300),
+            'left',
+            array(0, 200, 200, 200),
+            'right'
         );
 
         $this->formatter->format($containers[0], $this->document);
@@ -113,10 +115,13 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function correctNodesPositionWithNoFloatIfPreviousSiblingsHaveFloat()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 700, 700, 700),
-                array(0, 700, 300, 300), 'left',
-                array(0, 400, 200, 200), 'right',
-                array(0, 200, 100, 100), 'none'
+            array(0, 700, 700, 700),
+            array(0, 700, 300, 300),
+            'left',
+            array(0, 400, 200, 200),
+            'right',
+            array(0, 200, 100, 100),
+            'none'
         );
 
         $this->formatter->format($containers[0], $this->document);
@@ -133,12 +138,17 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function correctParentDimensionIfHaveSomeFloatingChildrenInFewRows()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 500, 500, 100),
-                array(0, 500, 20, 20), 'left',
-                array(0, 480, 20, 20), 'left',
-                array(0, 460, 20, 20), 'none',
-                array(0, 440, 20, 20), 'left',
-                array(0, 420, 20, 20), 'left'
+            array(0, 500, 500, 100),
+            array(0, 500, 20, 20),
+            'left',
+            array(0, 480, 20, 20),
+            'left',
+            array(0, 460, 20, 20),
+            'none',
+            array(0, 440, 20, 20),
+            'left',
+            array(0, 420, 20, 20),
+            'left'
         );
 
         $this->formatter->format($containers[0], $this->document);
@@ -157,9 +167,11 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function parentOverflowWhileFloating($float)
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 500, 100, 40),
-                array(0, 500, 80, 20), $float,
-                array(0, 480, 80, 20), $float
+            array(0, 500, 100, 40),
+            array(0, 500, 80, 20),
+            $float,
+            array(0, 480, 80, 20),
+            $float
         );
 
         $this->formatter->format($containers[0], $this->document);
@@ -183,9 +195,11 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function nodesHaveEqualTopYCoordEvenIfHaveHeightIsDifferent()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 500, 200, 40),
-                array(0, 500, 80, 20), 'left',
-                array(0, 480, 80, 20), 'right'
+            array(0, 500, 200, 40),
+            array(0, 500, 80, 20),
+            'left',
+            array(0, 480, 80, 20),
+            'right'
         );
 
         $containers[1]->setAttribute('padding-top', 7);
@@ -225,8 +239,9 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function correctNodesPositionWithRightFloatIfRightPaddingIsSet()
     {
         $containers = $this->createContainerWithFloatingChildren(
-                array(0, 500, 100, 40),
-                array(0, 500, 80, 20), 'right'
+            array(0, 500, 100, 40),
+            array(0, 500, 80, 20),
+            'right'
         );
 
         $containers[1]->setAttribute('padding-right', 20);

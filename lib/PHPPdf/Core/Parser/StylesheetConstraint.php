@@ -71,15 +71,14 @@ class StylesheetConstraint extends BagContainer implements \Countable
 
     public function removeClass($class)
     {
-        if($this->hasClass($class))
-        {
+        if ($this->hasClass($class)) {
             unset($this->classes[$class]);
         }
     }
 
     /**
      * Adds constraints with given tag
-     * 
+     *
      * @param string Constraint tag
      * @param StylesheetConstraint Constraint to add
      */
@@ -106,37 +105,33 @@ class StylesheetConstraint extends BagContainer implements \Countable
 
     /**
      * Find attributes by specyfic criteria
-     * 
+     *
      * $query should be array in format:
-     * 
+     *
      * * array(
      * *  array('tag' => 'first-tag', 'classes' => array('class1', 'class2')),
      * *  array('tag' => 'second-tag', 'classes' => array()),
      * * )
-     * 
+     *
      * Above example is equivalent to css selector: "first-tag.class1.class2 second-tag"
-     * 
+     *
      * @param array $query Criteria of constraint
      * @return BagContainer Container with specyfic attributes
      */
     public function find(array $query)
     {
-        if(count($query) === 0)
-        {
+        if (count($query) === 0) {
             return new BagContainer($this->getAll());
         }
 
         $containers = array();
-        while($queryElement = array_shift($query))
-        {
+        while ($queryElement = array_shift($query)) {
             $tag = $this->getTagFromQueryElement($queryElement);
             $classes = $this->getClassesFromQueryElement($queryElement);
 
-            foreach($this->constraints as $order => $constraint)
-            {
+            foreach ($this->constraints as $order => $constraint) {
                 $matchingIndex = $this->getMatchingIndex($constraint, $tag, $classes);
-                if($matchingIndex > 0)
-                {
+                if ($matchingIndex > 0) {
                     $container = $constraint->find($query);
                     $container->addWeight($matchingIndex);
                     $container->setOrder($order);
@@ -145,11 +140,10 @@ class StylesheetConstraint extends BagContainer implements \Countable
             }
         }
 
-        usort($containers, function($container1, $container2){
+        usort($containers, function ($container1, $container2) {
             $result = $container1->getWeight() - $container2->getWeight();
             
-            if($result == 0)
-            {
+            if ($result == 0) {
                 $result = $container1->getOrder() - $container2->getOrder();
             }
             
@@ -176,8 +170,7 @@ class StylesheetConstraint extends BagContainer implements \Countable
         $matchingIndex = 0;
         $constraintClasses = $constraint->getClasses();
         $classMatchingIndex = 0;
-        if(($constraint->tag === self::TAG_WILDCARD || $constraint->tag === $tag) && (!$constraintClasses || $classMatchingIndex = $this->getClassMatchingIndex($constraint, $classes)))
-        {
+        if (($constraint->tag === self::TAG_WILDCARD || $constraint->tag === $tag) && (!$constraintClasses || $classMatchingIndex = $this->getClassMatchingIndex($constraint, $classes))) {
             $matchingIndex += 1 + $classMatchingIndex;
         }
 
@@ -192,8 +185,7 @@ class StylesheetConstraint extends BagContainer implements \Countable
 
         $matchingIndex = 0;
 
-        if($classesCount == count($constraintClasses))
-        {
+        if ($classesCount == count($constraintClasses)) {
             $matchingIndex += $classesCount;
         }
 
@@ -217,13 +209,11 @@ class StylesheetConstraint extends BagContainer implements \Countable
 
         $this->setTag($data['tag']);
 
-        foreach((array) $data['classes'] as $class)
-        {
+        foreach ((array) $data['classes'] as $class) {
             $this->addClass($class);
         }
 
-        foreach((array) $data['constraints'] as $constraint)
-        {
+        foreach ((array) $data['constraints'] as $constraint) {
             $this->addConstraint($constraint->tag, $constraint);
         }
     }
@@ -231,8 +221,7 @@ class StylesheetConstraint extends BagContainer implements \Countable
     public static function merge(array $containers)
     {
         $internalConstraints = array();
-        foreach($containers as $constraint)
-        {
+        foreach ($containers as $constraint) {
             $internalConstraints = array_merge($internalConstraints, $constraint->constraints);
         }
         
@@ -241,6 +230,5 @@ class StylesheetConstraint extends BagContainer implements \Countable
         $constraint->constraints = $internalConstraints;
         
         return $constraint;
-        
     }
 }

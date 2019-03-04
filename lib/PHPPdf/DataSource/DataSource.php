@@ -10,7 +10,7 @@ namespace PHPPdf\DataSource;
 
 /**
  * Data source class
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class DataSource
@@ -27,7 +27,7 @@ abstract class DataSource
 
     /**
      * Read data from source
-     * 
+     *
      * @return string Data from source
      */
     abstract public function read();

@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\RowDimensionFormatter,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\RowDimensionFormatter;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Document;
 
 class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -84,8 +84,7 @@ class RowDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $cells = array();
 
-        foreach($cellHeights as $height)
-        {
+        foreach ($cellHeights as $height) {
             $boundary = $this->getBoundaryMockWithEnlargeAsserts($rowHeight - $height);
 
             $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('getHeight', 'setHeight', 'getBoundary'));

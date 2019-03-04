@@ -16,13 +16,13 @@ use PHPPdf\Core\Engine\Engine;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\DrawingTask,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\Node\Node;
 
 /**
  * Image element
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Image extends Node
@@ -62,8 +62,7 @@ class Image extends Node
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
         $sourceImage = $this->createSource($document);
-        $callback = function(Node $node, $sourceImage)
-        {
+        $callback = function (Node $node, $sourceImage) {
             $gc = $node->getGraphicsContext();
             
             $alpha = $node->getAlpha();
@@ -73,14 +72,12 @@ class Image extends Node
             $rotationNode = $node->getAncestorWithRotation();
             $translation = $node->getPositionTranslation();
         
-            if($isAlphaSet || $rotationNode || $keepRatio)
-            {
+            if ($isAlphaSet || $rotationNode || $keepRatio) {
                 $gc->saveGS();
                 $gc->setAlpha($alpha);
             }
             
-            if($rotationNode)
-            {
+            if ($rotationNode) {
                 $middlePoint = $rotationNode->getMiddlePoint()->translate($translation->getX(), $translation->getY());
                 $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
             }
@@ -93,20 +90,16 @@ class Image extends Node
             $x += $translation->getX();
             $y -= $translation->getY();
             
-            if($keepRatio)
-            {
+            if ($keepRatio) {
                 $gc->clipRectangle($x, $y, $x+$originalWidth, $y-$originalHeight);
                 
                 $sourceRatio = $sourceImage->getOriginalHeight() / $sourceImage->getOriginalWidth();
                 
-                if($sourceRatio > 1)
-                {
+                if ($sourceRatio > 1) {
                     $height = $width * $sourceRatio;
                     
                     $y += ($height - $originalHeight)/2;
-                }
-                else
-                {
+                } else {
                     $width = $height / $sourceRatio;
                     
                     $x -= ($width - $originalWidth)/2;
@@ -115,8 +108,7 @@ class Image extends Node
             
             $gc->drawImage($sourceImage, $x, $y-$height, $x+$width, $y);
             
-            if($isAlphaSet || $rotationNode || $keepRatio)
-            {
+            if ($isAlphaSet || $rotationNode || $keepRatio) {
                 $gc->restoreGS();
             }
         };
@@ -128,14 +120,10 @@ class Image extends Node
     
     public function createSource(Engine $engine)
     {
-        try
-        {
+        try {
             return $engine->createImage($this->getAttribute('src'));
-        }
-        catch(InvalidResourceException $e)
-        {
-            if($this->getAttribute('ignore-error'))
-            {
+        } catch (InvalidResourceException $e) {
+            if ($this->getAttribute('ignore-error')) {
                 return EmptyImage::getInstance();
             }
             
@@ -150,8 +138,7 @@ class Image extends Node
         $this->originalWidth = $source->getOriginalWidth();
         $this->originalHeight = $source->getOriginalHeight();
 
-        if(!$this->getWidth() && !$this->getHeight())
-        {
+        if (!$this->getWidth() && !$this->getHeight()) {
             $this->setWidth($this->originalWidth);
             $this->setHeight($this->originalHeight);
         }

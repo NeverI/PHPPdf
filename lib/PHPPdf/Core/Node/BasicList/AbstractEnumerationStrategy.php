@@ -9,12 +9,12 @@
 namespace PHPPdf\Core\Node\BasicList;
 
 use PHPPdf\Core\Document;
-use PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\BasicList;
 
 /**
  * Base class for enumeration strategy
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractEnumerationStrategy implements EnumerationStrategy
@@ -22,12 +22,12 @@ abstract class AbstractEnumerationStrategy implements EnumerationStrategy
     protected $index = 0;
     protected $visualIndex = 1;
     
-	public function getInitialIndex()
+    public function getInitialIndex()
     {
         return $this->index;
     }
 
-	public function setIndex($index, $visualIndex = null)
+    public function setIndex($index, $visualIndex = null)
     {
         $this->index = $index;
     }
@@ -41,7 +41,7 @@ abstract class AbstractEnumerationStrategy implements EnumerationStrategy
     {
         $child = $list->getChild($this->index);
         
-        $point = $child->getFirstPoint();        
+        $point = $child->getFirstPoint();
         $positionTranslation = $list->getPositionTranslation();
 
         list($xTranslation, $yTranslation) = $this->getEnumerationElementTranslations($document, $list);

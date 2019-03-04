@@ -3,7 +3,6 @@
 
 namespace PHPPdf\Bridge\Imagine;
 
-
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\PointInterface;
@@ -42,7 +41,9 @@ class Rectangle
 
     public function intersection(Rectangle $rectangle)
     {
-        if($this->disjoint($rectangle)) return null;
+        if ($this->disjoint($rectangle)) {
+            return null;
+        }
 
         $x1 = max($this->point->getX(), $rectangle->point->getX());
         $y1 = max($this->point->getY(), $rectangle->point->getY());

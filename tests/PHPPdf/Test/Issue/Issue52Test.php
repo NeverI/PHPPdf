@@ -3,7 +3,6 @@
 
 namespace PHPPdf\Test\Issue;
 
-
 use PHPPdf\Core\Document;
 use PHPPdf\Core\Engine\ZF\Engine;
 use PHPPdf\Core\Node\DynamicPage;
@@ -62,8 +61,7 @@ XML;
         $this->assertEquals(200, $document->pages[0]->getWidth());
         $this->assertEquals(200, $document->pages[0]->getHeight());
 
-        if($placeholders)
-        {
+        if ($placeholders) {
             $this->assertContains('placeholders', $pdfContent);
         }
     }
@@ -101,4 +99,4 @@ XML;
             ->build();
         return $facade;
     }
-} 
+}

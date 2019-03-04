@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Formatter\BaseFormatter,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\BaseFormatter;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
 
 /**
  * Calculates real dimension of node
@@ -25,8 +25,7 @@ class StandardDimensionFormatter extends BaseFormatter
         $maxWidth = $node->getRecurseAttribute('max-width') ?: \PHP_INT_MAX;
         $maxHeight = $node->getRecurseAttribute('max-height') ?: \PHP_INT_MAX;
 
-        if($node->getWidth() === null && !$node->isInline() && $node->getFloat() === Node::FLOAT_NONE)
-        {
+        if ($node->getWidth() === null && !$node->isInline() && $node->getFloat() === Node::FLOAT_NONE) {
             $parentWidth = $parent->getWidthWithoutPaddings();
 
             $marginLeft = $node->getMarginLeft();
@@ -34,14 +33,11 @@ class StandardDimensionFormatter extends BaseFormatter
 
             $node->setWidth(min($parentWidth - ($marginLeft + $marginRight), $maxWidth));
             $node->setRelativeWidth('100%');
-        }
-        elseif($node->isInline())
-        {
+        } elseif ($node->isInline()) {
             $node->setWidth(0);
         }
 
-        if($node->getHeight() === null)
-        {
+        if ($node->getHeight() === null) {
             $node->setHeight(0);
         }
 
@@ -56,8 +52,7 @@ class StandardDimensionFormatter extends BaseFormatter
         
         $parentWidth = $parent ? $parent->getWidthWithoutPaddings() : null;
         
-        if($parent && $parentWidth < $prefferedWidth)
-        {
+        if ($parent && $parentWidth < $prefferedWidth) {
             $prefferedWidth = $parentWidth;
         }
 

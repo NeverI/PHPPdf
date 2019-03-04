@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\TextPositionFormatter,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\TextPositionFormatter;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Document;
 
 class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -81,15 +81,13 @@ class TextPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function addBoundaryPointsAsserts($boundaryMock, $lineSizes, $firstYCoord)
     {
         $at = 1;
-        foreach($lineSizes as $i => $size)
-        {
+        foreach ($lineSizes as $i => $size) {
             $yCoord = $firstYCoord - self::TEXT_LINE_HEIGHT*$i;
             $boundaryMock->expects($this->at($at++))
                          ->method('setNext')
                          ->with($size, $yCoord);
 
-            if(isset($lineSizes[$i+1]))
-            {
+            if (isset($lineSizes[$i+1])) {
                 $boundaryMock->expects($this->at($at++))
                              ->method('setNext')
                              ->with($size, $yCoord - self::TEXT_LINE_HEIGHT);

@@ -11,8 +11,7 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        if(!class_exists('ZendPdf\PdfDocument', true))
-        {
+        if (!class_exists('ZendPdf\PdfDocument', true)) {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
         
@@ -102,7 +101,7 @@ class FontTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      */
     public function getWidthOfText()
-    {        
+    {
         $text = 'some text';
         
         $width12 = $this->font->getWidthOfText($text, 12);

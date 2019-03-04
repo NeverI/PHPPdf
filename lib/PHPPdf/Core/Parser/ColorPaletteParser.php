@@ -13,7 +13,7 @@ use PHPPdf\Parser\XmlParser;
 
 /**
  * Document to generate
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColorPaletteParser extends XmlParser
@@ -27,13 +27,11 @@ class ColorPaletteParser extends XmlParser
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($reader->name === 'color')
-        {
+        if ($reader->name === 'color') {
             $name = $reader->getAttribute('name');
             $hex = $reader->getAttribute('hex');
             
-            if(!$name || !$hex)
-            {
+            if (!$name || !$hex) {
                 throw new ParseException('"name" and "hex" attributes are required for "color" tag.');
             }
             

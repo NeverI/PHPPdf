@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Core\Parser\NodeFactoryParser,
-    PHPPdf\Core\Parser\StylesheetParser,
-    PHPPdf\Core\Node\NodeFactory;
+use PHPPdf\Core\Parser\NodeFactoryParser;
+use PHPPdf\Core\Parser\StylesheetParser;
+use PHPPdf\Core\Node\NodeFactory;
 
 class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -182,8 +182,7 @@ XML;
 XML;
         $nodeFactory = $this->parser->parse($xml);
 
-        foreach(array('tag1', 'tag2') as $tag)
-        {
+        foreach (array('tag1', 'tag2') as $tag) {
             $node = $nodeFactory->getPrototype($tag);
 
             $this->assertEquals(array('PHPPdf\Core\Formatter\FloatFormatter'), $node->getFormattersNames($formatterType));

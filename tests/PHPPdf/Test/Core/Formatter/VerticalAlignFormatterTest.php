@@ -4,8 +4,8 @@ namespace PHPPdf\Test\Core\Formatter;
 
 use PHPPdf\Core\Node\Container;
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Formatter\VerticalAlignFormatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\VerticalAlignFormatter;
 
 class VerticalAlignFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -38,7 +38,7 @@ class VerticalAlignFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->invokeMethod($child, 'setBoundary', array($this->objectMother->getBoundaryStub(0, $childYCoord, 500, $childHeight)));
         $container->add($child);
         
-        $container->setAttribute('vertical-align', $align);     
+        $container->setAttribute('vertical-align', $align);
 
         $this->formatter->format($container, $this->document);
         

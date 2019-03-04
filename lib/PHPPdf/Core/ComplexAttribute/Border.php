@@ -10,12 +10,12 @@ namespace PHPPdf\Core\ComplexAttribute;
 
 use Zend\Code\Generator\DocBlockGenerator;
 
-use PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\UnitConverter;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Document;
 
 /**
  * Enhance node by drawing border
@@ -59,32 +59,24 @@ class Border extends ComplexAttribute
 
     private function setType($type)
     {
-        if(!is_numeric($type))
-        {
+        if (!is_numeric($type)) {
             $types = explode('+', $type);
 
             $this->type = 0;
-            foreach($types as $type)
-            {
+            foreach ($types as $type) {
                 $this->type |= $this->getConstantValue('TYPE', $type);
             }
-        }
-        else
-        {
+        } else {
             $this->type = $type;
         }
     }
 
     private function setStyle($style)
     {
-        if(!is_numeric($style) && !is_array($style))
-        {
-            if(strpos($style, ' ') !== false)
-            {
+        if (!is_numeric($style) && !is_array($style)) {
+            if (strpos($style, ' ') !== false) {
                 $style = explode(' ', $style);
-            }
-            else
-            {
+            } else {
                 $style = $this->getConstantValue('STYLE', $style);
             }
         }
@@ -104,12 +96,9 @@ class Border extends ComplexAttribute
 
     protected function doEnhance($graphicsContext, Node $node, Document $document)
     {
-        if($node->getShape() === Node::SHAPE_RECTANGLE)
-        {
+        if ($node->getShape() === Node::SHAPE_RECTANGLE) {
             $this->drawRectangleBorder($graphicsContext, $node, $document);
-        }
-        elseif($node->getShape() === Node::SHAPE_ELLIPSE)
-        {
+        } elseif ($node->getShape() === Node::SHAPE_ELLIPSE) {
             $this->drawCircleBorder($graphicsContext, $node, $document);
         }
     }
@@ -119,31 +108,23 @@ class Border extends ComplexAttribute
         $graphicsContext->setLineDashingPattern($this->convertStyle($this->style, $document));
         $size = $document->convertUnit($this->size);
         $graphicsContext->setLineWidth($size);
-        $boundary = $this->getTranslationAwareBoundary($node, $node->getBoundary());        
+        $boundary = $this->getTranslationAwareBoundary($node, $node->getBoundary());
 
         $points = $this->getPointsWithPositionCorrection($document, $boundary);
 
-        if($this->getRadius() !== null)
-        {
+        if ($this->getRadius() !== null) {
             $firstPoint = $points[3];
             $diagonalPoint = $points[1];
 
             $this->drawRoundedBoundary($graphicsContext, $firstPoint[0], $firstPoint[1], $diagonalPoint[0], $diagonalPoint[1], GraphicsContext::SHAPE_DRAW_STROKE);
-        }
-        elseif($this->type === self::TYPE_ALL)
-        {
+        } elseif ($this->type === self::TYPE_ALL) {
             $this->drawBoundary($graphicsContext, $points, GraphicsContext::SHAPE_DRAW_STROKE, $size/2);
-        }
-        else
-        {
+        } else {
             $halfSize = $size/2;
-            foreach(array(self::TYPE_TOP, self::TYPE_RIGHT, self::TYPE_BOTTOM, self::TYPE_LEFT) as $type)
-            {
-                if($this->type & $type)
-                {
+            foreach (array(self::TYPE_TOP, self::TYPE_RIGHT, self::TYPE_BOTTOM, self::TYPE_LEFT) as $type) {
+                if ($this->type & $type) {
                     $log = 1;
-                    for($index=0; $log < $type; $log = $log << 1)
-                    {
+                    for ($index=0; $log < $type; $log = $log << 1) {
                         $index++;
                     }
 
@@ -157,10 +138,8 @@ class Border extends ComplexAttribute
     
     private function convertStyle($style, UnitConverter $unitConverter)
     {
-        if(is_array($style))
-        {
-            foreach($style as $i => $value)
-            {
+        if (is_array($style)) {
+            foreach ($style as $i => $value) {
                 $style[$i] = $unitConverter->convertUnit($value);
             }
         }
@@ -177,8 +156,7 @@ class Border extends ComplexAttribute
         
         $position = $converter->convertUnit($this->position);
 
-        foreach($boundary->getPoints() as $index => $point)
-        {
+        foreach ($boundary->getPoints() as $index => $point) {
             $xSign = isset($xSignMatrix[$index]) ? $xSignMatrix[$index] : 1;
             $ySign = isset($ySignMatrix[$index]) ? $ySignMatrix[$index] : 1;
 
@@ -195,29 +173,21 @@ class Border extends ComplexAttribute
         $x2 = $points[$firstPointIndex+1][0];
         $y2 = $points[$firstPointIndex+1][1];
 
-        if($x1 == $x2)
-        {
-            if($y1 >= $y2)
-            {
+        if ($x1 == $x2) {
+            if ($y1 >= $y2) {
                 $y1 += $halfSize;
                 $y2 -= $halfSize;
-            }
-            else
-            {
+            } else {
                 $y1 -= $halfSize;
                 $y2 += $halfSize;
             }
         }
 
-        if($y1 == $y2)
-        {
-            if($x1 <= $x2)
-            {
+        if ($y1 == $y2) {
+            if ($x1 <= $x2) {
                 $x1 -= $halfSize;
                 $x2 += $halfSize;
-            }
-            else
-            {
+            } else {
                 $x1 += $halfSize;
                 $x2 -= $halfSize;
             }
@@ -234,8 +204,7 @@ class Border extends ComplexAttribute
         
         $translation = $node->getPositionTranslation();
         
-        if(!$translation->isZero())
-        {
+        if (!$translation->isZero()) {
             $point = $point->translate($translation->getX(), $translation->getY());
         }
         

@@ -20,10 +20,8 @@ class ColorPaletteTest extends TestCase
         
         $palette = new ColorPalette($colors);
         
-        foreach($colors as $name => $expectedColor)
-        {
-            foreach(array($name, strtoupper($name)) as $key)
-            {
+        foreach ($colors as $name => $expectedColor) {
+            foreach (array($name, strtoupper($name)) as $key) {
                 $actualColor = $palette->get($key);
                 $this->assertEquals($expectedColor, $actualColor);
             }
@@ -31,8 +29,7 @@ class ColorPaletteTest extends TestCase
         
         $hexColors = array('#000000', '#ffffff');
         
-        foreach($hexColors as $color)
-        {
+        foreach ($hexColors as $color) {
             $this->assertEquals($color, $palette->get($color));
         }
     }

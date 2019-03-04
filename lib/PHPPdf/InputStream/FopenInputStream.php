@@ -12,7 +12,7 @@ use PHPPdf\Exception\RuntimeException;
 
 /**
  * Adapter for fopen family functions
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class FopenInputStream implements InputStream
@@ -23,8 +23,7 @@ class FopenInputStream implements InputStream
     {
         $this->fp = @\fopen($filepath, $mode);
         
-        if($this->fp === false)
-        {
+        if ($this->fp === false) {
             throw new RuntimeException(sprintf('File "%s" can\'t be opened in mode "%s".', $filepath, $mode));
         }
     }
@@ -33,8 +32,7 @@ class FopenInputStream implements InputStream
     {
         $realMode = null;
         
-        switch($mode)
-        {
+        switch ($mode) {
             case self::SEEK_CUR:
                 $realMode = SEEK_CUR;
                 break;

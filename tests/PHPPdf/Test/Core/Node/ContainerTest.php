@@ -3,10 +3,10 @@
 namespace PHPPdf\Test\Core\Node;
 
 use PHPPdf\ObjectMother\NodeObjectMother;
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Node\Node;
 
 class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -50,8 +50,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->add($child1);
 
         $child2 = $child1->copy();
-        foreach($boundary as $point)
-        {
+        foreach ($boundary as $point) {
             $child2->getBoundary()->setNext($point);
         }
         $child2->translate(0, 200);
@@ -81,8 +80,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function minWidthIsMaxValueOfMinWidthOfChildren(array $childrenMinWidths, $paddingLeft = 0, $paddingRight = 0, $marginLeft = 0, $marginRight = 0)
     {
         $children = array();
-        foreach($childrenMinWidths as $minWidth)
-        {
+        foreach ($childrenMinWidths as $minWidth) {
             $child = $this->getMock('PHPPdf\Core\Node\Container', array('getMinWidth'));
             $child->expects($this->atLeastOnce())
                   ->method('getMinWidth')
@@ -122,13 +120,10 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $boundary = $this->createResizableBoundaryMock($width, $horizontalResizeBy, $verticalResizeBy, 2);
 
-        if($childRelativeWidth !== null)
-        {
+        if ($childRelativeWidth !== null) {
             $relativeWidth = ((int) $childRelativeWidth)/100;
             $childResizeBy = ($width + $horizontalResizeBy) * $relativeWidth - $childWidth;
-        }
-        else
-        {
+        } else {
             $childResizeBy = $horizontalResizeBy + ($width - $paddingRight - ($childWidth + $childMarginRight));
             $childResizeBy = $childResizeBy < 0 ? $childResizeBy : 0;
         }
@@ -183,8 +178,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->method('getFirstPoint')
                  ->will($this->returnValue(Point::getInstance(0, 0)));
 
-        if($initSequence !== false)
-        {
+        if ($initSequence !== false) {
             $boundary->expects($this->at($initSequence++))
                      ->method('pointTranslate')
                      ->with(1, $horizontalResizeBy, 0);
@@ -194,9 +188,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $boundary->expects($this->at($initSequence++))
                      ->method('pointTranslate')
                      ->with(3, 0, $verticalResizeBy);
-        }
-        else
-        {
+        } else {
             $boundary->expects($this->never())
                      ->method('pointTranslate');
         }
@@ -235,9 +227,9 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->method('getGraphicsContext')
                  ->will($this->returnValue($graphicContextStub));
                  
-         $this->node->setParent($pageMock);
+        $this->node->setParent($pageMock);
          
-         $this->assertEquals($graphicContextStub, $this->node->getGraphicsContext());
+        $this->assertEquals($graphicContextStub, $this->node->getGraphicsContext());
     }
     
     /**
@@ -272,8 +264,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $width = 100;
         $horizontalResize = 50;
         
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $child = new Container();
             $child->setWidth(50);
             $child->setRelativeWidth('50%');
@@ -292,8 +283,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $children = $this->node->getChildren();
         
         $expectedWidth = ($width + $horizontalResize)/2;
-        foreach($children as $child)
-        {
+        foreach ($children as $child) {
             $realWidth = $child->getDiagonalPoint()->getX() - $child->getFirstPoint()->getX();
             $this->assertEquals($expectedWidth, $realWidth);
         }
@@ -317,9 +307,9 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $childHeight = 100;
         
         $child = new Container(array(
-        	'width' => $childWidth, 
-        	'height' => $childHeight, 
-        	'float' => 'right'
+            'width' => $childWidth,
+            'height' => $childHeight,
+            'float' => 'right'
         ));
         
         $childBoundary = $this->objectMother->getBoundaryStub($width - $childWidth, $childHeight, $childWidth, $childHeight);

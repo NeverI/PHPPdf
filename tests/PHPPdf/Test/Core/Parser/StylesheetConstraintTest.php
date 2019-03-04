@@ -3,8 +3,8 @@
 namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Parser\BagContainer;
-use PHPPdf\Core\Parser\StylesheetConstraint,
-    PHPPdf\Core\AttributeBag;
+use PHPPdf\Core\Parser\StylesheetConstraint;
+use PHPPdf\Core\AttributeBag;
 
 class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -44,12 +44,9 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $container = $this->constraint->find($query);
 
-        if($isFound)
-        {
+        if ($isFound) {
             $this->assertEquals($constraint->getAll(), $container->getAll());
-        }
-        else
-        {
+        } else {
             $this->assertEquals(array(), $container->getAll());
         }
     }
@@ -116,8 +113,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $constraint = new StylesheetConstraint(array_merge($attributes, $complexAttributes));
 
-        foreach($classes as $class)
-        {
+        foreach ($classes as $class) {
             $constraint->addClass($class);
         }
 
@@ -182,8 +178,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->assertEquals($expected->getClasses(), $actual->getClasses());
 
         $actualConstraintChildren = $actual->getConstraints();
-        foreach($expected->getConstraints() as $name => $constraint)
-        {
+        foreach ($expected->getConstraints() as $name => $constraint) {
             $this->assertStylesheetConstraintEquals($constraint, $actualConstraintChildren[$name]);
         }
     }
@@ -222,7 +217,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     * 
+     *
      * Number of matching children constraints should not affect on weight on parent constraint
      */
     public function weightOfConstraintIsMaxWeightOfChildrenMatchingConstraints()

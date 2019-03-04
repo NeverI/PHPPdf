@@ -30,7 +30,7 @@ class BarcodeTest extends TestCase
      * @dataProvider drawBarcodeInGraphicsContextProvider
      */
     public function drawBarcodeInGraphicsContext($x, $y, $width, $height, $barHeight, $barcodeText, $drawText, $barcodeType, $fontType, $fontSize, $color, $withChecksum, $orientation, $barThinWidth, $barThickWidth, $factor)
-    {               
+    {
         $boundary = $this->objectMother->getBoundaryStub($x, $y, $width, $height);
         $this->invokeMethod($this->barcode, 'setBoundary', array($boundary));
         $font = $this->getMock('PHPPdf\Core\Engine\Font');
@@ -52,7 +52,7 @@ class BarcodeTest extends TestCase
         
         $this->gc->expects($this->once())
                  ->method('drawBarcode')
-                 ->with($x, $y, $this->validateByCallback(function($barcode, TestCase $test) use($barcodeText, $drawText, $barcodeType, $fontPath, $fontSize, $color, $barHeight, $withChecksum, $orientation, $barThinWidth, $barThickWidth, $factor){
+                 ->with($x, $y, $this->validateByCallback(function ($barcode, TestCase $test) use ($barcodeText, $drawText, $barcodeType, $fontPath, $fontSize, $color, $barHeight, $withChecksum, $orientation, $barThinWidth, $barThickWidth, $factor) {
                      $test->assertInstanceOf('Zend\Barcode\Object\ObjectInterface', $barcode);
                      $test->assertTrue(stripos(get_class($barcode), $barcodeType) !== false);
                      $test->assertEquals($barcodeText, $barcode->getText());
@@ -90,8 +90,7 @@ class BarcodeTest extends TestCase
         $tasks = new DrawingTaskHeap();
         $this->barcode->collectOrderedDrawingTasks($document, $tasks);
         
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }

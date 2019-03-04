@@ -2,11 +2,11 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\PageBreakingFormatter,
-    PHPPdf\Core\Node\DynamicPage,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Formatter\PageBreakingFormatter;
+use PHPPdf\Core\Node\DynamicPage;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Container;
 
 class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -120,8 +120,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->assertEquals(4, count($pages));
 
-        foreach($pages as $page)
-        {
+        foreach ($pages as $page) {
             $children = $page->getChildren();
             $this->assertEquals(1, count($children));
 
@@ -142,8 +141,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $heightOfNode = (int) ($originalHeight*5/32);
 
         $mocks = array();
-        for($i=0; $i<32; $i++, $height -= $heightOfNode)
-        {
+        for ($i=0; $i<32; $i++, $height -= $heightOfNode) {
             $this->page->add($this->getContainerStub(array(0, $height), array(100, $height-$heightOfNode)));
         }
 

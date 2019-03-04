@@ -18,7 +18,7 @@ use ZendPdf\InternalType;
 
 /**
  * Content loading type has been changed, remote files are supported.
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Tiff extends BaseTiff
@@ -29,14 +29,14 @@ class Tiff extends BaseTiff
     {
         $isRemote = stripos($imageFileName, 'http') === 0;
         
-        if (($this->stream = $this->open($isRemote, $imageFileName)) === false ) {
+        if (($this->stream = $this->open($isRemote, $imageFileName)) === false) {
             throw new Exception\IOException("Can not open '$imageFileName' file for reading.");
         }
 
         $byteOrderIndicator = $this->read(2);
-        if($byteOrderIndicator == 'II') {
+        if ($byteOrderIndicator == 'II') {
             $this->_endianType = self::TIFF_ENDIAN_LITTLE;
-        } else if($byteOrderIndicator == 'MM') {
+        } elseif ($byteOrderIndicator == 'MM') {
             $this->_endianType = self::TIFF_ENDIAN_BIG;
         } else {
             throw new Exception\DomainException('Not a tiff file or Tiff corrupt. No byte order indication found');
@@ -44,7 +44,7 @@ class Tiff extends BaseTiff
 
         $version = $this->unpackBytes(self::UNPACK_TYPE_SHORT, $this->read(2));
 
-        if($version != 42) {
+        if ($version != 42) {
             throw new Exception\DomainException('Not a tiff file or Tiff corrupt. Incorrect version number.');
         }
         $ifdOffset = $this->unpackBytes(self::UNPACK_TYPE_LONG, $this->read(4));
@@ -57,8 +57,8 @@ class Tiff extends BaseTiff
          * is four bytes pointing to the offset of the next IFD.
          */
 
-        while($ifdOffset > 0) {
-            if($this->seek($ifdOffset, InputStream::SEEK_SET) == -1 || $ifdOffset+2 >= $this->_fileSize) {
+        while ($ifdOffset > 0) {
+            if ($this->seek($ifdOffset, InputStream::SEEK_SET) == -1 || $ifdOffset+2 >= $this->_fileSize) {
                 throw new Exception\CorruptedImageException("Could not seek to the image file directory as indexed by the file. Likely cause is TIFF corruption. Offset: ". $ifdOffset);
             }
 
@@ -73,12 +73,12 @@ class Tiff extends BaseTiff
              * 4 bytes (long) number of values, or value count.
              * 4 bytes (mixed) data if the data will fit into 4 bytes or an offset if the data is too large.
              */
-            for($dirEntryIdx = 1; $dirEntryIdx <= $numDirEntries; $dirEntryIdx++) {
+            for ($dirEntryIdx = 1; $dirEntryIdx <= $numDirEntries; $dirEntryIdx++) {
                 $tag         = $this->unpackBytes(self::UNPACK_TYPE_SHORT, $this->read(2));
                 $fieldType   = $this->unpackBytes(self::UNPACK_TYPE_SHORT, $this->read(2));
                 $valueCount  = $this->unpackBytes(self::UNPACK_TYPE_LONG, $this->read(4));
 
-                switch($fieldType) {
+                switch ($fieldType) {
                     case self::TIFF_FIELD_TYPE_BYTE:
                         $fieldLength = $valueCount;
                         break;
@@ -100,8 +100,8 @@ class Tiff extends BaseTiff
 
                 $offsetBytes = $this->read(4);
 
-                if($fieldLength <= 4) {
-                    switch($fieldType) {
+                if ($fieldLength <= 4) {
+                    switch ($fieldType) {
                         case self::TIFF_FIELD_TYPE_BYTE:
                             $value = $this->unpackBytes(self::UNPACK_TYPE_BYTE, $offsetBytes);
                             break;
@@ -124,7 +124,7 @@ class Tiff extends BaseTiff
                  * they will be > 4 bytes and require seek/extraction of the offset. Same goes for extracting arrays of data, like
                  * the data offsets and length. This should be fixed in the future.
                  */
-                switch($tag) {
+                switch ($tag) {
                     case self::TIFF_TAG_IMAGE_WIDTH:
                         $this->_width = $value;
                         break;
@@ -132,7 +132,7 @@ class Tiff extends BaseTiff
                         $this->_height = $value;
                         break;
                     case self::TIFF_TAG_BITS_PER_SAMPLE:
-                        if($valueCount>1) {
+                        if ($valueCount>1) {
                             $fp = $this->tell();
                             $this->seek($refOffset, InputStream::SEEK_SET);
                             $this->_bitsPerSample = $this->unpackBytes(self::UNPACK_TYPE_SHORT, $this->read(2));
@@ -143,7 +143,7 @@ class Tiff extends BaseTiff
                         break;
                     case self::TIFF_TAG_COMPRESSION:
                         $this->_compression = $value;
-                        switch($value) {
+                        switch ($value) {
                             case self::TIFF_COMPRESSION_UNCOMPRESSED:
                                 $this->_filter = 'None';
                                 break;
@@ -178,7 +178,7 @@ class Tiff extends BaseTiff
                         $this->_colorCode = $value;
                         $this->_whiteIsZero = false;
                         $this->_blackIsZero = false;
-                        switch($value) {
+                        switch ($value) {
                             case self::TIFF_PHOTOMETRIC_INTERPRETATION_WHITE_IS_ZERO:
                                 $this->_whiteIsZero = true;
                                 $this->_colorSpace = 'DeviceGray';
@@ -206,7 +206,7 @@ class Tiff extends BaseTiff
                         }
                         break;
                     case self::TIFF_TAG_STRIP_OFFSETS:
-                        if($valueCount>1) {
+                        if ($valueCount>1) {
                             $format = ($this->_endianType == self::TIFF_ENDIAN_LITTLE)?'V*':'N*';
                             $fp = $this->tell();
                             $this->seek($refOffset, InputStream::SEEK_SET);
@@ -218,7 +218,7 @@ class Tiff extends BaseTiff
                         }
                         break;
                    case self::TIFF_TAG_STRIP_BYTE_COUNTS:
-                        if($valueCount>1) {
+                        if ($valueCount>1) {
                             $format = ($this->_endianType == self::TIFF_ENDIAN_LITTLE)?'V*':'N*';
                             $fp = $this->tell();
                             $this->seek($refOffset, InputStream::SEEK_SET);
@@ -237,16 +237,16 @@ class Tiff extends BaseTiff
             $ifdOffset = $this->unpackBytes(self::UNPACK_TYPE_LONG, $this->read(4));
         }
 
-        if(!isset($this->_imageDataOffset) || !isset($this->_imageDataLength)) {
+        if (!isset($this->_imageDataOffset) || !isset($this->_imageDataLength)) {
             throw new Exception\CorruptedImageException('TIFF: The image processed did not contain image data as expected.');
         }
 
         $imageDataBytes = '';
-        if(is_array($this->_imageDataOffset)) {
-            if(!is_array($this->_imageDataLength)) {
+        if (is_array($this->_imageDataOffset)) {
+            if (!is_array($this->_imageDataLength)) {
                 throw new Exception\CorruptedImageException('TIFF: The image contained multiple data offsets but not multiple data lengths. Tiff may be corrupt.');
             }
-            foreach($this->_imageDataOffset as $idx => $offset) {
+            foreach ($this->_imageDataOffset as $idx => $offset) {
                 $this->seek($this->_imageDataOffset[$idx], InputStream::SEEK_SET);
                 $imageDataBytes .= $this->read($this->_imageDataLength[$idx]);
             }
@@ -254,7 +254,7 @@ class Tiff extends BaseTiff
             $this->seek($this->_imageDataOffset, InputStream::SEEK_SET);
             $imageDataBytes = $this->read($this->_imageDataLength);
         }
-        if($imageDataBytes === '') {
+        if ($imageDataBytes === '') {
             throw new Exception\CorruptedImageException('TIFF: No data. Image Corruption');
         }
 
@@ -263,7 +263,7 @@ class Tiff extends BaseTiff
         \ZendPdf\Resource\Image::__construct();
 
         $imageDictionary = $this->_resource->dictionary;
-        if(!isset($this->_width) || !isset($this->_width)) {
+        if (!isset($this->_width) || !isset($this->_width)) {
             throw new Exception\CorruptedImageException('Problem reading tiff file. Tiff is probably corrupt.');
         }
 
@@ -281,13 +281,13 @@ class Tiff extends BaseTiff
         $this->_imageProperties['PDFcolorSpace'] = $this->_colorSpace;
 
         $imageDictionary->Width            = new InternalType\NumericObject($this->_width);
-        if($this->_whiteIsZero === true) {
+        if ($this->_whiteIsZero === true) {
             $imageDictionary->Decode       = new InternalType\ArrayObject(array(new InternalType\NumericObject(1), new InternalType\NumericObject(0)));
         }
         $imageDictionary->Height           = new InternalType\NumericObject($this->_height);
         $imageDictionary->ColorSpace       = new InternalType\NameObject($this->_colorSpace);
         $imageDictionary->BitsPerComponent = new InternalType\NumericObject($this->_bitsPerSample);
-        if(isset($this->_filter) && $this->_filter != 'None') {
+        if (isset($this->_filter) && $this->_filter != 'None') {
             $imageDictionary->Filter = new InternalType\NameObject($this->_filter);
         }
 
@@ -297,26 +297,19 @@ class Tiff extends BaseTiff
     
     private function open($isRemote, $imageFileName)
     {
-        try 
-        {
-            if($isRemote)
-            {
+        try {
+            if ($isRemote) {
                 $content = @file_get_contents($imageFileName);
                 
-                if($content === false)
-                {
+                if ($content === false) {
                     return false;
                 }
                 
                 return new StringInputStream($content);
-            }
-            else
-            {
+            } else {
                 return new FopenInputStream($imageFileName, 'rb');
             }
-        }
-        catch(\PHPPdf\Exception $e)
-        {
+        } catch (\PHPPdf\Exception $e) {
             return false;
         }
     }

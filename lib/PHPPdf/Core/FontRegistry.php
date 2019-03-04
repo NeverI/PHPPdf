@@ -38,8 +38,7 @@ class FontRegistry implements \Countable
 
     public function get($name)
     {
-        if($this->has($name))
-        {
+        if ($this->has($name)) {
             return $this->fonts[$name];
         }
 

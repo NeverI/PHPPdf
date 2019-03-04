@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Point;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
 
 /**
  * Calculates text's real dimension

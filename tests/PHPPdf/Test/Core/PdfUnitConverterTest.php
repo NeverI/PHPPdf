@@ -61,8 +61,7 @@ class PdfUnitConverterTest extends TestCase
      */
     public function dpiMustBePositiveInteger($dpi, $expectedException)
     {
-        if($expectedException)
-        {
+        if ($expectedException) {
             $this->setExpectedException('InvalidArgumentException');
         }
         

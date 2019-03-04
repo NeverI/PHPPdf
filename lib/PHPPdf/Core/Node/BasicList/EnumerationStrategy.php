@@ -8,16 +8,15 @@
 
 namespace PHPPdf\Core\Node\BasicList;
 
-
 use PHPPdf\Core\Document;
-use PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\BasicList;
 
 /**
  * Strategy of liste enumeration
- * 
+ *
  * Object of this class is able to draw sequence of enumeration
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface EnumerationStrategy

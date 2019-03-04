@@ -130,8 +130,7 @@ class EngineTest extends TestCase
     {
         $gcs = array();
         
-        foreach($expectedContents as $content)
-        {
+        foreach ($expectedContents as $content) {
             $gc = $this->getMockBuilder('PHPPdf\Core\Engine\Imagine\GraphicsContext')
                        ->setMethods(array('render', 'commit'))
                        ->disableOriginalConstructor()
@@ -181,6 +180,6 @@ class EngineTest extends TestCase
                       ->with($path)
                       ->will($this->throwException(new \Imagine\Exception\RuntimeException()));
 
-       $this->engine->loadEngine($path, 'utf-8');
+        $this->engine->loadEngine($path, 'utf-8');
     }
 }

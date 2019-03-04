@@ -55,4 +55,4 @@ class NodeAssert extends \PHPUnit_Framework_Assert
         $this->assertEquals($this->node->getParent()->getWidthWithoutPaddings(), $this->node->getWidth());
         return $this;
     }
-} 
+}

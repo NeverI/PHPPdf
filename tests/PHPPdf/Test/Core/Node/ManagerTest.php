@@ -24,7 +24,7 @@ class ManagerTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertNull($wrapper->getNode());
         
-        $node = new Container();        
+        $node = new Container();
         $this->manager->register('id', $node);
         
         $this->assertEquals($node, $wrapper->getNode());

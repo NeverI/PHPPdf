@@ -19,8 +19,7 @@ class AttributeBag implements \Countable, \Serializable
 
     public function __construct(array $values = array())
     {
-        foreach($values as $name => $value)
-        {
+        foreach ($values as $name => $value) {
             $this->add($name, $value);
         }
     }
@@ -29,8 +28,7 @@ class AttributeBag implements \Countable, \Serializable
     {
         $name = (string) $name;
 
-        if($this->has($name) && is_array($value) && is_array($this->get($name)))
-        {
+        if ($this->has($name) && is_array($value) && is_array($this->get($name))) {
             $value = $value + $this->get($name);
         }
         
@@ -60,8 +58,8 @@ class AttributeBag implements \Countable, \Serializable
     }
 
     /**
-     * Merge couple of bags into one. 
-     * 
+     * Merge couple of bags into one.
+     *
      * Type of return object depends on invocation context. Return object is as same
      * type as class used in invocation (late state binding).
      *
@@ -72,10 +70,8 @@ class AttributeBag implements \Countable, \Serializable
     {
         $mergedBag = new static();
 
-        foreach($bags as $bag)
-        {
-            foreach($bag->getAll() as $name => $value)
-            {
+        foreach ($bags as $bag) {
+            foreach ($bag->getAll() as $name => $value) {
                 $mergedBag->add($name, $value);
             }
         }

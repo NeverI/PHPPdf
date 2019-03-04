@@ -17,107 +17,97 @@ use PHPPdf\Core\Point;
 
 /**
  * TODO: refactoring
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ParagraphFormatter extends BaseFormatter
 {
     public function format(Node $node, Document $document)
     {
-        $this->designateLinesOfWords($node);        
-        $this->setTextBoundaries($node->getChildren());           
+        $this->designateLinesOfWords($node);
+        $this->setTextBoundaries($node->getChildren());
     }
     
-	private function designateLinesOfWords(Node $node)
-	{
-    	$currentPoint = $node->getFirstPoint();
-    	
-    	$partsOfLine = array();
-    	$yTranslation = 0;
-    	$line = new Line($node, 0, $yTranslation);
-    	
-    	foreach($node->getChildren() as $textNode)
-    	{
-    	    $words = $textNode->getWords();
-    	    $wordsSizes = $textNode->getWordsSizes();
+    private function designateLinesOfWords(Node $node)
+    {
+        $currentPoint = $node->getFirstPoint();
+        
+        $partsOfLine = array();
+        $yTranslation = 0;
+        $line = new Line($node, 0, $yTranslation);
+        
+        foreach ($node->getChildren() as $textNode) {
+            $words = $textNode->getWords();
+            $wordsSizes = $textNode->getWordsSizes();
     
-    	    $currentWordLine = array();
-    	    $currentWidthOfLine = 0;
+            $currentWordLine = array();
+            $currentWidthOfLine = 0;
     
-    	    $numberOfWords = count($words);
-    	    
-    	    $first = true;
-    	    
-    	    $lineWidth = 0;
-    	    foreach($words as $index => $word)
-    	    {
-    	        $wordSize = $wordsSizes[$index];
-    	        $newLineWidth = $currentWidthOfLine + $wordSize;
-    	        
-    	        $endXCoord = $newLineWidth + $currentPoint->getX();
-    	        $maxLineXCoord = $this->getMaxXCoord($node);
-    	        $isEndOfLine = $endXCoord > $maxLineXCoord;
-    	        
-    	        if($isEndOfLine)
-    	        {
-    	            if($currentWordLine)
-    	            {
-        	            $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $node->getFirstPoint()->getX(), $textNode);
-    	                $partsOfLine[] = $partOfLine;
-    	                
-    	                $line->addParts($partsOfLine);
-    	                $node->addLine($line);
-    	                
-    	                $yTranslation += $line->getHeight();
-    	                $line = new Line($node, 0, $yTranslation);
-    	                $partsOfLine = array();
-        	            
-        	            $currentWidthOfLine = 0;
-        	            $currentWordLine = array();
-    	            }
-    	            else
-    	            {
-    	                $line->addParts($partsOfLine);
-    	                $node->addLine($line);
-    	                
-    	                $yTranslation += $line->getHeight();
-    	                $line = new Line($node, 0, $yTranslation);
-    	                $partsOfLine = array();
-    	            }
+            $numberOfWords = count($words);
+            
+            $first = true;
+            
+            $lineWidth = 0;
+            foreach ($words as $index => $word) {
+                $wordSize = $wordsSizes[$index];
+                $newLineWidth = $currentWidthOfLine + $wordSize;
+                
+                $endXCoord = $newLineWidth + $currentPoint->getX();
+                $maxLineXCoord = $this->getMaxXCoord($node);
+                $isEndOfLine = $endXCoord > $maxLineXCoord;
+                
+                if ($isEndOfLine) {
+                    if ($currentWordLine) {
+                        $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $node->getFirstPoint()->getX(), $textNode);
+                        $partsOfLine[] = $partOfLine;
+                        
+                        $line->addParts($partsOfLine);
+                        $node->addLine($line);
+                        
+                        $yTranslation += $line->getHeight();
+                        $line = new Line($node, 0, $yTranslation);
+                        $partsOfLine = array();
+                        
+                        $currentWidthOfLine = 0;
+                        $currentWordLine = array();
+                    } else {
+                        $line->addParts($partsOfLine);
+                        $node->addLine($line);
+                        
+                        $yTranslation += $line->getHeight();
+                        $line = new Line($node, 0, $yTranslation);
+                        $partsOfLine = array();
+                    }
 
-    	            $currentPoint = Point::getInstance($node->getFirstPoint()->getX(), 0);
-    	        }
+                    $currentPoint = Point::getInstance($node->getFirstPoint()->getX(), 0);
+                }
 
-	            $currentWidthOfLine = $currentWidthOfLine + $wordSize;
-	            $currentWordLine[] = $word;
-    	    }
-    	    
-            if($currentWordLine)
-            {
+                $currentWidthOfLine = $currentWidthOfLine + $wordSize;
+                $currentWordLine[] = $word;
+            }
+            
+            if ($currentWordLine) {
                 $partOfLine = new LinePart($currentWordLine, $currentWidthOfLine, $currentPoint->getX() - $node->getFirstPoint()->getX(), $textNode);
                 $partsOfLine[] = $partOfLine;
                 
-	            $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
+                $currentPoint = $currentPoint->translate($currentWidthOfLine, 0);
             }
-    	}
-    	
-    	if($partsOfLine)
-    	{
-    	    $yTranslation += $line->getHeight();
-    	    $line = new Line($node, 0, $yTranslation);
+        }
+        
+        if ($partsOfLine) {
+            $yTranslation += $line->getHeight();
+            $line = new Line($node, 0, $yTranslation);
             $line->addParts($partsOfLine);
             $node->addLine($line);
-    	}
+        }
     }
     
     private function getMaxXCoord(Node $node)
     {
-        for($parent=$node->getParent(); $parent && !$parent->getWidth() && !$parent->getMaxWidth(); $parent=$parent->getParent())
-        {
+        for ($parent=$node->getParent(); $parent && !$parent->getWidth() && !$parent->getMaxWidth(); $parent=$parent->getParent()) {
         }
         
-        if(!$node->getWidth() && $parent && ($parent->getWidth() || $parent->getMaxWidth()))
-        {
+        if (!$node->getWidth() && $parent && ($parent->getWidth() || $parent->getMaxWidth())) {
             $node = $parent;
         }
 
@@ -126,8 +116,7 @@ class ParagraphFormatter extends BaseFormatter
     
     private function setTextBoundaries(array $textNodes)
     {
-        foreach($textNodes as $textNode)
-        {
+        foreach ($textNodes as $textNode) {
             $this->setTextBoundary($textNode);
         }
     }
@@ -137,8 +126,7 @@ class ParagraphFormatter extends BaseFormatter
         $lineParts = $text->getLineParts();
         
         $points = array();
-        foreach($lineParts as $part)
-        {
+        foreach ($lineParts as $part) {
             $points[] = $part->getFirstPoint();
         }
         
@@ -153,8 +141,7 @@ class ParagraphFormatter extends BaseFormatter
         $boundary = $text->getBoundary();
         $totalHeight = 0;
         
-        foreach($lineParts as $rowNumber => $part)
-        {
+        foreach ($lineParts as $rowNumber => $part) {
             $height = $part->getText()->getLineHeightRecursively();
             $totalHeight += $height;
             $width = $part->getWidth();
@@ -162,8 +149,7 @@ class ParagraphFormatter extends BaseFormatter
             $startPoint = $points[$rowNumber];
             $newX = $startPoint->getX() + $width;
             $newY = $currentY - $height;
-            if($currentX !== $newX)
-            {
+            if ($currentX !== $newX) {
                 $boundary->setNext($newX, $currentY);
             }
 

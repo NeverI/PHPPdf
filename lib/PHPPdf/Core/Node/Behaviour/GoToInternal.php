@@ -28,8 +28,7 @@ class GoToInternal extends Behaviour
     {
         $destinationNode = $this->destination->getNode();
         
-        if(!$destinationNode)
-        {
+        if (!$destinationNode) {
             throw new RuntimeException('Destination of GoToInternal dosn\'t exist.');
         }
 

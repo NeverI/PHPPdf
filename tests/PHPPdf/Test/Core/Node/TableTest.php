@@ -79,12 +79,10 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $pointOfBreaking = 220;
         $reversePointOfBreaking = $start - $pointOfBreaking;
         $rowBreakOccurs = false;
-        for($i=0; $i<$numberOfRows; $i++)
-        {
+        for ($i=0; $i<$numberOfRows; $i++) {
             $end = $start-$heightOfRow;
             $break = $reversePointOfBreaking < $start && $reversePointOfBreaking > $end;
-            if($break)
-            {
+            if ($break) {
                 $rowBreakOccurs = true;
             }
 
@@ -103,19 +101,16 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createRowMock($start, $end, $break = false, $translate = false)
     {
         $methods = array('getHeight', 'getBoundary');
-        if($break)
-        {
+        if ($break) {
             $methods[] = 'breakAt';
         }
-        if($translate)
-        {
+        if ($translate) {
             $methods[] = 'translate';
         }
 
         $mock = $this->getMock('PHPPdf\Core\Node\Table\Row', $methods);
 
-        if($break)
-        {
+        if ($break) {
             $mock->expects($this->once())
                  ->method('breakAt')
                  ->will($this->returnValue(null));
@@ -137,8 +132,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->method('getHeight')
              ->will($this->returnValue($height));
 
-        if($translate)
-        {
+        if ($translate) {
             $mock->expects($this->atLeastOnce())
                  ->method('translate');
         }
@@ -156,10 +150,8 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $rows = array();
         
-        foreach($cellsWidthsByColumn as $columnNumber => $cellsWidths)
-        {
-            foreach($cellsWidths as $rowNumber => $width)
-            {
+        foreach ($cellsWidthsByColumn as $columnNumber => $cellsWidths) {
+            foreach ($cellsWidths as $rowNumber => $width) {
                 $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('getWidth', 'getNumberOfColumn', 'getColspan'));
                 $cell->expects($this->atLeastOnce())
                      ->method('getWidth')
@@ -179,10 +171,8 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
             }
         }
 
-        foreach($rows as $cells)
-        {
-            foreach($cells as $cell)
-            {
+        foreach ($rows as $cells) {
+            foreach ($cells as $cell) {
                 $this->table->attributeChanged($cell, 'width', null);
             }
         }
@@ -195,7 +185,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
         return array(
             array(
                 array(
-                    array(100, 200, 110), 
+                    array(100, 200, 110),
                     array(30, 50, 30),
                 ),
                 array(
@@ -227,15 +217,13 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $numberOfColumns = count($cellsMarginsLeft);
         $expectedMarginsLeft = $expectedMarginsRight = array_fill(0, $numberOfColumns, 0);
         
-        foreach($cellsMarginsLeft as $columnNumber => $marginsLeft)
-        {
-            foreach($marginsLeft as $rowNumber => $marginLeft)
-            {
+        foreach ($cellsMarginsLeft as $columnNumber => $marginsLeft) {
+            foreach ($marginsLeft as $rowNumber => $marginLeft) {
                 $marginRight = $cellsMarginsRight[$columnNumber][$rowNumber];
                 
                 $cell = new Cell(array(
-                	'margin-left' => $marginLeft, 
-                	'margin-right' => $marginRight,
+                    'margin-left' => $marginLeft,
+                    'margin-right' => $marginRight,
                 ));
                 $cell->setNumberOfColumn($columnNumber);
 
@@ -246,8 +234,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
             }
         }
 
-        foreach($cells as $cell)
-        {
+        foreach ($cells as $cell) {
             $this->table->attributeChanged($cell, 'margin-left', 0);
             $this->table->attributeChanged($cell, 'margin-right', 0);
         }
@@ -310,7 +297,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
     /**
      * @test
      * @dataProvider convertColumnWidthsFromRelativeToAbsoluteProvider
-     */    
+     */
     public function convertColumnWidthsFromRelativeToAbsolute($tableWidth, $actualWidthOfColumns, $expectedWidthOfColumns)
     {
         $this->table->setWidth($tableWidth);
@@ -337,13 +324,11 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function minWidthOfColumnIsMaxOfMinWidthOfColumnsCells(array $cellsInRowsMinWidths, array $colspans, $numberOfColumns)
     {
         $expectedMinWidthsOfColumns = array_fill(0, $numberOfColumns, 0);
-        foreach($cellsInRowsMinWidths as $rowNumber => $cellsMinWidths)
-        {
+        foreach ($cellsInRowsMinWidths as $rowNumber => $cellsMinWidths) {
             $row = $this->getMock('PHPPdf\Core\Node\Table\Row', array('getChildren'));
 
             $cells = array();
-            foreach ($cellsMinWidths as $columnNumber => $minWidth)
-            {
+            foreach ($cellsMinWidths as $columnNumber => $minWidth) {
                 $colspan = $colspans[$rowNumber][$columnNumber];
 
                 $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('getMinWidth', 'getNumberOfColumn', 'getColspan'));
@@ -359,8 +344,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
                 $cells[] = $cell;
 
                 $minWidthPerColumn = $minWidth / $colspan;
-                for($i=0; $i<$colspan; $i++)
-                {
+                for ($i=0; $i<$colspan; $i++) {
                     $realColumnNumber = $columnNumber + $i;
                     $expectedMinWidthsOfColumns[$realColumnNumber] = max($expectedMinWidthsOfColumns[$realColumnNumber], $minWidthPerColumn);
                 }
@@ -417,8 +401,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->table->reduceColumnsWidthsByMargins();
 
-        array_walk($columnsWidths, function(&$value, $key) use($marginsLeft, $marginsRight)
-        {
+        array_walk($columnsWidths, function (&$value, $key) use ($marginsLeft, $marginsRight) {
             $value -= $marginsLeft[$key] + $marginsRight[$key];
         });
 

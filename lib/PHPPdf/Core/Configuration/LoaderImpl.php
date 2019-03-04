@@ -20,9 +20,9 @@ use PHPPdf\Cache\Cache;
 
 /**
  * Standard configuration loader.
- * 
+ *
  * Loads configuration from xml files.
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class LoaderImpl implements Loader
@@ -43,31 +43,27 @@ class LoaderImpl implements Loader
     
     public function __construct($nodeFile = null, $complexAttributeFile = null, $fontFiles = null, $colorFile = null)
     {
-        if($nodeFile === null)
-        {
+        if ($nodeFile === null) {
             $nodeFile = __DIR__.'/../../Resources/config/nodes.xml';
         }
         
-        if($complexAttributeFile === null)
-        {
+        if ($complexAttributeFile === null) {
             $complexAttributeFile = __DIR__.'/../../Resources/config/complex-attributes.xml';
         }
         
-        if(!$fontFiles)
-        {
+        if (!$fontFiles) {
             $fontFiles = array(
                 'pdf' => __DIR__.'/../../Resources/config/fonts.xml',
                 'image' => __DIR__.'/../../Resources/config/fonts-image.xml',
             );
         }
         
-        if($colorFile === null)
-        {
+        if ($colorFile === null) {
             $colorFile = __DIR__.'/../../Resources/config/colors.xml';
         }
         
-        $this->nodeFile = $nodeFile;        
-        $this->complexAttributeFile = $complexAttributeFile;        
+        $this->nodeFile = $nodeFile;
+        $this->complexAttributeFile = $complexAttributeFile;
         $this->setFontFile($fontFiles);
         $this->colorFile = $colorFile;
 
@@ -75,34 +71,33 @@ class LoaderImpl implements Loader
     }
     
     public function setNodeFile($nodeFile)
-	{
-		$this->nodeFile = $nodeFile;
-	}
+    {
+        $this->nodeFile = $nodeFile;
+    }
 
-	public function setComplexAttributeFile($complexAttributeFile)
-	{
-		$this->complexAttributeFile = $complexAttributeFile;
-	}
+    public function setComplexAttributeFile($complexAttributeFile)
+    {
+        $this->complexAttributeFile = $complexAttributeFile;
+    }
 
-	public function setFontFile($fontFile)
-	{
-    	if(is_string($fontFile))
-        {
+    public function setFontFile($fontFile)
+    {
+        if (is_string($fontFile)) {
             $fontFile = array(
                 'pdf' => $fontFile,
                 'image' => $fontFile,
             );
         }
-	    
-		$this->fontFiles = $fontFile;
-	}
+        
+        $this->fontFiles = $fontFile;
+    }
 
-	public function setColorFile($colorFile)
-	{
-		$this->colorFile = $colorFile;
-	}
+    public function setColorFile($colorFile)
+    {
+        $this->colorFile = $colorFile;
+    }
 
-	public function setUnitConverter(UnitConverter $unitConverter)
+    public function setUnitConverter(UnitConverter $unitConverter)
     {
         $this->unitConverter = $unitConverter;
     }
@@ -112,33 +107,29 @@ class LoaderImpl implements Loader
         $this->cache = $cache;
     }
 
-	public function createComplexAttributeFactory()
+    public function createComplexAttributeFactory()
     {
-        if($this->complexAttributeFactory === null)
-        {
+        if ($this->complexAttributeFactory === null) {
             $this->complexAttributeFactory = $this->loadComplexAttributes();
-        }        
+        }
 
         return $this->complexAttributeFactory;
     }
 
-	public function createFontRegistry($engine = 'pdf')
+    public function createFontRegistry($engine = 'pdf')
     {
-        if(!isset($this->fontRegistries[$engine]))
-        {
+        if (!isset($this->fontRegistries[$engine])) {
             $this->fontRegistries[$engine] = $this->loadFonts($engine);
-        }        
+        }
 
         return $this->fontRegistries[$engine];
-        
     }
 
-	public function createNodeFactory()
+    public function createNodeFactory()
     {
-        if($this->nodeFactory === null)
-        {
+        if ($this->nodeFactory === null) {
             $this->nodeFactory = $this->loadNodes();
-        }        
+        }
 
         return $this->nodeFactory;
     }
@@ -148,11 +139,9 @@ class LoaderImpl implements Loader
         $file = $this->nodeFile;
 
         $unitConverter = $this->unitConverter;
-        $doLoadNodes = function($content) use($unitConverter)
-        {
+        $doLoadNodes = function ($content) use ($unitConverter) {
             $nodeFactoryParser = new NodeFactoryParser();
-            if($unitConverter)
-            {
+            if ($unitConverter) {
                 $nodeFactoryParser->setUnitConverter($unitConverter);
             }
 
@@ -165,8 +154,7 @@ class LoaderImpl implements Loader
         $nodeFactory = $this->getFromCacheOrCallClosure($file, $doLoadNodes);
 
         //TODO: DI
-        if($nodeFactory->hasPrototype('page') && $nodeFactory->hasPrototype('dynamic-page'))
-        {
+        if ($nodeFactory->hasPrototype('page') && $nodeFactory->hasPrototype('dynamic-page')) {
             $page = $nodeFactory->create('page');
             $nodeFactory->getPrototype('dynamic-page')->setPrototypePage($page);
         }
@@ -178,12 +166,9 @@ class LoaderImpl implements Loader
     {
         $id = $this->getCacheId($file);
 
-        if($this->cache->test($id))
-        {
+        if ($this->cache->test($id)) {
             $result = $this->cache->load($id);
-        }
-        else
-        {
+        } else {
             $content = $this->loadFile($file);
             $result = $closure($content);
             $this->cache->save($result, $id);
@@ -206,8 +191,7 @@ class LoaderImpl implements Loader
     {
         $file = $this->complexAttributeFile;
 
-        $doLoadComplexAttributes = function($content)
-        {
+        $doLoadComplexAttributes = function ($content) {
             $complexAttributeFactoryParser = new ComplexAttributeFactoryParser();
             $complexAttributeFactory = $complexAttributeFactoryParser->parse($content);
 
@@ -219,15 +203,13 @@ class LoaderImpl implements Loader
 
     protected function loadFonts($engine)
     {
-        if(!isset($this->fontFiles[$engine]))
-        {
+        if (!isset($this->fontFiles[$engine])) {
             throw new InvalidArgumentException(sprintf('Font file for engine "%s" is not defined.', $engine));
         }
         
         $file = $this->fontFiles[$engine];
 
-        $doLoadFonts = function($content)
-        {
+        $doLoadFonts = function ($content) {
             $fontRegistryParser = new FontRegistryParser();
             $fontRegistry = $fontRegistryParser->parse($content);
 
@@ -239,10 +221,9 @@ class LoaderImpl implements Loader
     
     public function createColorPalette()
     {
-        if($this->colorPalette === null)
-        {
+        if ($this->colorPalette === null) {
             $this->colorPalette = $this->loadColorPalette();
-        }        
+        }
 
         return $this->colorPalette;
     }
@@ -251,13 +232,12 @@ class LoaderImpl implements Loader
     {
         $file = $this->colorFile;
 
-        $doLoadColorPalette = function($content)
-        {
+        $doLoadColorPalette = function ($content) {
             $colorPaletteParser = new ColorPaletteParser();
             
             return $colorPaletteParser->parse($content);
         };
 
         return $this->getFromCacheOrCallClosure($file, $doLoadColorPalette);
-    }    
+    }
 }

@@ -13,22 +13,26 @@ use ZendPdf\InternalType;
 
 /**
  * Modified ZendPdf\Page class
- * 
+ *
  * Roundings are circles of radius = $radius in contrast to Zend_Pdf.
  */
 class Page extends ZendPage
 {
-    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius,
-                                         $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
-    {
-
+    public function drawRoundedRectangle(
+        $x1,
+        $y1,
+        $x2,
+        $y2,
+        $radius,
+        $fillType = self::SHAPE_DRAW_FILL_AND_STROKE
+    ) {
         $this->_addProcSet('PDF');
 
-        if(!is_array($radius)) {
+        if (!is_array($radius)) {
             $radius = array($radius, $radius, $radius, $radius);
         } else {
             for ($i = 0; $i < 4; $i++) {
-                if(!isset($radius[$i])) {
+                if (!isset($radius[$i])) {
                     $radius[$i] = 0;
                 }
             }

@@ -10,7 +10,7 @@ namespace PHPPdf\InputStream;
 
 /**
  * Input stream that is able to read data form string
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class StringInputStream implements InputStream
@@ -28,8 +28,7 @@ class StringInputStream implements InputStream
     public function seek($index, $mode = self::SEEK_CUR)
     {
         $newIndex = 0;
-        switch($mode)
-        {
+        switch ($mode) {
             case self::SEEK_CUR:
                 $newIndex = $this->currentIndex + $index;
                 break;
@@ -48,15 +47,13 @@ class StringInputStream implements InputStream
     
     public function read($length)
     {
-        if($this->currentIndex >= $this->contentLength)
-        {
+        if ($this->currentIndex >= $this->contentLength) {
             return '';
         }
         
         $last = $this->currentIndex + $length;
         
-        if($last > $this->contentLength)
-        {
+        if ($last > $this->contentLength) {
             $last = $this->contentLength - $this->currentIndex;
         }
         

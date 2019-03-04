@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\CellFirstPointPositionFormatter,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Point;
+use PHPPdf\Core\Formatter\CellFirstPointPositionFormatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
 
 class CellFirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

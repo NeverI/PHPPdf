@@ -9,10 +9,10 @@
 namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Engine\Font;
-use PHPPdf\Core\Formatter\BaseFormatter,
-    PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Formatter\Chain;
+use PHPPdf\Core\Formatter\BaseFormatter;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\Chain;
 
 /**
  * Calculates text's real dimension
@@ -35,8 +35,7 @@ class TextDimensionFormatter extends BaseFormatter
         $fontSize = $node->getFontSizeRecursively();
         $encoding = $node->getEncoding();
         
-        foreach($wordCandidates as $wordCandidate)
-        {
+        foreach ($wordCandidates as $wordCandidate) {
             self::processWordCandidate($wordCandidate, $maxPossibleWordLength, $font, $fontSize, $encoding, $words, $wordsSizes);
         }
 
@@ -47,8 +46,7 @@ class TextDimensionFormatter extends BaseFormatter
     {
         $wordCandidates = preg_split('/[ \t]+/', $text);
         
-        for($i=0, $lastIndex = count($wordCandidates) - 1; $i < $lastIndex; $i++)
-        {
+        for ($i=0, $lastIndex = count($wordCandidates) - 1; $i < $lastIndex; $i++) {
             $wordCandidates[$i] .= ' ';
         }
         
@@ -59,12 +57,9 @@ class TextDimensionFormatter extends BaseFormatter
     {
         $wordCandidateWidth = $font->getWidthOfText($wordCandidate, $fontSize);
         
-        if($wordCandidateWidth > $maxPossibleWordWidth)
-        {
+        if ($wordCandidateWidth > $maxPossibleWordWidth) {
             self::buildWordsNoGreaterThanGivenWidth($wordCandidate, $maxPossibleWordWidth, $font, $fontSize, $encoding, $words, $wordSizes);
-        }
-        else
-        {
+        } else {
             $words[] = $wordCandidate;
             $wordSizes[] = $wordCandidateWidth;
         }
@@ -77,23 +72,19 @@ class TextDimensionFormatter extends BaseFormatter
         $buildingWord = '';
         $buildingWordWidth = 0;
         
-        for($i=0; $i<$wordLength; $i++)
-        {
+        for ($i=0; $i<$wordLength; $i++) {
             $char = mb_substr($wordCandidate, $i, 1, $encoding);
             $charSize = $font->getWidthOfText($char, $fontSize);
             
             $nextBuildingWordWidth = $buildingWordWidth + $charSize;
             
-            if($nextBuildingWordWidth > $maxPossibleWordWidth)
-            {
+            if ($nextBuildingWordWidth > $maxPossibleWordWidth) {
                 $words[] = $buildingWord;
                 $wordSizes[] = $buildingWordWidth;
                 
                 $buildingWord = $char;
                 $buildingWordWidth = $charSize;
-            }
-            else
-            {
+            } else {
                 $buildingWord .= $char;
                 $buildingWordWidth += $charSize;
             }
@@ -106,22 +97,19 @@ class TextDimensionFormatter extends BaseFormatter
     
     private static function getMaxPossibleWordLength(Nodes\Node $node)
     {
-    	for($currentNode=$node; ;$currentNode = $currentNode->getParent())
-    	{
+        for ($currentNode=$node; ;$currentNode = $currentNode->getParent()) {
             $maxWidth = $currentNode->getMaxWidth();
-            if($maxWidth)
-            {
+            if ($maxWidth) {
                 return $maxWidth;
             }
 
             $width = $currentNode->getWidth();
 
-    	    if($width)
-    	    {
-    	        return $width;
-    	    }
-    	}
-    	
-    	return 0;
+            if ($width) {
+                return $width;
+            }
+        }
+        
+        return 0;
     }
 }

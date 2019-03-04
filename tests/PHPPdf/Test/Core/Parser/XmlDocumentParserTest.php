@@ -5,11 +5,11 @@ namespace PHPPdf\Test\Core\Parser;
 use PHPPdf\Core\Node\Container;
 use PHPPdf\Core\Node\Paragraph;
 use PHPPdf\Core\Node\Text;
-use PHPPdf\Core\Parser\XmlDocumentParser,
-    PHPPdf\Core\Node\NodeFactory,
-    PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
-    PHPPdf\Core\Node\PageCollection,
-    PHPPdf\Core\Parser\StylesheetConstraint;
+use PHPPdf\Core\Parser\XmlDocumentParser;
+use PHPPdf\Core\Node\NodeFactory;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
+use PHPPdf\Core\Node\PageCollection;
+use PHPPdf\Core\Parser\StylesheetConstraint;
 
 class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -122,8 +122,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $factoryMock = $this->getMock('PHPPdf\Core\Node\NodeFactory', array('create'));
         
         $index = 0;
-        foreach($mocks as $mockData)
-        {
+        foreach ($mocks as $mockData) {
             list($tag, $mock) = $mockData;
             
             $expection = $excatly ? $this->exactly($excatly) : $this->at($index);
@@ -148,8 +147,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createNodeMock($baseClass = 'PHPPdf\Core\Node\Page', $methods = array(), $setParentExpectation = true)
     {
         $nodeMock = $this->getMock($baseClass, array_merge(array('setParent', 'setAttribute'), $methods));
-        if($setParentExpectation)
-        {
+        if ($setParentExpectation) {
             $nodeMock->expects($this->once())
                       ->method('setParent');
         }
@@ -160,8 +158,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function addNodeAttributesExpectations($node, $attributes, $attributeStartIndex = 0)
     {
         $index = $attributeStartIndex;
-        foreach($attributes as $name => $value)
-        {
+        foreach ($attributes as $name => $value) {
             $node->expects($this->at($index++))
                       ->method('setAttribute')
                       ->with($this->equalTo($name), $this->equalTo($value))
@@ -215,7 +212,6 @@ XML;
 
         $this->assertOnlyChild($nodeMock1, $pageCollection);
         $this->assertOnlyChild($nodeMock2, $nodeMock1);
-
     }
 
     private function assertOnlyChild($expectedChild, $parentNode)
@@ -455,12 +451,11 @@ XML;
 
         $parserMock = $this->getMock('PHPPdf\Core\Parser\StylesheetParser', array('parse'));
         $parserMock->expects($this->once())
-                   ->method('parse') 
-                   //move after stylesheet close tag and return constraint                  
+                   ->method('parse')
+                   //move after stylesheet close tag and return constraint
                    ->will($this->returnCompose(array(
-                       $this->returnCallback(function() use($reader){                           
-                           while($reader->name != XmlDocumentParser::STYLESHEET_TAG)
-                           {
+                       $this->returnCallback(function () use ($reader) {
+                           while ($reader->name != XmlDocumentParser::STYLESHEET_TAG) {
                                $reader->next();
                            }
                        }), $this->returnValue($constraintMock)
@@ -559,8 +554,7 @@ XML;
 
     private function addComplexAttributeExpectationToNodeMock($node, $complexAttributes, $initSequence)
     {
-        foreach($complexAttributes as $name => $parameters)
-        {
+        foreach ($complexAttributes as $name => $parameters) {
             $node->expects($this->at($initSequence++))
                   ->method('mergeComplexAttributes')
                   ->with($this->equalTo($name), $this->equalTo($parameters));
@@ -824,8 +818,7 @@ XML;
         
         $pages = $this->parser->parse($xml);
         
-        foreach(array($text1Node, $text2Node) as $textNode)
-        {
+        foreach (array($text1Node, $text2Node) as $textNode) {
             $textNode->preFormat($this->documentMock);
         }
 
@@ -935,8 +928,7 @@ XML;
         //first two invocations are getSupportedBehaviourNames method calls
         $behaviourFactoryCallIndex = 2;
 
-        foreach($behaviourNames as $i => $behaviourName)
-        {
+        foreach ($behaviourNames as $i => $behaviourName) {
             $behaviour = $this->getMockBuilder('PHPPdf\Core\Node\Behaviour\Behaviour')
                               ->setMethods(array('doAttach'))
                               ->getMock();
@@ -989,12 +981,9 @@ XML;
         $xml = <<<XML
 <pdf></pdfaa>    
 XML;
-        try
-        {
+        try {
             $this->parser->parse($xml);
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \PHPUnit_Framework_Error_Warning::$enabled = $warningEnabled;
             throw $e;
         }
@@ -1079,5 +1068,5 @@ XML;
         $this->parser->addListener($listener);
         
         $this->parser->parse($xml);
-    } 
+    }
 }

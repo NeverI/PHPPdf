@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Node;
 
 /**
  * Item of BasicList
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class BasicListItem extends Container
@@ -19,8 +19,7 @@ class BasicListItem extends Container
     {
         $absoluteYCoordOfBreaking = $this->getFirstPoint()->getY() - $height;
         
-        if($this->hasLeafDescendants($absoluteYCoordOfBreaking))
-        {
+        if ($this->hasLeafDescendants($absoluteYCoordOfBreaking)) {
             return parent::doBreakAt($height);
         }
         

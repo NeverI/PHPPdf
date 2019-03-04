@@ -9,13 +9,12 @@ use PHPPdf\Core\Engine\ZF\Engine;
 use PHPPdf\Core\Engine\ZF\GraphicsContext;
 
 class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
-{   
+{
     const ENCODING = 'utf-8';
     
     protected function setUp()
     {
-        if(!class_exists('ZendPdf\PdfDocument', true))
-        {
+        if (!class_exists('ZendPdf\PdfDocument', true)) {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
     }
@@ -336,21 +335,21 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $zendPageMock->expects($this->at(0))
                      ->method('saveGS');
         $zendPageMock->expects($this->at(1))
-                     ->method('setLineDashingPattern');        
+                     ->method('setLineDashingPattern');
         $zendPageMock->expects($this->at(2))
                      ->method('setLineWidth');
         $zendPageMock->expects($this->at(3))
-                     ->method('setFillColor');        
+                     ->method('setFillColor');
         $zendPageMock->expects($this->at(4))
                      ->method('setLineColor');
         $zendPageMock->expects($this->at(5))
                      ->method('restoreGS');
         $zendPageMock->expects($this->at(6))
-                     ->method('setLineDashingPattern');        
+                     ->method('setLineDashingPattern');
         $zendPageMock->expects($this->at(7))
                      ->method('setLineWidth');
         $zendPageMock->expects($this->at(8))
-                     ->method('setFillColor');        
+                     ->method('setFillColor');
         $zendPageMock->expects($this->at(9))
                      ->method('setLineColor');
         $zendPageMock->expects($this->at(10))
@@ -367,8 +366,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $gc->saveGS();
         //second loop pass do not change internal gc state
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $gc->setLineDashingPattern(array(1, 1));
             $gc->setLineWidth(1);
             $gc->setFillColor($color1);
@@ -378,8 +376,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc->restoreGS();
 
         //second loop pass do not change internal gc state
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $gc->setLineDashingPattern(array(1, 1));
             $gc->setLineWidth(1);
             $gc->setFillColor($color1);
@@ -406,8 +403,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
               ->method('getWrappedColor')
               ->will($this->returnValue($zendColor));
               
-        if($components !== null)
-        {
+        if ($components !== null) {
             $color->expects($this->any())
                   ->method('getComponents')
                   ->will($this->returnValue($components));
@@ -431,7 +427,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $zendPageMock->expects($this->once())
                      ->method('attachAnnotation')
-                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($uri, $coords){
+                     ->with($this->validateByCallback(function ($actual, \PHPUnit_Framework_TestCase $testCase) use ($uri, $coords) {
                          $testCase->assertAnnotationLinkWithRectangle($coords, $actual);
                          
                          $action = $actual->getDestination();
@@ -451,8 +447,7 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $boundary = $actual->getResource()->Rect;
         
-        foreach($coords as $i => $coord)
-        {
+        foreach ($coords as $i => $coord) {
             $this->assertEquals((string) $coord, $boundary->items[$i]->toString());
         }
     }
@@ -475,12 +470,11 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $zendPageMock->expects($this->once())
                      ->method('attachAnnotation')
-                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($top, $coords, $pageStub){
+                     ->with($this->validateByCallback(function ($actual, \PHPUnit_Framework_TestCase $testCase) use ($top, $coords, $pageStub) {
                          $testCase->assertAnnotationLinkWithRectangle($coords, $actual);
                          
                          $destination = $actual->getDestination();
                          $testCase->assertZendPageDestination($top, $pageStub, $destination);
-
                      }, $this));
                      
         $gc = $this->createGc($this->getEngineMock(), $zendPageMock);
@@ -615,12 +609,11 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $zendPageMock->expects($this->once())
                      ->method('attachAnnotation')
-                     ->with($this->validateByCallback(function($actual, \PHPUnit_Framework_TestCase $testCase) use($text, $coords){
+                     ->with($this->validateByCallback(function ($actual, \PHPUnit_Framework_TestCase $testCase) use ($text, $coords) {
                          $testCase->assertInstanceOf('ZendPdf\Annotation\Text', $actual);
                          $rect = $actual->getResource()->Rect;
 
-                         foreach($coords as $i => $coord)
-                         {
+                         foreach ($coords as $i => $coord) {
                              $testCase->assertEquals($coord, $rect->items[$i]->toPhp());
                          }
                          $actualText = $actual->getResource()->Contents->toString();
@@ -644,14 +637,11 @@ class GraphicsContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
                              
         $gc = $this->createGc(new Engine(), $zendPageMock);
         
-        if($expectCall)
-        {
+        if ($expectCall) {
             $zendPageMock->expects($this->at(0))
                          ->method('setAlpha')
                          ->with($alpha);
-        }
-        else
-        {
+        } else {
             $zendPageMock->expects($this->never())
                          ->method('setAlpha');
         }

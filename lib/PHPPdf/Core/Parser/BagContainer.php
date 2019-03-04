@@ -26,8 +26,7 @@ class BagContainer implements \Serializable
     {
         $attributeBag = new AttributeBag();
         
-        foreach($attributes as $name => $value)
-        {
+        foreach ($attributes as $name => $value) {
             $attributeBag->add($name, $value);
         }
 
@@ -103,22 +102,18 @@ class BagContainer implements \Serializable
     {
         $attributes = $this->getAll();
         
-        foreach($attributes as $name => $value)
-        {
-            if(is_array($value))
-            {
+        foreach ($attributes as $name => $value) {
+            if (is_array($value)) {
                 $node->mergeComplexAttributes($name, $value);
-            }
-            else
-            {
+            } else {
                 $node->setAttribute($name, $value);
             }
         }
     }
 
     /**
-     * Marge couple of BagContainers into one object. 
-     * 
+     * Marge couple of BagContainers into one object.
+     *
      * Result of merging always is BagContainer.
      *
      * @param array $containers
@@ -129,8 +124,7 @@ class BagContainer implements \Serializable
         $attributeBags = array();
 
         $weight = 0;
-        foreach($containers as $container)
-        {
+        foreach ($containers as $container) {
             $weight = max($weight, $container->getWeight());
             $attributeBags[] = $container->getAttributeBag();
         }

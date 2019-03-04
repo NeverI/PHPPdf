@@ -80,7 +80,11 @@ class ImageDrawingTest extends AbstractGraphicsContextTest
         $color3 = '#333333';
 
         $image = $this->imageWithVerticallyColoredRectangleInLeftUpperQuater(
-            self::WIDTH, self::HEIGHT, $color1, $color2, $color3
+            self::WIDTH,
+            self::HEIGHT,
+            $color1,
+            $color2,
+            $color3
         )->get();
 
         $scaledWidth = self::WIDTH*$scale;
@@ -108,7 +112,11 @@ class ImageDrawingTest extends AbstractGraphicsContextTest
         $color3 = '#333333';
 
         $image = $this->imageWithVerticallyColoredRectangleInRightBottomQuater(
-            self::WIDTH, self::HEIGHT, $color1, $color2, $color3
+            self::WIDTH,
+            self::HEIGHT,
+            $color1,
+            $color2,
+            $color3
         )->get();
 
         $scaledWidth = self::WIDTH*$scale;
@@ -278,8 +286,7 @@ class ImageDrawingTest_ImageBuilder
     {
         $image = $this->imagine->create($this->size, $this->color);
 
-        foreach($this->colorRects as $colorRect)
-        {
+        foreach ($this->colorRects as $colorRect) {
             /**
              * @var Point $startPoint
              * @var Box $box
@@ -297,4 +304,3 @@ class ImageDrawingTest_ImageBuilder
         return new \PHPPdf\Core\Engine\Imagine\Image($image, $this->imagine);
     }
 }
-

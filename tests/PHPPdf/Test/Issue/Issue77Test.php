@@ -45,7 +45,8 @@ class Issue77Test extends TestCase
     private function renderDocumentWithFooter($footer, $useTemplate)
     {
         $template = $useTemplate ? 'document-template="'.__DIR__.'/../../Resources/test.pdf"' : '';
-        return $this->facade->render('<pdf>
+        return $this->facade->render(
+            '<pdf>
     <dynamic-page encoding="UTF-8" '.$template.'>
                 <placeholders>
                     <header>
@@ -64,7 +65,6 @@ class Issue77Test extends TestCase
 
             </dynamic-page>
         </pdf>',
-
             '<stylesheet></stylesheet>'
         );
     }

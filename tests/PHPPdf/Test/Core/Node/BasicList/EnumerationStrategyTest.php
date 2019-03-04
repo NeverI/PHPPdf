@@ -15,7 +15,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
         $this->strategy = $this->createStrategy();
     }
     
-    abstract protected function createStrategy();    
+    abstract protected function createStrategy();
     
     /**
      * @test
@@ -56,18 +56,15 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
 
         $positionTranslation = 0;
 
-        if($position == BasicList::LIST_POSITION_OUTSIDE)
-        {
+        if ($position == BasicList::LIST_POSITION_OUTSIDE) {
             $expectedWidth = rand(3, 7);
             $positionTranslation -= $expectedWidth;
             
             $fontTypeMock->expects($this->once())
                          ->method('getWidthOfText')
                          ->with($expectedText, $fontSize)
-                         ->will($this->returnValue($expectedWidth));                       
-        }
-        else
-        {
+                         ->will($this->returnValue($expectedWidth));
+        } else {
             $fontTypeMock->expects($this->atLeastOnce())
                          ->method('getWidthOfText');
         }

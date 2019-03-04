@@ -53,13 +53,11 @@ class FacadeBuilder extends AbstractStringFilterContainer
     {
         $this->stringFilters[] = new ResourcePathStringFilter();
 
-        if($configurationLoader === null)
-        {
+        if ($configurationLoader === null) {
             $configurationLoader = new LoaderImpl();
         }
 
-        if($engineFactory === null)
-        {
+        if ($engineFactory === null) {
             $engineFactory = new EngineFactoryImpl();
         }
         
@@ -69,7 +67,7 @@ class FacadeBuilder extends AbstractStringFilterContainer
 
     /**
      * Static constructor
-     * 
+     *
      * @return FacadeBuilder
      */
     public static function create(Loader $configuration = null, EngineFactory $engineFactory = null)
@@ -111,20 +109,17 @@ class FacadeBuilder extends AbstractStringFilterContainer
         $this->addStringFiltersTo($facade);
         $facade->setEngineType($this->engineType);
         
-        if($documentParser instanceof FacadeAware)
-        {
+        if ($documentParser instanceof FacadeAware) {
             $documentParser->setFacade($facade);
         }
         
         $facade->setUseCacheForStylesheetConstraint($this->useCacheForStylesheetConstraint);
 
-        if($this->cacheType && $this->cacheType !== 'Null')
-        {
+        if ($this->cacheType && $this->cacheType !== 'Null') {
             $cache = new CacheImpl($this->cacheType, $this->cacheOptions);
             $facade->setCache($cache);
             
-            if($this->useCacheForConfigurationLoader)
-            {
+            if ($this->useCacheForConfigurationLoader) {
                 $this->configurationLoader->setCache($cache);
             }
         }
@@ -155,7 +150,7 @@ class FacadeBuilder extends AbstractStringFilterContainer
      *
      * @param string $type Type of cache, see {@link PHPPdf\Cache\CacheImpl} engine constants
      * @param array $options Options for cache
-     * 
+     *
      * @return FacadeBuilder
      */
     public function setCache($type, array $options = array())
@@ -175,7 +170,7 @@ class FacadeBuilder extends AbstractStringFilterContainer
      *
      * @see setCache()
      * @param boolean $useCache Cache for Stylesheets should by used?
-     * 
+     *
      * @return FacadeBuilder
      */
     public function setUseCacheForStylesheetConstraint($useCache)
@@ -191,8 +186,7 @@ class FacadeBuilder extends AbstractStringFilterContainer
     public function setDocumentParserType($type)
     {
         $parserTypes = array(self::PARSER_XML, self::PARSER_MARKDOWN);
-        if(!in_array($type, $parserTypes))
-        {
+        if (!in_array($type, $parserTypes)) {
             throw new InvalidArgumentException(sprintf('Unknown parser type "%s", expected one of: %s.', $type, implode(', ', $parserTypes)));
         }
 
@@ -203,9 +197,9 @@ class FacadeBuilder extends AbstractStringFilterContainer
     
     /**
      * Sets stylesheet filepath for markdown document parser
-     * 
+     *
      * @param string|null $filepath Filepath
-     * 
+     *
      * @return FacadeBuilder
      */
     public function setMarkdownStylesheetFilepath($filepath)
@@ -217,9 +211,9 @@ class FacadeBuilder extends AbstractStringFilterContainer
     
     /**
      * Sets document template for markdown document parser
-     * 
+     *
      * @param string|null $filepath Filepath to document template
-     * 
+     *
      * @return FacadeBuilder
      */
     public function setMarkdownDocumentTemplateFilepath($filepath)

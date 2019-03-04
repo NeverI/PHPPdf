@@ -28,7 +28,7 @@ class FacadeConfiguration
 
     /**
      * Static constructor
-     * 
+     *
      * @return FacadeConfiguration
      */
     public static function newInstance()

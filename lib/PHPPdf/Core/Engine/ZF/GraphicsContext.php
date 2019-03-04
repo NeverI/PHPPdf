@@ -64,12 +64,9 @@ class GraphicsContext extends AbstractGraphicsContext
     public function __construct(Engine $engine, $pageOrPageSize, $encoding)
     {
         $this->engine = $engine;
-        if($pageOrPageSize instanceof ZendPage)
-        {
+        if ($pageOrPageSize instanceof ZendPage) {
             $this->page = $pageOrPageSize;
-        }
-        else
-        {
+        } else {
             list($this->width, $this->height) = explode(':', $pageOrPageSize);
         }
         
@@ -128,8 +125,7 @@ class GraphicsContext extends AbstractGraphicsContext
     protected function doSetFillColor($colorData)
     {
         $color = $this->getColor($colorData);
-        if(!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents())
-        {
+        if (!$this->state['fillColor'] || $color->getComponents() !== $this->state['fillColor']->getComponents()) {
             $this->getPage()->setFillColor($color);
             $this->state['fillColor'] = $color;
         }
@@ -137,13 +133,11 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private function getColor($colorData)
     {
-        if(is_string($colorData))
-        {
+        if (is_string($colorData)) {
             return ZendColor::color($colorData);
         }
         
-        if(!$colorData instanceof ZendColor)
-        {
+        if (!$colorData instanceof ZendColor) {
             throw new InvalidArgumentException('Wrong color value, expected string or object of ZendPdf\Color\Html class.');
         }
         
@@ -153,8 +147,7 @@ class GraphicsContext extends AbstractGraphicsContext
     protected function doSetLineColor($colorData)
     {
         $color = $this->getColor($colorData);
-        if(!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents())
-        {
+        if (!$this->state['lineColor'] || $color->getComponents() !== $this->state['lineColor']->getComponents()) {
             $this->getPage()->setLineColor($color);
             $this->state['lineColor'] = $color;
         }
@@ -167,42 +160,30 @@ class GraphicsContext extends AbstractGraphicsContext
 
     protected function doDrawText($text, $x, $y, $encoding, $wordSpacing = 0, $fillType = self::SHAPE_DRAW_FILL)
     {
-        try 
-        {
-            if($wordSpacing === 0 && $fillType === self::SHAPE_DRAW_FILL)
-            {
+        try {
+            if ($wordSpacing === 0 && $fillType === self::SHAPE_DRAW_FILL) {
                 $this->getPage()->drawText($text, $x, $y, $encoding);
-            }
-            else
-            {
+            } else {
                 $this->richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType);
             }
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
     
     private function richDrawText($text, $x, $y, $encoding, $wordSpacing, $fillType)
     {
-        if($this->getPage()->getFont() === null) 
-        {
+        if ($this->getPage()->getFont() === null) {
             throw new \ZendPdf\Exception\LogicException('Font has not been set');
         }
   
-        if($fillType == self::SHAPE_DRAW_FILL)
-        {
+        if ($fillType == self::SHAPE_DRAW_FILL) {
             $pdfFillType = 0;
-        }
-        elseif($fillType == self::SHAPE_DRAW_STROKE)
-        {
+        } elseif ($fillType == self::SHAPE_DRAW_STROKE) {
             $pdfFillType = 1;
-        }
-        else
-        {
+        } else {
             $pdfFillType = 2;
-        }       
+        }
         
         $data = $this->getDataForTextDrawing($text, $x, $y, $encoding, $wordSpacing, $pdfFillType);
 
@@ -221,27 +202,24 @@ class GraphicsContext extends AbstractGraphicsContext
                  .  $xObj->toString() . ' ' . $yObj->toString() . " Td\n"
                  . ($fillType != 0 ? $fillType.' Tr'."\n" : '');
                  
-        if($this->isFontDefiningSpaceInSingleByte($font))
-        {
+        if ($this->isFontDefiningSpaceInSingleByte($font)) {
             $textObj = $this->createTextObject($font, $text, $encoding);
 
             $data .= ($wordSpacing != 0 ? $wordSpacingObj->toString().' Tw'."\n" : '')
                      .  $textObj->toString() . " Tj\n";
         }
         //Word spacing form fonts, that defines space char on 2 bytes, dosn't work
-        else
-        {
+        else {
             $words = explode(' ', $text);
 
             $spaceObj = $this->createTextObject($font, ' ', $encoding);
             
-            foreach($words as $word)
-            {
+            foreach ($words as $word) {
                 $textObj = $this->createTextObject($font, $word, $encoding);
                 $data .= '0 Tc'."\n"
-                		 . $textObj->toString(). " Tj\n"
-                		 . $wordSpacingObj->toString() . " Tc\n"
-                		 . $spaceObj->toString() ." Tj\n";
+                         . $textObj->toString(). " Tj\n"
+                         . $wordSpacingObj->toString() . " Tc\n"
+                         . $spaceObj->toString() ." Tj\n";
             }
         }
         
@@ -262,8 +240,7 @@ class GraphicsContext extends AbstractGraphicsContext
 
     public function getPage()
     {
-        if(!$this->page)
-        {
+        if (!$this->page) {
             $this->page = new Page($this->width.':'.$this->height);
             $this->width = $this->height = null;
         }
@@ -277,8 +254,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private function translateFillType($fillType)
     {
-        switch($fillType)
-        {
+        switch ($fillType) {
             case self::SHAPE_DRAW_STROKE:
                 return ZendPage::SHAPE_DRAW_STROKE;
             case self::SHAPE_DRAW_FILL:
@@ -292,8 +268,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doSetLineWidth($width)
     {
-        if(!$this->state['lineWidth'] || $this->state['lineWidth'] != $width)
-        {
+        if (!$this->state['lineWidth'] || $this->state['lineWidth'] != $width) {
             $this->getPage()->setLineWidth($width);
             $this->state['lineWidth'] = $width;
         }
@@ -301,15 +276,13 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doSetLineDashingPattern($pattern)
     {
-        switch($pattern)
-        {
+        switch ($pattern) {
             case self::DASHING_PATTERN_DOTTED:
                 $pattern = array(1, 2);
                 break;
         }
         
-        if($this->state['lineDashingPattern'] === null || $this->state['lineDashingPattern'] !== $pattern)
-        {
+        if ($this->state['lineDashingPattern'] === null || $this->state['lineDashingPattern'] !== $pattern) {
             $this->getPage()->setLineDashingPattern($pattern);
             $this->state['lineDashingPattern'] = $pattern;
         }
@@ -317,34 +290,28 @@ class GraphicsContext extends AbstractGraphicsContext
 
     protected function doUriAction($x1, $y1, $x2, $y2, $uri)
     {
-        try
-        {
+        try {
             $uriAction = \ZendPdf\Action\Uri::create($uri);
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $uriAction);
             
             $this->getPage()->attachAnnotation($annotation);
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw new RuntimeException(sprintf('Error wile adding uri action with uri="%s"', $uri), 0, $e);
         }
     }
     
     protected function doGoToAction(BaseGraphicsContext $gc, $x1, $y1, $x2, $y2, $top)
     {
-        try
-        {
-            $destination = \ZendPdf\Destination\FitHorizontally::create($gc->getPage(), $top);   
+        try {
+            $destination = \ZendPdf\Destination\FitHorizontally::create($gc->getPage(), $top);
             
             $annotation = $this->createAnnotationLink($x1, $y1, $x2, $y2, $destination);
             
             $this->getPage()->attachAnnotation($annotation);
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw new RuntimeException('Error while adding goTo action', 0, $e);
-        }        
+        }
     }
     
     private function createAnnotationLink($x1, $y1, $x2, $y2, $target)
@@ -365,8 +332,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     public function addBookmark($identifier, $name, $top, $parentIdentifier = null)
     {
-        try
-        {   
+        try {
             $destination = \ZendPdf\Destination\FitHorizontally::create($this->getPage(), $top);
             $action = \ZendPdf\Action\GoToAction::create($destination);
             
@@ -375,32 +341,24 @@ class GraphicsContext extends AbstractGraphicsContext
             
             $outline = \ZendPdf\Outline\AbstractOutline::create($name, $action);
             
-            $this->engine->registerOutline($identifier, $outline);     
+            $this->engine->registerOutline($identifier, $outline);
             
             $this->addToQueue('doAddBookmark', array($identifier, $outline, $parentIdentifier));
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
     }
 
     protected function doAddBookmark($identifier, \ZendPdf\Outline\AbstractOutline $outline, $parentIdentifier = null)
     {
-        try
-        {            
-            if($parentIdentifier !== null)
-            {
+        try {
+            if ($parentIdentifier !== null) {
                 $parent = $this->engine->getOutline($parentIdentifier);
                 $parent->childOutlines[] = $outline;
-            }
-            else
-            {
+            } else {
                 $this->engine->getZendPdf()->outlines[] = $outline;
             }
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw new RuntimeException('Error while bookmark adding', 0, $e);
         }
     }
@@ -413,8 +371,7 @@ class GraphicsContext extends AbstractGraphicsContext
     
     protected function doSetAlpha($alpha)
     {
-        if($this->state['alpha'] != $alpha)
-        {
+        if ($this->state['alpha'] != $alpha) {
             $this->getPage()->setAlpha($alpha);
             $this->state['alpha'] = $alpha;
         }
@@ -443,10 +400,8 @@ class GraphicsContext extends AbstractGraphicsContext
     
     private function getIndexOfPage()
     {
-        foreach($this->engine->getAttachedGraphicsContexts() as $index => $gc)
-        {
-            if($gc === $this)
-            {
+        foreach ($this->engine->getAttachedGraphicsContexts() as $index => $gc) {
+            if ($gc === $this) {
                 return $index;
             }
         }
@@ -457,8 +412,7 @@ class GraphicsContext extends AbstractGraphicsContext
     public function copy()
     {
         $gc = clone $this;
-        if($this->page)
-        {
+        if ($this->page) {
             $gc->page = clone $this->getPage();
         }
         

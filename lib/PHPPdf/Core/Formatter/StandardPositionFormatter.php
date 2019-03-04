@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Boundary;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Boundary;
 
 /**
  * Calculates real position of node
@@ -22,8 +22,7 @@ class StandardPositionFormatter extends BaseFormatter
     public function format(Nodes\Node $node, Document $document)
     {
         $boundary = $node->getBoundary();
-        if(!$boundary->isClosed())
-        {
+        if (!$boundary->isClosed()) {
             list($x, $y) = $boundary->getFirstPoint()->toArray();
 
             $attributesSnapshot = $node->getAttributesSnapshot();
@@ -36,8 +35,7 @@ class StandardPositionFormatter extends BaseFormatter
                      ->setNext($x - $width, $yEnd)
                      ->close();
 
-            if($node->hadAutoMargins())
-            {
+            if ($node->hadAutoMargins()) {
                 $node->translate(-$diffWidth/2, 0);
             }
         }

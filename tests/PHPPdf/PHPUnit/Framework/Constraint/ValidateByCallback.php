@@ -15,32 +15,28 @@ class ValidateByCallback extends \PHPUnit_Framework_Constraint
         $this->testCase = $testCase;
     }
     
-	public function evaluate($other, $description = '', $returnResult = FALSE)
-	{
-	    if($this->valid !== null)
-	    {
-	        return $this->valid;
-	    }
-	    
-	    try
-	    {
-	        $closure = $this->closure;
-	        $closure($other, $this->testCase);
-	    }
-	    catch(\PHPUnit_Framework_AssertionFailedError $e)
-	    {
-	        $this->failureException = $e;
-	        $this->valid = false;
-	        return false;
-	    }
-	    
-	    $this->valid = true;
-	    
-	    return true;
-	}
+    public function evaluate($other, $description = '', $returnResult = false)
+    {
+        if ($this->valid !== null) {
+            return $this->valid;
+        }
+        
+        try {
+            $closure = $this->closure;
+            $closure($other, $this->testCase);
+        } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            $this->failureException = $e;
+            $this->valid = false;
+            return false;
+        }
+        
+        $this->valid = true;
+        
+        return true;
+    }
 
-	public function toString()
-	{
-		return $this->failureException->toString();
-	}
+    public function toString()
+    {
+        return $this->failureException->toString();
+    }
 }

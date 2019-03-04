@@ -15,7 +15,7 @@ use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Parser for node config file
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class NodeFactoryParser extends XmlParser
@@ -75,32 +75,19 @@ class NodeFactoryParser extends XmlParser
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($this->isFormattersParsing)
-        {
+        if ($this->isFormattersParsing) {
             $this->parseFormatter($reader->name, $reader);
-        }
-        elseif($reader->name === self::GLYPH_TAG)
-        {
+        } elseif ($reader->name === self::GLYPH_TAG) {
             $this->parseNode($reader);
-        }
-        elseif($reader->name === self::STYLESHEET_TAG)
-        {
+        } elseif ($reader->name === self::STYLESHEET_TAG) {
             $this->parseStylesheet($reader);
-        }
-        elseif($reader->name === self::FORMATTERS_TAG)
-        {
+        } elseif ($reader->name === self::FORMATTERS_TAG) {
             $this->isFormattersParsing = true;
-        }
-        elseif($reader->name === self::INVOKE_TAG)
-        {
+        } elseif ($reader->name === self::INVOKE_TAG) {
             $this->parseInvoke($reader);
-        }
-        elseif($reader->name === self::INVOKE_ARG_TAG)
-        {
+        } elseif ($reader->name === self::INVOKE_ARG_TAG) {
             $this->parseInvokeArg($reader);
-        }
-        elseif($reader->name === self::ALIAS_TAG)
-        {
+        } elseif ($reader->name === self::ALIAS_TAG) {
             $this->currentAliases[] = $reader->readString();
         }
     }
@@ -113,14 +100,12 @@ class NodeFactoryParser extends XmlParser
         $name = trim($reader->getAttribute('name'));
         $class = trim($reader->getAttribute('class'));
 
-        if(!$name || !$class)
-        {
+        if (!$name || !$class) {
             throw new ParseException('"name" and "class" attribute are required.');
         }
 
         $node = new $class();
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             $node->setUnitConverter($this->unitConverter);
         }
         $root->addPrototype($name, $node);
@@ -165,8 +150,7 @@ class NodeFactoryParser extends XmlParser
         
         $factory = $this->getFirstElementFromStack();
         
-        if($class)
-        {
+        if ($class) {
             $value = new $class();
         }
         
@@ -175,20 +159,16 @@ class NodeFactoryParser extends XmlParser
 
     protected function parseEndElement(\XMLReader $reader)
     {
-        if($reader->name === self::FORMATTERS_TAG)
-        {
+        if ($reader->name === self::FORMATTERS_TAG) {
             $this->isFormattersParsing = false;
-        }
-        elseif(!$this->isFormattersParsing && $reader->name === self::GLYPH_TAG)
-        {
+        } elseif (!$this->isFormattersParsing && $reader->name === self::GLYPH_TAG) {
             $node = $this->popFromStack();
             
             $factory = $this->getFirstElementFromStack();
 
             $factory->addAliases($this->lastTag, $this->currentAliases);
 
-            foreach($this->invokeMethods as $invokeMethod)
-            {
+            foreach ($this->invokeMethods as $invokeMethod) {
                 list($method, $argId) = $invokeMethod;
                 $factory->addInvocationsMethodsOnCreate($this->lastTag, $method, $argId);
             }

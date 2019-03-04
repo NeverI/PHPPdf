@@ -15,23 +15,20 @@ use PHPPdf\Core\Node\Node;
 
 /**
  * Elastic page formatter
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ElasticPageFormatter extends BaseFormatter
 {
     public function format(Node $node, Document $document)
     {
-        if(!$node instanceof Page)
-        {
+        if (!$node instanceof Page) {
             throw new InvalidArgumentException('ElasticPageFormatter works only with PHPPdf\Core\Node\Page class.');
         }
         
         $lastChild = null;
-        foreach($node->getChildren() as $child)
-        {
-            if(!$lastChild || ($lastChild->getDiagonalPoint()->getY() - $lastChild->getMarginBottom()) > ($child->getDiagonalPoint()->getY() - $child->getMarginBottom()))
-            {
+        foreach ($node->getChildren() as $child) {
+            if (!$lastChild || ($lastChild->getDiagonalPoint()->getY() - $lastChild->getMarginBottom()) > ($child->getDiagonalPoint()->getY() - $child->getMarginBottom())) {
                 $lastChild = $child;
             }
         }
@@ -43,8 +40,7 @@ class ElasticPageFormatter extends BaseFormatter
         
         $node->setPageSize($node->getRealWidth(), $height);
         
-        foreach($node->getChildren() as $child)
-        {
+        foreach ($node->getChildren() as $child) {
             $child->translate(0, $translate);
         }
         

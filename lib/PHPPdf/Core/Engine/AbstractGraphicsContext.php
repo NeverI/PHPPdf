@@ -12,7 +12,7 @@ use Zend\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * Base class for GraphicsContext classes.
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractGraphicsContext implements GraphicsContext
@@ -21,8 +21,7 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     
     public function commit()
     {
-        foreach($this->methodInvocationsQueue as $data)
-        {
+        foreach ($this->methodInvocationsQueue as $data) {
             list($method, $args) = $data;
             call_user_func_array(array($this, $method), $args);
         }
@@ -58,8 +57,7 @@ abstract class AbstractGraphicsContext implements GraphicsContext
     
     public function drawImage(Image $image, $x1, $y1, $x2, $y2)
     {
-        if(!$image instanceof EmptyImage)
-        {
+        if (!$image instanceof EmptyImage) {
             $this->addToQueue('doDrawImage', func_get_args());
         }
     }

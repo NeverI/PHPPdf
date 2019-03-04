@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
 
 /**
  * Collect debug information
@@ -20,6 +20,5 @@ class DebugFormatter extends BaseFormatter
 {
     public function format(Node $node, Document $document)
     {
-
     }
 }

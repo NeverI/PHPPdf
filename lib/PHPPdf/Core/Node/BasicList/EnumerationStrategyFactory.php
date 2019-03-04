@@ -12,7 +12,7 @@ use PHPPdf\Core\Node\BasicList;
 
 /**
  * Factory of enumeration strategy
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class EnumerationStrategyFactory
@@ -25,8 +25,7 @@ class EnumerationStrategyFactory
     {
         $strategy = null;
         
-        switch($type)
-        {
+        switch ($type) {
             case BasicList::TYPE_DECIMAL:
                 $strategy = new OrderedEnumerationStrategy();
                 break;
@@ -46,7 +45,7 @@ class EnumerationStrategyFactory
                 $strategy->setVisualIndex('A');
                 break;
             default:
-                $strategy = new UnorderedEnumerationStrategy();                
+                $strategy = new UnorderedEnumerationStrategy();
                 break;
         }
         

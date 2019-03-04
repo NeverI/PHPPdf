@@ -14,7 +14,7 @@ use PHPPdf\Core\Document;
 
 /**
  * Container being able to format as columns
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnableContainer extends Container
@@ -32,8 +32,7 @@ class ColumnableContainer extends Container
     {
         $count = (int) $count;
 
-        if($count < 2)
-        {
+        if ($count < 2) {
             throw new InvalidArgumentException(sprintf('Number of columns should be integer greater than 1, %d given.', $count));
         }
 

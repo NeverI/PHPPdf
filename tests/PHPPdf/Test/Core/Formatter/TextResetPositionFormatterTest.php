@@ -2,10 +2,10 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Formatter\TextResetPositionFormatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Formatter\TextResetPositionFormatter;
 
 class TextResetPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

@@ -29,10 +29,8 @@ class Bookmark extends Behaviour
     {
         $this->name = (string) $name;
 
-        foreach($options as $optionName => $value)
-        {
-            if(!in_array($optionName, array_keys($this->options)))
-            {
+        foreach ($options as $optionName => $value) {
+            if (!in_array($optionName, array_keys($this->options))) {
                 throw new InvalidArgumentException(sprintf('Option "%s" is not supported by "%s" class.', $optionName, get_class($this)));
             }
             
@@ -50,17 +48,13 @@ class Bookmark extends Behaviour
     
     private function getParentBookmarkIdentifier(Node $node)
     {
-        if($this->options['parentId'])
-        {
+        if ($this->options['parentId']) {
             return $this->options['parentId'];
         }
         
-        for($parent = $node->getParent(); $parent !== null; $parent = $parent->getParent())
-        {
-            foreach($parent->getBehaviours() as $behaviour)
-            {
-                if($behaviour instanceof Bookmark)
-                {
+        for ($parent = $node->getParent(); $parent !== null; $parent = $parent->getParent()) {
+            foreach ($parent->getBehaviours() as $behaviour) {
+                if ($behaviour instanceof Bookmark) {
                     return $behaviour->getUniqueId();
                 }
             }

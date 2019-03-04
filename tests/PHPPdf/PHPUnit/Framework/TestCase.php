@@ -9,7 +9,7 @@ use PHPPdf\PHPUnit\Framework\MockObject\Stub\ComposeStub;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    public function  __construct($name = NULL, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -50,13 +50,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     
     private function getProperty(\ReflectionClass $class, $name)
     {
-        while($class && !$class->hasProperty($name))
-        {
+        while ($class && !$class->hasProperty($name)) {
             $class = $class->getParentClass();
         }
         
-        if($class)
-        {
+        if ($class) {
             return $class->getProperty($name);
         }
         

@@ -6,13 +6,12 @@ use PHPPdf\Core\ComplexAttribute\ComplexAttribute;
 use PHPPdf\Core\Point;
 use PHPPdf\Core\Engine\GraphicsContext;
 
-
 abstract class ComplexAttributeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     protected $document;
     
     protected function assertDrawCircle(ComplexAttribute $attribute, $color, $radius, Point $centerPoint, $fillType)
-    {        
+    {
         $gc = $this->getMock('PHPPdf\Core\Engine\GraphicsContext');
         
         $node = $this->getMockBuilder('PHPPdf\Core\Node\Circle')
@@ -29,8 +28,8 @@ abstract class ComplexAttributeTest extends \PHPPdf\PHPUnit\Framework\TestCase
              
         $gc->expects($this->once())
            ->method('drawEllipse')
-           ->with($centerPoint->getX(), $centerPoint->getY(), $radius*2, $radius*2, $fillType);           
+           ->with($centerPoint->getX(), $centerPoint->getY(), $radius*2, $radius*2, $fillType);
         
-        $attribute->enhance($node, $this->document);        
+        $attribute->enhance($node, $this->document);
     }
 }

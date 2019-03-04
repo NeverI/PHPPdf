@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Node\Node;
 
 class TextPositionFormatter extends BaseFormatter
 {
@@ -28,12 +28,10 @@ class TextPositionFormatter extends BaseFormatter
 
         $currentX = $x;
         $currentY = $y;
-        foreach($lineSizes as $rowNumber => $width)
-        {
+        foreach ($lineSizes as $rowNumber => $width) {
             $newX = $x + $width;
             $newY = $currentY - $lineHeight;
-            if($currentX !== $newX)
-            {
+            if ($currentX !== $newX) {
                 $boundary->setNext($newX, $currentY);
             }
 

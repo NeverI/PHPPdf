@@ -8,13 +8,13 @@
 
 namespace PHPPdf\Core\Node\Table;
 
-use PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\Listener;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\Listener;
 
 /**
  * Cell of the row
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Cell extends Container
@@ -55,8 +55,7 @@ class Cell extends Container
     {
         $width = parent::getWidth();
 
-        if($width === null)
-        {
+        if ($width === null) {
             $width = 0;
         }
 
@@ -80,8 +79,7 @@ class Cell extends Container
     {
         parent::setParent($node);
 
-        foreach($this->listeners as $listener)
-        {
+        foreach ($this->listeners as $listener) {
             $listener->parentBind($this);
         }
     }
@@ -92,8 +90,7 @@ class Cell extends Container
 
         parent::setAttributeDirectly($name, $value);
         
-        foreach($this->listeners as $listener)
-        {
+        foreach ($this->listeners as $listener) {
             $listener->attributeChanged($this, $name, $oldValue);
         }
     }

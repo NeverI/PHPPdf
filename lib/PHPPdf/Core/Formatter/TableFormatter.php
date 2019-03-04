@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document,
-    PHPPdf\Util,
-    PHPPdf\Core\Node\Table;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Util;
+use PHPPdf\Core\Node\Table;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -32,25 +32,21 @@ class TableFormatter extends BaseFormatter
 
         $verticalAlignFormatter = $document->getFormatter('PHPPdf\Core\Formatter\VerticalAlignFormatter');
         
-        foreach($node->getChildren() as $row)
-        {
+        foreach ($node->getChildren() as $row) {
             $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth - $totalMargins;
             $translate = 0;
-            foreach($row->getChildren() as /* @var $cell PHPPdf\Core\Node\Table\Cell */ $cell)
-            {
+            foreach ($row->getChildren() as /* @var $cell PHPPdf\Core\Node\Table\Cell */ $cell) {
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();
                 $minWidth = $newWidth = 0;
                 
-                for($i=0; $i<$colspan; $i++)
-                {
+                for ($i=0; $i<$colspan; $i++) {
                     $realColumn = $column + $i;
 
                     $minWidth += $minWidthsOfColumns[$realColumn];
                     $newWidth += $widthsOfColumns[$realColumn];
 
-                    if($i>0)
-                    {
+                    if ($i>0) {
                         $margins = $marginsRight[$realColumn] + $marginsLeft[$realColumn];
                         $minWidth += $margins;
                         $newWidth += $margins;
@@ -59,13 +55,10 @@ class TableFormatter extends BaseFormatter
 
                 $diffBetweenNewAndMinWidth = $newWidth - $minWidth;
 
-                if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $diffBetweenNewAndMinWidth)
-                {
+                if ($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $diffBetweenNewAndMinWidth) {
                     $newWidth = $minWidth;
                     $diffBetweenTableAndColumnsWidths += $diffBetweenNewAndMinWidth;
-                }
-                elseif($diffBetweenTableAndColumnsWidths < 0)
-                {
+                } elseif ($diffBetweenTableAndColumnsWidths < 0) {
                     $newWidth += $diffBetweenTableAndColumnsWidths;
                     $diffBetweenTableAndColumnsWidths = 0;
                 }

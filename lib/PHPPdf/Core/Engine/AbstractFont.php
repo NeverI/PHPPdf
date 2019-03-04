@@ -39,16 +39,11 @@ abstract class AbstractFont implements Font
             self::STYLE_LIGHT_ITALIC,
         );
 
-        if(count($fonts) === 0)
-        {
+        if (count($fonts) === 0) {
             throw new InvalidArgumentException('Passed empty map of fonts.');
-        }
-        elseif(count(\array_diff(array_keys($fonts), $types)) > 0)
-        {
+        } elseif (count(\array_diff(array_keys($fonts), $types)) > 0) {
             throw new InvalidArgumentException('Invalid font types in map of fonts.');
-        }
-        elseif(!isset($fonts[self::STYLE_NORMAL]))
-        {
+        } elseif (!isset($fonts[self::STYLE_NORMAL])) {
             throw new InvalidArgumentException('Path for normal font must by passed.');
         }
     }
@@ -67,17 +62,13 @@ abstract class AbstractFont implements Font
 
     private function convertStyleType($style)
     {
-        if(is_string($style))
-        {
+        if (is_string($style)) {
             $style = str_replace('-', '_', strtoupper($style));
             $const = sprintf('%s::STYLE_%s', __CLASS__, $style);
 
-            if(defined($const))
-            {
+            if (defined($const)) {
                 $style = constant($const);
-            }
-            else
-            {
+            } else {
                 $style = self::STYLE_NORMAL;
             }
         }

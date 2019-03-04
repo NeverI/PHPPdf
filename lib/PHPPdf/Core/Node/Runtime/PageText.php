@@ -10,11 +10,11 @@ namespace PHPPdf\Core\Node\Runtime;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Core\Node\Text,
-    PHPPdf\Core\Node\Runtime,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\UnitConverter,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Text;
+use PHPPdf\Core\Node\Runtime;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\UnitConverter;
+use PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -24,7 +24,7 @@ abstract class PageText extends Text implements Runtime
     private $evaluated = false;
     private $page = null;
 
-    public function  __construct(array $attributes = array(), UnitConverter $converter = null)
+    public function __construct(array $attributes = array(), UnitConverter $converter = null)
     {
         parent::__construct('', $attributes, $converter);
     }
@@ -79,20 +79,16 @@ abstract class PageText extends Text implements Runtime
 
     protected function preDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        if($this->evaluated)
-        {
+        if ($this->evaluated) {
             parent::preDraw($document, $tasks);
         }
     }
 
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        if($this->evaluated)
-        {
+        if ($this->evaluated) {
             parent::doDraw($document, $tasks);
-        }
-        else
-        {
+        } else {
             $page = $this->getPage();
             $page->markAsRuntimeNode($this);
         }
@@ -104,8 +100,7 @@ abstract class PageText extends Text implements Runtime
 
         $this->setText($text);
         
-        foreach($this->lineParts as $part)
-        {
+        foreach ($this->lineParts as $part) {
             $part->setWords($text);
         }
 
@@ -122,16 +117,14 @@ abstract class PageText extends Text implements Runtime
         
         $copy = $this->copy();
 
-        foreach($lineParts as $part)
-        {
+        foreach ($lineParts as $part) {
             $copyPart = clone $part;
             $copyPart->setText($copy);
             $copy->lineParts[] = $copyPart;
         }
         
         $copy->setBoundary(clone $boundary);
-        if($parent)
-        {
+        if ($parent) {
             $copy->setParent($parent);
         }
 
@@ -144,8 +137,7 @@ abstract class PageText extends Text implements Runtime
 
     public function getPage()
     {
-        if($this->page !== null)
-        {
+        if ($this->page !== null) {
             return $this->page;
         }
 

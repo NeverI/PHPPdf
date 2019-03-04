@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -20,8 +20,7 @@ class VerticalAlignFormatter extends BaseFormatter
     {
         $verticalAlign = $node->getRecurseAttribute('vertical-align');
         
-        if($verticalAlign == Node::VERTICAL_ALIGN_TOP || $verticalAlign == null)
-        {
+        if ($verticalAlign == Node::VERTICAL_ALIGN_TOP || $verticalAlign == null) {
             return;
         }
         
@@ -41,14 +40,12 @@ class VerticalAlignFormatter extends BaseFormatter
     {
         $children = $node->getChildren();
         
-        usort($children, function($firstChild, $secondChild){
-            if($firstChild->getDiagonalPoint()->getY() < $secondChild->getDiagonalPoint()->getY())
-            {
+        usort($children, function ($firstChild, $secondChild) {
+            if ($firstChild->getDiagonalPoint()->getY() < $secondChild->getDiagonalPoint()->getY()) {
                 return 1;
             }
             
-            if($firstChild->getDiagonalPoint()->getY() == $secondChild->getDiagonalPoint()->getY())
-            {
+            if ($firstChild->getDiagonalPoint()->getY() == $secondChild->getDiagonalPoint()->getY()) {
                 return 0;
             }
             
@@ -62,8 +59,7 @@ class VerticalAlignFormatter extends BaseFormatter
     {
         $minYCoord = $node->getFirstPoint()->getY() - $node->getPaddingTop();
 
-        foreach($node->getChildren() as $child)
-        {
+        foreach ($node->getChildren() as $child) {
             $minYCoord = min($minYCoord, $child->getDiagonalPoint()->getY());
         }
         
@@ -74,8 +70,7 @@ class VerticalAlignFormatter extends BaseFormatter
     {
         $difference = $minYCoord - ($node->getDiagonalPoint()->getY() + $node->getPaddingBottom());
         
-        if($verticalAlign == Node::VERTICAL_ALIGN_MIDDLE)
-        {
+        if ($verticalAlign == Node::VERTICAL_ALIGN_MIDDLE) {
             $difference /= 2;
         }
         
@@ -84,8 +79,7 @@ class VerticalAlignFormatter extends BaseFormatter
     
     private function verticalTranslateOfNodes(array $nodes, $verticalTranslation)
     {
-        foreach($nodes as $node)
-        {
+        foreach ($nodes as $node) {
             $node->translate(0, $verticalTranslation);
         }
     }

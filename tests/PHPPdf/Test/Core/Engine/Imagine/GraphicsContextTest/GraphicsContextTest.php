@@ -30,7 +30,7 @@ class GraphicsContextTest extends TestCase
      * @test
      */
     public function gsState()
-    {        
+    {
         $this->gc->setFillColor('#111111');
         $this->gc->saveGS();
         $this->gc->commit();
@@ -98,8 +98,7 @@ class GraphicsContextTest extends TestCase
         $expected['fontStyle'] = null;
         $expected['clips'] = array();
         
-        foreach($attributes as $name => $value)
-        {
+        foreach ($attributes as $name => $value) {
             call_user_func_array(array($this->gc, 'set'.$name), (array) $value);
         }
         
@@ -147,7 +146,7 @@ class GraphicsContextTest extends TestCase
     private function setExpectedImageSize($width, $height, $image = null)
     {
         $image = $image ? : $this->image;
-        $box = new Box($width, $height);        
+        $box = new Box($width, $height);
         $image->expects($this->any())
                     ->method('getSize')
                     ->will($this->returnValue($box));
@@ -171,26 +170,22 @@ class GraphicsContextTest extends TestCase
         
         $expectedCoords = array();
         
-        foreach($y as $i => $coord)
-        {
+        foreach ($y as $i => $coord) {
             $expectedCoords[] = new Point($x[$i], $height - $coord);
         }
         
         $expectedFill = $fillType == GraphicsContext::SHAPE_DRAW_FILL;
         $expectedPolygons = array();
         
-        if($fillType > 0)
-        {
+        if ($fillType > 0) {
             $expectedPolygons[] = array($expectedFillColor, true);
         }
         
-        if($fillType == 0 || $fillType == 2)
-        {
+        if ($fillType == 0 || $fillType == 2) {
             $expectedPolygons[] = array($expectedLineColor, false);
         }
         
-        foreach($expectedPolygons as $at => $polygon)
-        {
+        foreach ($expectedPolygons as $at => $polygon) {
             list($expectedColor, $expectedFill) = $polygon;
             $this->drawer->expects($this->at($at))
                          ->method('polygon')
@@ -361,16 +356,16 @@ class GraphicsContextTest extends TestCase
                       ->with(new Box($rectangleWidth, $rectangleHeight))
                       ->will($this->returnValue($rectangleImage));
                       
-       $this->gc->saveGS();
-       $this->gc->clipRectangle($x1, $y1, $x2, $y2);
-       $this->gc->commit();
+        $this->gc->saveGS();
+        $this->gc->clipRectangle($x1, $y1, $x2, $y2);
+        $this->gc->commit();
        
-       $this->image->expects($this->once())
+        $this->image->expects($this->once())
                    ->method('paste')
                    ->with($rectangleImage, new Point($x1, $height - $y1));
        
-       $this->gc->restoreGS();
-       $this->gc->commit();
+        $this->gc->restoreGS();
+        $this->gc->commit();
     }
     
     /**

@@ -11,7 +11,7 @@ use PHPPdf\Core\Node\Container;
 use PHPPdf\Core\Node\BasicList\OrderedEnumerationStrategy;
 
 class OrderedEnumerationStrategyTest extends EnumerationStrategyTest
-{   
+{
     protected function createStrategy()
     {
         return new OrderedEnumerationStrategy();

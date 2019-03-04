@@ -91,18 +91,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         static::initializeTypeIfNecessary();
 
         $this->initialize();
-        if($converter)
-        {
+        if ($converter) {
             $this->setUnitConverter($converter);
         }
         $this->setAttributes($attributes);
     }
     
-    protected final static function initializeTypeIfNecessary()
+    final protected static function initializeTypeIfNecessary()
     {
         $class = get_called_class();
-        if(!isset(self::$initialized[$class]))
-        {
+        if (!isset(self::$initialized[$class])) {
             static::initializeType();
             self::$initialized[$class] = true;
         }
@@ -117,13 +115,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $predicateGetters = array('breakable');
         
         $attributeWithGetters = array_flip($attributeWithGetters);
-        array_walk($attributeWithGetters, function(&$value, $key, $predicateGetters){
+        array_walk($attributeWithGetters, function (&$value, $key, $predicateGetters) {
             $method = in_array($key, $predicateGetters) ? 'is' : 'get';
             $value = $method.str_replace('-', '', $key);
         }, $predicateGetters);
         
         $attributeWithSetters = array_flip($attributeWithSetters);
-        array_walk($attributeWithSetters, function(&$value, $key){
+        array_walk($attributeWithSetters, function (&$value, $key) {
             $value = 'set'.str_replace('-', '', $key);
         });
         
@@ -136,22 +134,20 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     /**
      * @todo refactoring
      */
-    protected final static function setAttributeGetters(array $getters)
+    final protected static function setAttributeGetters(array $getters)
     {
         $class = get_called_class();
-        if(!isset(self::$attributeGetters[$class]))
-        {
+        if (!isset(self::$attributeGetters[$class])) {
             self::$attributeGetters[$class] = array();
         }
 
         self::$attributeGetters[$class] = $getters + self::$attributeGetters[$class];
     }
     
-    protected final static function setAttributeSetters(array $setters)
+    final protected static function setAttributeSetters(array $setters)
     {
         $class = get_called_class();
-        if(!isset(self::$attributeSetters[$class]))
-        {
+        if (!isset(self::$attributeSetters[$class])) {
             self::$attributeSetters[$class] = array();
         }
         
@@ -161,8 +157,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected static function addAttribute($name, $default = null)
     {
         $class = get_called_class();
-        if(!isset(self::$defaultAttributes[$class]))
-        {
+        if (!isset(self::$defaultAttributes[$class])) {
             self::$defaultAttributes[$class] = array();
         }
         
@@ -236,8 +231,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function addDrawingTasks(array $tasks)
     {
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $this->addDrawingTask($task);
         }
     }
@@ -250,7 +244,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     /**
      * Add complexAttribute attributes, if complexAttribute with passed name is exists, it will be
      * merged.
-     * 
+     *
      * @param string $name Name of complexAttribute
      * @param array $attributes Attributes of complexAttribute
      */
@@ -261,14 +255,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Get all complexAttribute data or data of complexAttribute with passed name
-     * 
+     *
      * @param string $name Name of complexAttribute to get
      * @return array If $name is null, data of all complexAttributes will be returned, otherwise data of complexAttribute with passed name will be returned.
      */
     public function getComplexAttributes($name = null)
     {
-        if($name === null)
-        {
+        if ($name === null) {
             return $this->complexAttributeBag->getAll();
         }
 
@@ -280,8 +273,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function getBoundary()
     {
-        if($this->boundary === null)
-        {
+        if ($this->boundary === null) {
             $this->setBoundary(new Boundary());
         }
 
@@ -315,7 +307,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     /**
      * Gets point of left upper corner of this node, this method works on boundary from {@see getRealBoundary()}
      * on contrast to {@see getFirstPoint()} method.
-     * 
+     *
      * @return PHPPdf\Core\Point
      */
     public function getRealFirstPoint()
@@ -337,7 +329,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     /**
      * Gets point of right bottom corner of this node, this method works on boundary from {@see getRealBoundary()}
      * on contrast to {@see getDiagonalPoint()} method.
-     * 
+     *
      * @return PHPPdf\Core\Point
      */
     public function getRealDiagonalPoint()
@@ -356,8 +348,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function setParent(Container $node)
     {
         $oldParent = $this->parent;
-        if($oldParent)
-        {
+        if ($oldParent) {
             $oldParent->remove($this);
         }
 
@@ -376,19 +367,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Gets ancestor with passed type. If ancestor has not been found, null will be returned.
-     * 
+     *
      * @param string $type Full class name with namespace
      * @return PHPPdf\Core\Node\Node Nearest ancestor in $type
      */
     public function getAncestorByType($type)
     {
         $current = $this;
-        do
-        {
+        do {
             $parent = $current->parent;
             $current = $parent;
-        }
-        while($parent && !$parent instanceof $type);
+        } while ($parent && !$parent instanceof $type);
 
         return $parent;
     }
@@ -400,8 +389,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $parent = $this->parent;
 
-        if(!$parent)
-        {
+        if (!$parent) {
             return array();
         }
 
@@ -446,8 +434,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $page = $this->getAncestorByType('\PHPPdf\Core\Node\Page');
 
-        if(!$page)
-        {
+        if (!$page) {
             throw new LogicException(sprintf('Node "%s" is not attach to any page.', get_class($this)));
         }
 
@@ -456,20 +443,18 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Gets font object associated with current object
-     * 
+     *
      * @return Font
      */
     public function getFont(Document $document)
     {
         $fontType = $this->getRecurseAttribute('font-type');
 
-        if($fontType)
-        {
+        if ($fontType) {
             $font = $document->getFont($fontType);
             
             $fontStyle = $this->getRecurseAttribute('font-style');
-            if($fontStyle)
-            {
+            if ($fontStyle) {
                 $font->setStyle($fontStyle);
             }
 
@@ -496,12 +481,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     public function getFontType($recurse = false)
     {
-        if(!$recurse)
-        {
+        if (!$recurse) {
             return $this->getAttributeDirectly('font-type');
-        }
-        else
-        {
+        } else {
             return $this->getRecurseAttribute('font-type');
         }
     }
@@ -540,8 +522,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $width = $this->convertUnit($width);
         $this->setAttributeDirectly('width', $width);
 
-        if(\strpos($width, '%') !== false)
-        {
+        if (\strpos($width, '%') !== false) {
             $this->setRelativeWidth($width);
         }
 
@@ -725,8 +706,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function hadAutoMargins($flag = null)
     {
-        if($flag === null)
-        {
+        if ($flag === null) {
             return $this->hadAutoMargins;
         }
 
@@ -740,8 +720,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $margins = \func_get_args();
 
-        if(count($margins) === 1 && is_string(current($margins)))
-        {
+        if (count($margins) === 1 && is_string(current($margins))) {
             $margins = explode(' ', current($margins));
         }
 
@@ -755,20 +734,17 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $count = count($attributes);
 
-        if($count === 0)
-        {
+        if ($count === 0) {
             throw new InvalidArgumentException('Attribute values doesn\'t pass.');
         }
 
         $repeat = \ceil(4 / $count);
 
-        for($i=1; $i<$repeat; $i++)
-        {
+        for ($i=1; $i<$repeat; $i++) {
             $attributes = array_merge($attributes, $attributes);
         }
 
-        foreach($attributeNames as $key => $label)
-        {
+        foreach ($attributeNames as $key => $label) {
             $this->setAttribute($label, $attributes[$key]);
         }
     }
@@ -780,8 +756,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $paddings = \func_get_args();
 
-        if(count($paddings) === 1 && is_string(current($paddings)))
-        {
+        if (count($paddings) === 1 && is_string(current($paddings))) {
             $paddings = explode(' ', current($paddings));
         }
 
@@ -848,8 +823,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $positions = array(self::POSITION_ABSOLUTE, self::POSITION_RELATIVE, self::POSITION_STATIC);
         
-        if(!in_array($position, $positions))
-        {
+        if (!in_array($position, $positions)) {
             throw new InvalidArgumentException('Unsupported position value: "%s", expected: %s', $position, implode(', ', $positions));
         }
         
@@ -872,16 +846,14 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     public function getRotate()
     {
         $rotate = $this->getAttribute('rotate');
-        if(in_array($rotate, array(self::ROTATE_DIAGONALLY, self::ROTATE_OPPOSITE_DIAGONALLY)) && ($page = $this->getPage()))
-        {
+        if (in_array($rotate, array(self::ROTATE_DIAGONALLY, self::ROTATE_OPPOSITE_DIAGONALLY)) && ($page = $this->getPage())) {
             $width = $page->getWidth();
             $height = $page->getHeight();
             $d = sqrt($width*$width + $height*$height);
 
             $angle = $d == 0 ? 0 : acos($width/$d);
             
-            if($rotate === self::ROTATE_OPPOSITE_DIAGONALLY)
-            {
+            if ($rotate === self::ROTATE_OPPOSITE_DIAGONALLY) {
                 $angle = -$angle;
             }
             
@@ -903,8 +875,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function convertUnit($value)
     {
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             return $this->unitConverter->convertUnit($value);
         }
         
@@ -913,25 +884,24 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Sets attributes values
-     * 
+     *
      * @param array $attributes Array of attributes
-     * 
+     *
      * @throws InvalidAttributeException If at least one of attributes isn't supported by this node
      */
     public function setAttributes(array $attributes)
     {
-        foreach($attributes as $name => $value)
-        {
+        foreach ($attributes as $name => $value) {
             $this->setAttribute($name, $value);
         }
     }
 
     /**
      * Sets attribute value
-     * 
+     *
      * @param string $name Name of attribute
      * @param mixed $value Value of attribute
-     * 
+     *
      * @throws InvalidAttributeException If attribute isn't supported by this node
      * @return Node Self reference
      */
@@ -940,13 +910,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->throwExceptionIfAttributeDosntExist($name);
         
         $class = get_class($this);
-        if(isset(self::$attributeSetters[$class][$name]))
-        {
+        if (isset(self::$attributeSetters[$class][$name])) {
             $methodName = self::$attributeSetters[$class][$name];
             $this->$methodName($value);
-        }
-        else
-        {
+        } else {
             $this->setAttributeDirectly($name, $value);
         }
 
@@ -955,20 +922,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function setAttributeDirectly($name, $value)
     {
-        if(self::$defaultAttributes[get_class($this)][$name] === $value)
-        {
+        if (self::$defaultAttributes[get_class($this)][$name] === $value) {
             unset($this->attributes[$name]);
-        }
-        else
-        {
+        } else {
             $this->attributes[$name] = $value;
         }
     }
 
     protected function getAttributeDirectly($name)
     {
-        if(!isset($this->attributes[$name]))
-        {
+        if (!isset($this->attributes[$name])) {
             $class = get_class($this);
             return self::$defaultAttributes[$class][$name];
         }
@@ -977,8 +940,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     private function throwExceptionIfAttributeDosntExist($name)
     {
-        if(!$this->hasAttribute($name))
-        {
+        if (!$this->hasAttribute($name)) {
             throw new InvalidAttributeException($name);
         }
     }
@@ -1004,17 +966,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function isBreakable()
     {
-        try
-        {
+        try {
             $page = $this->getPage();
             
-            if($page->getHeight() < $this->getHeight())
-            {
+            if ($page->getHeight() < $this->getHeight()) {
                 return true;
-            }            
-        }
-        catch (\LogicException $e)
-        {
+            }
+        } catch (\LogicException $e) {
             //ignore, original attribute value will be returned
         }
         
@@ -1055,9 +1013,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Returns attribute value
-     * 
+     *
      * @param string $name Name of attribute
-     * 
+     *
      * @throws InvalidAttributeException If attribute isn't supported by this node
      * @return mixed Value of attribute
      */
@@ -1066,15 +1024,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->throwExceptionIfAttributeDosntExist($name);
 
         $class = get_class($this);
-        if(isset(self::$attributeGetters[$class][$name]))
-        {
+        if (isset(self::$attributeGetters[$class][$name])) {
             $methodName = self::$attributeGetters[$class][$name];
             return $this->$methodName();
-        }
-        else
-        {
+        } else {
             return $this->getAttributeDirectly($name);
-        }        
+        }
     }
 
     /**
@@ -1085,8 +1040,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $value = $this->getAttribute($name);
         $parent = $this->parent;
-        if($value === null && $parent)
-        {
+        if ($value === null && $parent) {
             $value = $parent->getRecurseAttribute($name);
             $this->setAttribute($name, $value);
             return $value;
@@ -1100,8 +1054,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function makeAttributesSnapshot(array $attributeNames = null)
     {
-        if($attributeNames === null)
-        {
+        if ($attributeNames === null) {
             $attributeNames = array_keys($this->attributes);
         }
         $class = get_class($this);
@@ -1123,14 +1076,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        try
-        {
+        try {
             $this->preDraw($document, $tasks);
             $this->doDraw($document, $tasks);
             $this->postDraw($document, $tasks);
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new \PHPPdf\Core\Exception\DrawingException(sprintf('Error while drawing node "%s"', get_class($this)), 0, $e);
         }
     }
@@ -1141,14 +1091,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function collectUnorderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->getChildren() as $node)
-        {
+        foreach ($this->getChildren() as $node) {
             $node->collectUnorderedDrawingTasks($document, $tasks);
         }
         
-        foreach($this->behaviours as $behaviour)
-        {
-            $callback = function($behaviour, $node){
+        foreach ($this->behaviours as $behaviour) {
+            $callback = function ($behaviour, $node) {
                 $behaviour->attach($node->getGraphicsContext(), $node);
             };
             $args = array($behaviour, $this);
@@ -1164,8 +1112,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     protected function getDrawingTasksFromComplexAttributes(Document $document, DrawingTaskHeap $tasks)
     {
         $complexAttributes = $document->getComplexAttributes($this->complexAttributeBag);
-        foreach($complexAttributes as $complexAttribute)
-        {
+        foreach ($complexAttributes as $complexAttribute) {
             $this->insertComplexAttributeTask($complexAttribute, $tasks, $document);
         }
     }
@@ -1193,8 +1140,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $parentPriority = $this->parent ? $this->parent->getPriority() : 0;
         $this->priority = $parentPriority - 1;
 
-        foreach($this->getChildren() as $child)
-        {
+        foreach ($this->getChildren() as $child) {
             $child->setPriorityFromParent();
         }
     }
@@ -1205,23 +1151,21 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     protected function postDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        if($this->getAttribute('dump'))
-        {
+        if ($this->getAttribute('dump')) {
             $tasks->insert($this->createDumpTask());
         }
     }
     
     protected function createDumpTask()
     {
-        $task = new DrawingTask(function($node){
+        $task = new DrawingTask(function ($node) {
             $gc = $node->getGraphicsContext();
             $firstPoint = $node->getFirstPoint();
             $diagonalPoint = $node->getDiagonalPoint();
             
             $boundary = $node->getBoundary();
             $coordinations = array();
-            foreach($boundary->getPoints() as $point)
-            {
+            foreach ($boundary->getPoints() as $point) {
                 $coordinations[] = $point->toArray();
             }
             
@@ -1282,10 +1226,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $siblings = $this->getSiblings();
         $previous = null;
         
-        foreach($siblings as $sibling)
-        {
-            if($sibling === $this)
-            {
+        foreach ($siblings as $sibling) {
+            if ($sibling === $this) {
                 return $previous;
             }
             $previous = $sibling;
@@ -1340,14 +1282,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Translates position of this node
-     * 
+     *
      * @param float $x X coord of translation vector
      * @param float $y Y coord of translation vector
      */
     public function translate($x, $y)
     {
-        if(!$x && !$y)
-        {
+        if (!$x && !$y) {
             return;
         }
         
@@ -1356,14 +1297,13 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Resizes node by passed sizes
-     * 
+     *
      * @param float $x Value of width's resize
      * @param float $y Value of height's resize
      */
     public function resize($x, $y)
     {
-        if(!$x && !$y)
-        {
+        if (!$x && !$y) {
             return;
         }
 
@@ -1377,32 +1317,24 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->setHeight($this->getHeight() + $y);
         $this->setWidth($this->getWidth() + $x);
 
-        foreach($this->getChildren() as $child)
-        {
-            if($child->getFloat() === Node::FLOAT_RIGHT)
-            {
+        foreach ($this->getChildren() as $child) {
+            if ($child->getFloat() === Node::FLOAT_RIGHT) {
                 $child->translate($x - $this->getPaddingRight(), 0);
-            }
-            else
-            {
+            } else {
                 $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
                 $childFirstXCoord = $child->getFirstPoint()->getX();
     
                 $relativeWidth = $child->getRelativeWidth();
     
-                if($relativeWidth !== null)
-                {
+                if ($relativeWidth !== null) {
                     $relativeWidth = ($x + $diagonalXCoord - $firstXCoord)*((int) $relativeWidth)/100;
                     $childResize = (($childFirstXCoord + $relativeWidth) + $child->getMarginRight()) - $childDiagonalXCoord;
-                }
-                else
-                {
+                } else {
                     $childResize = $x + ($diagonalXCoord - $childDiagonalXCoord);
                     $childResize = $childResize < 0 ? $childResize : 0;
                 }
                 
-                if($childResize != 0)
-                {
+                if ($childResize != 0) {
                     $child->resize($childResize, 0);
                 }
             }
@@ -1417,8 +1349,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function breakAt($height)
     {
-        if(!$this->shouldBeBroken($height))
-        {
+        if (!$this->shouldBeBroken($height)) {
             return null;
         }
 
@@ -1427,21 +1358,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function shouldBeBroken($height)
     {
-        if($height <= 0 || $height >= $this->getHeight())
-        {
+        if ($height <= 0 || $height >= $this->getHeight()) {
             return false;
         }
         
-        try
-        {
+        try {
             $page = $this->getPage();
-            if($page && $page->getHeight() < $this->getHeight())
-            {
+            if ($page && $page->getHeight() < $this->getHeight()) {
                 return true;
             }
-        }
-        catch(\LogicException $e)
-        {
+        } catch (\LogicException $e) {
             //if node has no parent, breakable attribute will decide
         }
         
@@ -1490,7 +1416,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Removes node from children
-     * 
+     *
      * @return boolean True if node has been found and succesfully removed, otherwise false
      */
     public function remove(Node $node)
@@ -1524,9 +1450,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     /**
      * Check if this node has leaf descendants.
-     * 
+     *
      * If $bottomYCoord is passed, only descendants above passed coord are checked
-     * 
+     *
      * @return boolean
      */
     public function hasLeafDescendants($bottomYCoord = null)
@@ -1536,10 +1462,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function isAbleToExistsAboveCoord($yCoord)
     {
-        foreach($this->getChildren() as $child)
-        {
-            if($child->isAbleToExistsAboveCoord($yCoord))
-            {
+        foreach ($this->getChildren() as $child) {
+            if ($child->isAbleToExistsAboveCoord($yCoord)) {
                 return true;
             }
         }
@@ -1549,9 +1473,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     /**
      * Gets child under passed index
-     * 
+     *
      * @param integer Index of child
-     * 
+     *
      * @return Node
      * @throws OutOfBoundsException Child dosn't exist
      */
@@ -1559,8 +1483,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $children = $this->getChildren();
         
-        if(!isset($children[$index]))
-        {
+        if (!isset($children[$index])) {
             throw new OutOfBoundsException(sprintf('Child "%s" dosn\'t exist.', $index));
         }
 
@@ -1578,8 +1501,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function convertScalarAttribute($name, $parentValue = null)
     {
-        if($parentValue === null && ($parent = $this->parent))
-        {
+        if ($parentValue === null && ($parent = $this->parent)) {
             $parentValue = $this->parent->getAttribute($name);
         }
         
@@ -1587,8 +1509,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         $absoluteValue = $this->unitConverter ? $this->unitConverter->convertPercentageValue($potentiallyRelativeValue, $parentValue) : $potentiallyRelativeValue;
 
-        if($absoluteValue !== $potentiallyRelativeValue)
-        {
+        if ($absoluteValue !== $potentiallyRelativeValue) {
             $this->setAttribute($name, $absoluteValue);
         }
     }
@@ -1597,10 +1518,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      * Format node by given formatters.
      */
     public function format(Document $document)
-    {        
+    {
         $this->preFormat($document);
-        foreach($this->getChildren() as $child)
-        {
+        foreach ($this->getChildren() as $child) {
             $child->format($document);
         }
         $this->postFormat($document);
@@ -1623,8 +1543,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     private function invokeFormatter(Document $document, array $formattersNames)
     {
-        foreach($formattersNames as $formatterName)
-        {
+        foreach ($formattersNames as $formatterName) {
             $formatter = $document->getFormatter($formatterName);
             $formatter->format($this, $document);
         }
@@ -1670,10 +1589,10 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
     /**
      * Set placeholder
-     * 
+     *
      * @param string $name Name of placeholder
      * @param Node $placeholder Object of Node
-     * 
+     *
      * @throws InvalidArgumentException Placeholder isn't supported by node
      */
     public function setPlaceholder($name, Node $placeholder)
@@ -1711,16 +1630,14 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     }
     
     protected function setDataFromUnserialize(array $data)
-    {       
-        if(isset($data['boundary']))
-        {
+    {
+        if (isset($data['boundary'])) {
             $this->setBoundary($data['boundary']);
         }
         $this->attributes = $data['attributes'];
         $this->complexAttributeBag = new AttributeBag($data['complexAttributeBag']);
 
-        foreach((array) $data['formattersNames'] as $type => $names)
-        {
+        foreach ((array) $data['formattersNames'] as $type => $names) {
             $this->setFormattersNames($type, $names);
         }
 
@@ -1729,7 +1646,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     /**
      * Method from NodeAware interface
-     * 
+     *
      * @return Node
      */
     public function getNode()
@@ -1744,8 +1661,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function getAncestorWithRotation()
     {
-        if($this->ancestorWithRotation === null)
-        {
+        if ($this->ancestorWithRotation === null) {
             $parent = $this->parent;
             $this->ancestorWithRotation = $this->getRotate() === null ? ($parent ? $parent->getAncestorWithRotation() : false) : $this;
         }
@@ -1755,8 +1671,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function getAncestorWithFontSize()
     {
-        if($this->ancestorWithFontSize === null)
-        {
+        if ($this->ancestorWithFontSize === null) {
             $parent = $this->parent;
             $this->ancestorWithFontSize = $this->getFontSize() === null ? ($parent ? $parent->getAncestorWithFontSize() : false) : $this;
         }
@@ -1766,16 +1681,12 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     public function getClosestAncestorWithPosition()
     {
-        if($this->closestAncestorWithPosition === null)
-        {
-            if($this->parent)
-            {
+        if ($this->closestAncestorWithPosition === null) {
+            if ($this->parent) {
                 $position = $this->parent->getAttribute('position');
                 $position = $position ? : self::POSITION_STATIC;
                 $this->closestAncestorWithPosition = $position === self::POSITION_STATIC ? $this->parent->getClosestAncestorWithPosition() : $this->parent;
-            }
-            else 
-            {
+            } else {
                 $this->closestAncestorWithPosition = false;
             }
         }
@@ -1788,8 +1699,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function getPositionTranslation()
     {
-        if($this->positionTranslation === null)
-        {
+        if ($this->positionTranslation === null) {
             $this->positionTranslation = $this->calculatePositionTranslation();
         }
         
@@ -1803,40 +1713,28 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         $position = $position ? : self::POSITION_STATIC;
 
-        if($position === self::POSITION_STATIC && !$ancestor)
-        {
+        if ($position === self::POSITION_STATIC && !$ancestor) {
             return Point::getInstance(0, 0);
         }
         
-        if($position === self::POSITION_RELATIVE && $ancestor)
-        {
-            if($ancestor)
-            {
+        if ($position === self::POSITION_RELATIVE && $ancestor) {
+            if ($ancestor) {
                 $ancestorTranslation = $ancestor->getPositionTranslation();
                 return $this->translatePointByPosition($ancestorTranslation);
-            }
-            else
-            {
+            } else {
                 return Point::getInstance($this->getAttributeDirectly('left'), $this->getAttributeDirectly('top'));
             }
-        }
-        elseif($position === self::POSITION_STATIC)
-        {
+        } elseif ($position === self::POSITION_STATIC) {
             return $ancestor->getPositionTranslation();
-        }
-        else
-        {
-            if($ancestor)
-            {
+        } else {
+            if ($ancestor) {
                 $ancestorTranslation = $ancestor->getPositionTranslation();
 
                 $top = $this->boundary->getFirstPoint()->getY() - $ancestor->getFirstPoint()->getY() + $this->getAttributeDirectly('top') + $ancestorTranslation->getY();
                 $left = $ancestor->getFirstPoint()->getX() - $this->boundary->getFirstPoint()->getX() + $this->getAttributeDirectly('left') + $ancestorTranslation->getX();
 
                 return Point::getInstance($left, $top);
-            }
-            else
-            {
+            } else {
                 $firstPoint = $this->getFirstPoint();
                 $page = $this->getPage();
                 
@@ -1862,8 +1760,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         $boundary = $this->boundary;
         
-        if($translation->getX() != 0 || $translation->getY() != 0)
-        {
+        if ($translation->getX() != 0 || $translation->getY() != 0) {
             $boundary = clone $boundary;
             $boundary->translate($translation->getX(), $translation->getY());
         }
@@ -1881,8 +1778,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         $this->ancestorWithRotation = null;
         $this->closestAncestorWithPosition = null;
 
-        foreach($this->getChildren() as $child)
-        {
+        foreach ($this->getChildren() as $child) {
             $child->flush();
         }
 

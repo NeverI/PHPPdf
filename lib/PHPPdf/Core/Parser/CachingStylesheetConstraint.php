@@ -25,12 +25,9 @@ class CachingStylesheetConstraint extends StylesheetConstraint
     {
         $queryAsString = $this->transformQueryToString($query);
 
-        if(isset($this->resultMap[$queryAsString]))
-        {
+        if (isset($this->resultMap[$queryAsString])) {
             $bag = $this->resultMap[$queryAsString];
-        }
-        else
-        {
+        } else {
             $bag = parent::find($query);
             $this->resultMap[$queryAsString] = $bag;
             $this->setResultMapModified(true);
@@ -42,8 +39,7 @@ class CachingStylesheetConstraint extends StylesheetConstraint
     private function transformQueryToString(array $query)
     {
         $queryParts = array();
-        foreach($query as $queryElement)
-        {
+        foreach ($query as $queryElement) {
             $tag = $queryElement['tag'];
             $classes = $queryElement['classes'];
 
@@ -96,12 +92,9 @@ class CachingStylesheetConstraint extends StylesheetConstraint
         $resultContainer = parent::merge($containers);
         
         $resultMap = array();
-        foreach($containers as $container)
-        {
-            foreach($container->resultMap as $tag => $bag)
-            {
-                if(!isset($resultMap[$tag]))
-                {
+        foreach ($containers as $container) {
+            foreach ($container->resultMap as $tag => $bag) {
+                if (!isset($resultMap[$tag])) {
                     $resultMap[$tag] = array();
                 }
                 
@@ -109,8 +102,7 @@ class CachingStylesheetConstraint extends StylesheetConstraint
             }
         }
         
-        foreach($resultMap as $tag => $bags)
-        {
+        foreach ($resultMap as $tag => $bags) {
             $resultMap[$tag] = BagContainer::merge($bags);
         }
         

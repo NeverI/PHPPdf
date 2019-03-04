@@ -39,8 +39,7 @@ class FontRegistryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $font = $fontDefinitions['font'];
         $styles = array(Font::STYLE_NORMAL => true, Font::STYLE_BOLD => true, Font::STYLE_ITALIC => false, Font::STYLE_BOLD_ITALIC => true);
 
-        foreach($styles as $style => $has)
-        {
+        foreach ($styles as $style => $has) {
             $this->assertEquals($has, isset($font[$style]));
         }
     }

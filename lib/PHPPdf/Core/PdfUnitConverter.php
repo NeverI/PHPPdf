@@ -12,7 +12,7 @@ use PHPPdf\Exception\InvalidArgumentException;
 
 /**
  * Unit converter
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PdfUnitConverter extends AbstractUnitConverter
@@ -22,8 +22,7 @@ class PdfUnitConverter extends AbstractUnitConverter
     
     public function __construct($dpi = 96)
     {
-        if(!is_int($dpi) || $dpi < 1)
-        {
+        if (!is_int($dpi) || $dpi < 1) {
             throw new InvalidArgumentException(sprintf('Dpi must be positive integer, "%s" given.', $dpi));
         }
 
@@ -33,8 +32,7 @@ class PdfUnitConverter extends AbstractUnitConverter
     
     public function convertUnit($value, $unit = null)
     {
-        if(is_numeric($value) && $unit === null)
-        {
+        if (is_numeric($value) && $unit === null) {
             return $value;
         }
         

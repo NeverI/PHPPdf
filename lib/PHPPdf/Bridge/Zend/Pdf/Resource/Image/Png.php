@@ -18,7 +18,7 @@ use ZendPdf\InternalType;
 
 /**
  * Content loading type has been changed, remote files are supported.
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Png extends BasePng
@@ -31,8 +31,7 @@ class Png extends BasePng
     {
         $isRemote = stripos($imageFileName, 'http') === 0;
         
-        if (($this->stream = $this->open($isRemote, $imageFileName)) === false ) {
-            
+        if (($this->stream = $this->open($isRemote, $imageFileName)) === false) {
             throw new Exception\IOException("Can not open '$imageFileName' file for reading.");
         }
 
@@ -41,13 +40,12 @@ class Png extends BasePng
         //Check if the file is a PNG
         $this->seek(1);
         if ('PNG' != $this->read(3)) {
-            
             throw new Exception\DomainException('Image is not a PNG');
         }
         $this->seek(12); //Signature bytes (Includes the IHDR chunk) IHDR processed linerarly because it doesnt contain a variable chunk length
-        $wtmp = unpack('Ni',$this->read(4)); //Unpack a 4-Byte Long
+        $wtmp = unpack('Ni', $this->read(4)); //Unpack a 4-Byte Long
         $width = $wtmp['i'];
-        $htmp = unpack('Ni',$this->read(4));
+        $htmp = unpack('Ni', $this->read(4));
         $height = $htmp['i'];
         $bits = ord($this->read(1)); //Higher than 8 bit depths are only supported in later versions of PDF.
         $color = ord($this->read(1));
@@ -75,11 +73,11 @@ class Png extends BasePng
          * The following loop processes PNG chunks. 4 Byte Longs are packed first give the chunk length
          * followed by the chunk signature, a four byte code. IDAT and IEND are manditory in any PNG.
          */
-        while(($chunkLengthBytes = $this->read(4)) !== false) {
+        while (($chunkLengthBytes = $this->read(4)) !== false) {
             $chunkLengthtmp         = unpack('Ni', $chunkLengthBytes);
             $chunkLength            = $chunkLengthtmp['i'];
             $chunkType                      = $this->read(4);
-            switch($chunkType) {
+            switch ($chunkType) {
                 case 'IDAT': //Image Data
                     /*
                      * Reads the actual image data from the PNG file. Since we know at this point that the compression
@@ -106,9 +104,9 @@ class Png extends BasePng
                             break;
 
                         case self::PNG_CHANNEL_RGB:
-                            $red = ord(substr($trnsData,1,1));
-                            $green = ord(substr($trnsData,3,1));
-                            $blue = ord(substr($trnsData,5,1));
+                            $red = ord(substr($trnsData, 1, 1));
+                            $green = ord(substr($trnsData, 3, 1));
+                            $blue = ord(substr($trnsData, 5, 1));
                             $transparencyData = array(new InternalType\NumericObject($red),
                                                       new InternalType\NumericObject($red),
                                                       new InternalType\NumericObject($green),
@@ -119,7 +117,7 @@ class Png extends BasePng
 
                         case self::PNG_CHANNEL_INDEXED:
                             //Find the first transparent color in the index, we will mask that. (This is a bit of a hack. This should be a SMask and mask all entries values).
-                            if(($trnsIdx = strpos($trnsData, "\0")) !== false) {
+                            if (($trnsIdx = strpos($trnsData, "\0")) !== false) {
                                 $transparencyData = array(new InternalType\NumericObject($trnsIdx),
                                                           new InternalType\NumericObject($trnsIdx));
                             }
@@ -136,7 +134,7 @@ class Png extends BasePng
                     $this->seek(4); //4 Byte Ending Sequence
                     break;
 
-                case 'IEND';
+                case 'IEND':
                     break 2; //End the loop too
 
                 default:
@@ -160,7 +158,7 @@ class Png extends BasePng
                 break;
 
             case self::PNG_CHANNEL_INDEXED:
-                if(empty($paletteData)) {
+                if (empty($paletteData)) {
                     throw new Exception\CorruptedImageException("PNG Corruption: No palette data read for indexed type PNG.");
                 }
                 $colorSpace = new InternalType\ArrayObject();
@@ -177,7 +175,7 @@ class Png extends BasePng
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
                  * will become the Shadow Mask (SMask).
                  */
-                if($bits > 8) {
+                if ($bits > 8) {
                     throw new Exception\NotImplementedException('Alpha PNGs with bit depth > 8 are not yet supported');
                 }
 
@@ -186,7 +184,7 @@ class Png extends BasePng
                 $pngDataRawDecoded = $this->decode($imageData, $width, 2, $bits);
 
                 //Iterate every pixel and copy out gray data and alpha channel (this will be slow)
-                for($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
+                for ($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
                     $imageDataTmp .= $pngDataRawDecoded[($pixel*2)];
                     $smaskData .= $pngDataRawDecoded[($pixel*2)+1];
                 }
@@ -200,7 +198,7 @@ class Png extends BasePng
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
                  * will become the Shadow Mask (SMask).
                  */
-                if($bits > 8) {
+                if ($bits > 8) {
                     throw new Exception\NotImplementedException('Alpha PNGs with bit depth > 8 are not yet supported');
                 }
 
@@ -209,7 +207,7 @@ class Png extends BasePng
                 $pngDataRawDecoded = $this->decode($imageData, $width, 4, $bits);
 
                 //Iterate every pixel and copy out rgb data and alpha channel (this will be slow)
-                for($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
+                for ($pixel = 0, $pixelcount = ($width * $height); $pixel < $pixelcount; $pixel++) {
                     $imageDataTmp .= $pngDataRawDecoded[($pixel*4)+0] . $pngDataRawDecoded[($pixel*4)+1] . $pngDataRawDecoded[($pixel*4)+2];
                     $smaskData .= $pngDataRawDecoded[($pixel*4)+3];
                 }
@@ -222,12 +220,12 @@ class Png extends BasePng
                 throw new Exception\CorruptedImageException('PNG Corruption: Invalid color space.');
         }
 
-        if(empty($imageData)) {
+        if (empty($imageData)) {
             throw new Exception\CorruptedImageException('Corrupt PNG Image. Mandatory IDAT chunk not found.');
         }
 
         $imageDictionary = $this->_resource->dictionary;
-        if(!empty($smaskData)) {
+        if (!empty($smaskData)) {
             /*
              * Includes the Alpha transparency data as a Gray Image, then assigns the image as the Shadow Mask for the main image data.
              */
@@ -250,7 +248,7 @@ class Png extends BasePng
             $smaskStream->dictionary->Filter       = new InternalType\NameObject('FlateDecode');
         }
 
-        if(!empty($transparencyData)) {
+        if (!empty($transparencyData)) {
             //This is experimental and not properly tested.
             $imageDictionary->Mask = new InternalType\ArrayObject($transparencyData);
         }
@@ -294,26 +292,19 @@ class Png extends BasePng
     
     private function open($isRemote, $imageFileName)
     {
-        try 
-        {
-            if($isRemote)
-            {
+        try {
+            if ($isRemote) {
                 $content = @file_get_contents($imageFileName);
                 
-                if($content === false)
-                {
+                if ($content === false) {
                     return false;
                 }
                 
                 return new StringInputStream($content);
-            }
-            else
-            {
+            } else {
                 return new FopenInputStream($imageFileName, 'rb');
             }
-        }
-        catch(\PHPPdf\Exception $e)
-        {
+        } catch (\PHPPdf\Exception $e) {
             return false;
         }
     }

@@ -30,7 +30,7 @@ class StickyNoteTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $gc = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
                    ->getMock();
         
-       $text = 'some text';
+        $text = 'some text';
 
         $gc->expects($this->once())
            ->method('attachStickyNote')
@@ -38,7 +38,7 @@ class StickyNoteTest extends \PHPPdf\PHPUnit\Framework\TestCase
            
         $stickyNote = new StickyNote($text);
         
-        $stickyNote->attach($gc, $node);        
+        $stickyNote->attach($gc, $node);
     }
     
     private function getNodeStub($x, $y, $width, $height)

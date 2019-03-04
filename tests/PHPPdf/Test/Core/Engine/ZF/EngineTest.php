@@ -13,8 +13,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function setUp()
     {
-        if(!class_exists('ZendPdf\PdfDocument', true))
-        {
+        if (!class_exists('ZendPdf\PdfDocument', true)) {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
         
@@ -42,8 +41,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->assertInstanceOf('PHPPdf\Core\Engine\ZF\Font', $font);
         
-        foreach($fontData as $style => $data)
-        {
+        foreach ($fontData as $style => $data) {
             $this->assertTrue($font->hasStyle($style));
         }
     }
@@ -107,7 +105,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     */    
+     */
     public function successfullEngineLoading()
     {
         $file = TEST_RESOURCES_DIR.'/test.pdf';
@@ -145,12 +143,9 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $engine->setMetadataValue($name, $value);
         
-        if($shouldBeSet)
-        {
+        if ($shouldBeSet) {
             $this->assertEquals($expectedValue, $zendPdf->properties[$name]);
-        }
-        else
-        {
+        } else {
             $this->assertFalse(isset($zendPdf->properties[$name]));
         }
     }
@@ -191,7 +186,7 @@ class EngineTest extends \PHPPdf\PHPUnit\Framework\TestCase
                   ->with($percentage, $value)
                   ->will($this->returnValue($result));
                   
-        $this->assertEquals($result, $engine->convertUnit($value, $unit));        
+        $this->assertEquals($result, $engine->convertUnit($value, $unit));
         $this->assertEquals($result, $engine->convertPercentageValue($percentage, $value));
     }
 }

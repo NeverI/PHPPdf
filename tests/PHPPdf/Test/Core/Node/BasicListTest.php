@@ -50,8 +50,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->list->setEnumerationStrategy($enumerationStrategy);
 
-        for($i=0; $i<$numberOfChildren; $i++)
-        {
+        for ($i=0; $i<$numberOfChildren; $i++) {
             $this->list->add(new Container());
             $enumerationStrategy->expects($this->at($i+1))
                                 ->method('drawEnumeration')
@@ -63,8 +62,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $this->list->collectOrderedDrawingTasks($document, $tasks);
         
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -89,8 +87,7 @@ class BasicListTest extends \PHPPdf\PHPUnit\Framework\TestCase
             'none' => BasicList::TYPE_NONE,
         );
         
-        foreach($types as $name => $value)
-        {
+        foreach ($types as $name => $value) {
             $this->list->setAttribute('type', $name);
             
             $this->assertEquals($value, $this->list->getAttribute('type'));

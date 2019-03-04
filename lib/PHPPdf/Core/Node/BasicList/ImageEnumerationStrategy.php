@@ -15,8 +15,8 @@ use PHPPdf\Core\Node\BasicList;
 use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
- * This enumeration strategy uses image as enumeration element 
- * 
+ * This enumeration strategy uses image as enumeration element
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ImageEnumerationStrategy extends AbstractEnumerationStrategy
@@ -40,20 +40,18 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         
         $xTranslation = 0;
         
-        if($list->getAttribute('list-position') === BasicList::LIST_POSITION_OUTSIDE)
-        {
+        if ($list->getAttribute('list-position') === BasicList::LIST_POSITION_OUTSIDE) {
             $xTranslation = -$this->imageWidth;
         }
         
-        return array($xTranslation, 0);    
+        return array($xTranslation, 0);
     }
     
     protected function getImage(BasicList $list)
     {
         $image = $list->getImage();
         
-        if(!$image)
-        {
+        if (!$image) {
             throw new LogicException('Image enumeration type requires not empty attribute "image" of BasicList.');
         }
         
@@ -62,18 +60,15 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
     
     private function getImageDimension(UnitConverter $converter, $image, $fontSize)
     {
-        if($this->imageWidth === null && $this->imageHeight === null)
-        {
+        if ($this->imageWidth === null && $this->imageHeight === null) {
             $imageHeight = $image->getOriginalHeight();
             $imageWidth = $image->getOriginalWidth();
-            if($imageWidth > $fontSize)
-            {
+            if ($imageWidth > $fontSize) {
                 $imageHeight = $imageHeight * $fontSize/$imageWidth;
                 $imageWidth = $fontSize;
             }
             
-            if($imageHeight > $fontSize)
-            {
+            if ($imageHeight > $fontSize) {
                 $imageWidth = $imageWidth * $fontSize/$imageHeight;
                 $imageHeight = $fontSize;
             }
@@ -91,6 +86,6 @@ class ImageEnumerationStrategy extends AbstractEnumerationStrategy
         $fontSize = $list->getRecurseAttribute('font-size');
         list($width, $height) = $this->getImageDimension($document, $image, $fontSize);
 
-        return $width;        
+        return $width;
     }
 }

@@ -60,8 +60,7 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->method('getWidth')
              ->will($this->returnValue($parentWidth));
              
-        if($nodeWidth > $parentWidth)
-        {
+        if ($nodeWidth > $parentWidth) {
             $mock->expects($this->once())
                  ->method('setWidth')
                  ->with($nodeWidth);
@@ -94,12 +93,9 @@ class ConvertAttributesFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->formatter->format($node, $this->document);
         
-        if($angle === null)
-        {
+        if ($angle === null) {
             $this->assertNull($node->getAttribute('rotate'));
-        }
-        else
-        {
+        } else {
             $this->assertEquals($expectedRadians, $node->getAttribute('rotate'), 'conversion from degrees to radians failure', 0.001);
         }
     }

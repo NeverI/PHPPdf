@@ -16,7 +16,7 @@ use PHPPdf\Core\Engine\ZF\Engine as ZendEngine;
 
 /**
  * Engine factory implementation
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class EngineFactoryImpl implements EngineFactory
@@ -41,18 +41,16 @@ class EngineFactoryImpl implements EngineFactory
     {
         $dpi = isset($options[self::OPTION_DPI]) ? $options[self::OPTION_DPI] : 96;
         
-        switch($type)
-        {
+        switch ($type) {
             case self::TYPE_PDF:
                 return new ZendEngine(null, new PdfUnitConverter($dpi));
             case self::TYPE_IMAGE:
                 $engine = ucfirst($this->getOption(self::OPTION_ENGINE, $options, self::ENGINE_GD));
                 $format = $this->getOption(self::OPTION_FORMAT, $options, self::FORMAT_JPEG);
 
-                $imagineClass = sprintf('Imagine\%s\Imagine', $engine);   
+                $imagineClass = sprintf('Imagine\%s\Imagine', $engine);
 
-                if(!class_exists($imagineClass, true))
-                {
+                if (!class_exists($imagineClass, true)) {
                     throw new DomainException(sprintf('Unknown image engine type "%s" or Imagine library is not installed.', $engine));
                 }
                 
@@ -60,8 +58,7 @@ class EngineFactoryImpl implements EngineFactory
                 
                 $renderOptions = array();
                 
-                if(isset($options[self::OPTION_QUALITY]))
-                {
+                if (isset($options[self::OPTION_QUALITY])) {
                     $renderOptions[self::OPTION_QUALITY] = $options[self::OPTION_QUALITY];
                 }
 

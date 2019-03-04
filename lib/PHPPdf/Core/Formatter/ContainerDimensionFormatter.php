@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Formatter\BaseFormatter,
-    PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\BaseFormatter;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Document;
 
 /**
  * Calculates real dimension of compose node
@@ -22,8 +22,7 @@ class ContainerDimensionFormatter extends BaseFormatter
     public function format(Nodes\Node $node, Document $document)
     {
         $minX = $maxX = $minY = $maxY = null;
-        foreach($node->getChildren() as $child)
-        {
+        foreach ($node->getChildren() as $child) {
             $firstPoint = $child->getFirstPoint();
             $diagonalPoint = $child->getDiagonalPoint();
 
@@ -45,21 +44,18 @@ class ContainerDimensionFormatter extends BaseFormatter
         $realHeight = $paddingVertical + ($maxY - $minY);
         $realWidth = $paddingHorizontal + ($maxX - $minX);
 
-        if($realHeight > $node->getHeight())
-        {
+        if ($realHeight > $node->getHeight()) {
             $node->setHeight($realHeight);
         }
 
-        if($node->isInline() || $realWidth > $node->getWidth())
-        {
+        if ($node->isInline() || $realWidth > $node->getWidth()) {
             $node->setWidth($realWidth);
         }
     }
 
     private function changeValueIfIsLess($value, $valueToSet)
     {
-        if($value === null || $value < $valueToSet)
-        {
+        if ($value === null || $value < $valueToSet) {
             return $valueToSet;
         }
         
@@ -68,8 +64,7 @@ class ContainerDimensionFormatter extends BaseFormatter
 
     private function changeValueIfIsGreater($value, $valueToSet)
     {
-        if($value === null || $value > $valueToSet)
-        {
+        if ($value === null || $value > $valueToSet) {
             return $valueToSet;
         }
         return $value;

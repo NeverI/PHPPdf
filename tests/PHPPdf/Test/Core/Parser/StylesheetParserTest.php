@@ -4,8 +4,8 @@ namespace PHPPdf\Test\Core\Parser;
 
 use PHPPdf\Core\Parser\BagContainer;
 
-use PHPPdf\Core\Parser\StylesheetParser,
-    PHPPdf\Core\Parser\StylesheetConstraint;
+use PHPPdf\Core\Parser\StylesheetParser;
+use PHPPdf\Core\Parser\StylesheetConstraint;
 
 class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -66,11 +66,9 @@ XML;
      */
     private function getConstraint(StylesheetConstraint $constraint, $tag, array $classes = array())
     {
-        foreach($constraint->getConstraints() as $child)
-        {
+        foreach ($constraint->getConstraints() as $child) {
             $childClasses = $child->getClasses();
-            if($child->getTag() == $tag && count(array_intersect($childClasses, $classes)) == count($childClasses))
-            {
+            if ($child->getTag() == $tag && count(array_intersect($childClasses, $classes)) == count($childClasses)) {
                 return $child;
             }
         }
@@ -389,7 +387,7 @@ XML;
                            ->method('getDefinitionNames')
                            ->will($this->returnValue('someComplexAttribute'));
 
-        $resultConstraint = $this->parser->parse($xml);        
+        $resultConstraint = $this->parser->parse($xml);
 
         $constraint = $this->getConstraint($resultConstraint, 'some-tag');
         

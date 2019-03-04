@@ -4,17 +4,16 @@ namespace PHPPdf\Test\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
 
-use PHPPdf\Core\Node\Page,
-    PHPPdf\Core\ComplexAttribute\Background,
-    PHPPdf\Core\ComplexAttribute\Border,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Stub\Node\StubNode,
-    PHPPdf\Stub\Node\StubComposeNode,
-    PHPPdf\ObjectMother\NodeObjectMother,
-    PHPPdf\Core\Node\Container;
-
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\ComplexAttribute\Background;
+use PHPPdf\Core\ComplexAttribute\Border;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Stub\Node\StubNode;
+use PHPPdf\Stub\Node\StubComposeNode;
+use PHPPdf\ObjectMother\NodeObjectMother;
+use PHPPdf\Core\Node\Container;
 
 class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -105,8 +104,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $margins = array('margin-top', 'margin-right', 'margin-bottom', 'margin-left');
         $this->node->setMargin('auto');
-        foreach($margins as $margin)
-        {
+        foreach ($margins as $margin) {
             $this->assertEquals('auto', $this->node->getAttribute($margin));
         }
 
@@ -135,15 +133,12 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function callMethod()
     {
-        try
-        {
+        try {
             $color = '#aaaaaa';
             $result = $this->node->setAttribute('color', $color);
             $this->assertEquals($this->node, $result);
             $this->assertEquals($color, $this->node->getAttribute('color'));
-        }
-        catch(\BadMethodCallException $e)
-        {
+        } catch (\BadMethodCallException $e) {
             $this->fail('exception should not be thrown');
         }
     }
@@ -254,8 +249,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->node->makeAttributesSnapshot();
         $snapshot = $this->node->getAttributesSnapshot();
 
-        foreach($snapshot as $name => $value)
-        {
+        foreach ($snapshot as $name => $value) {
             $this->assertEquals($value, $this->node->getAttribute($name));
         }
 
@@ -441,14 +435,13 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
             array('breakable', 'no', false),
         );
         
-        foreach($testData as $data)
-        {
+        foreach ($testData as $data) {
             list($attributeName, $attributeValue, $expectedValue) = $data;
             
             $this->node->setAttribute($attributeName, $attributeValue);
         
             $this->assertTrue($expectedValue === $this->node->getAttribute($attributeName));
-        }    
+        }
     }
     
     /**
@@ -556,8 +549,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->invokeMethod($page, 'setGraphicsContext', array($gc));
         $page->add($this->node);
         
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $behaviour = $this->getMockBuilder('PHPPdf\Core\Node\Behaviour\Behaviour')
                               ->setMethods(array('doAttach', 'attach'))
                               ->getMock();
@@ -571,8 +563,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $this->node->collectUnorderedDrawingTasks($this->createDocumentStub(), $tasks);
         
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -588,8 +579,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $parent->setAttribute('rotate', $parentRotation);
         $parent->add($this->node);
         
-        switch($expected)
-        {
+        switch ($expected) {
             case 'node':
                 $expectedNode = $this->node;
                 break;
@@ -682,12 +672,9 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $actualAncestor = $this->node->getClosestAncestorWithPosition();
         
-        if($expectedFalse)
-        {
+        if ($expectedFalse) {
             $this->assertFalse($actualAncestor);
-        }
-        else
-        {
+        } else {
             $this->assertEquals($grandparent, $actualAncestor);
         }
     }

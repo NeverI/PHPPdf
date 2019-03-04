@@ -31,39 +31,34 @@ abstract class XmlParser implements Parser
         $reader = $this->getReader($content);
 
         $stopParsing = false;
-        do
-        {
-            switch($reader->nodeType)
-            {
+        do {
+            switch ($reader->nodeType) {
                 case \XMLReader::ELEMENT:
                     $this->parseElement($reader);
                     break;
                 case \XMLReader::END_ELEMENT:
                     $this->parseEndElement($reader);
-                    if($this->isEndOfParsedDocument($reader))
-                    {
+                    if ($this->isEndOfParsedDocument($reader)) {
                         $stopParsing = true;
                     }
 
                     break;
                 case \XMLReader::TEXT:
                 case \XMLReader::SIGNIFICANT_WHITESPACE:
-                case \XMLReader::WHITESPACE:                    
+                case \XMLReader::WHITESPACE:
                 case \XMLReader::CDATA:
                 case \XMLReader::ENTITY:
                 case \XMLReader::ENTITY_REF:
                     $this->parseText($reader);
                     break;
             }
-        }
-        while(!$stopParsing && $this->read($reader));
+        } while (!$stopParsing && $this->read($reader));
 
         $this->stack = array();
         $this->stackSize = 0;
         
-        if(!$this->xmlReaderProvidedFromOutside)
-        {
-            $reader->close();            
+        if (!$this->xmlReaderProvidedFromOutside) {
+            $reader->close();
         }
         
         $this->reset();
@@ -77,23 +72,18 @@ abstract class XmlParser implements Parser
 
     private function getReader($content)
     {
-        if($content instanceof \XMLReader)
-        {
+        if ($content instanceof \XMLReader) {
             $reader = $content;
             $this->xmlReaderProvidedFromOutside = true;
-        }
-        else
-        {
+        } else {
             $reader = $this->createReader($content);
  
             $nodeType = $reader->nodeType;
-            while($reader->nodeType !== \XMLReader::ELEMENT)
-            {
+            while ($reader->nodeType !== \XMLReader::ELEMENT) {
                 $this->read($reader);
             }
 
-            if($reader->name != static::ROOT_TAG)
-            {
+            if ($reader->name != static::ROOT_TAG) {
                 throw new Exceptions\InvalidTagException(sprintf('Root of xml document must be "%s", "%s" given.', static::ROOT_TAG, $reader->name));
             }
             
@@ -115,8 +105,7 @@ abstract class XmlParser implements Parser
         $status = @$reader->read();
 
         $error = libxml_get_last_error();
-        if($error)
-        {
+        if ($error) {
             libxml_clear_errors();
             throw new Exceptions\ParseException(sprintf('Xml parsing error "%s" in file "%s" on line %s on column %s', $error->message, $error->file, $error->line, $error->column));
         }
@@ -129,16 +118,12 @@ abstract class XmlParser implements Parser
         $reader = new \XMLReader();
         $content = ltrim($content);
 
-        if($this->isXmlDocument($content))
-        {
+        if ($this->isXmlDocument($content)) {
             $reader->XML($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
-        }
-        else
-        {
+        } else {
             $success = @$reader->open($content, null, LIBXML_NOBLANKS | LIBXML_DTDLOAD);
             
-            if(!$success)
-            {
+            if (!$success) {
                 throw new ParseException(sprintf('File "%s" doesn\'t exist or is unreadable', $content));
             }
         }
@@ -156,11 +141,9 @@ abstract class XmlParser implements Parser
     protected function seekReaderToNextTag(\XMLReader $reader)
     {
         $result = null;
-        do
-        {
+        do {
             $result = $this->read($reader);
-        }
-        while($result && $reader->nodeType !== \XMLReader::ELEMENT && $reader->nodeType !== \XMLReader::TEXT);
+        } while ($result && $reader->nodeType !== \XMLReader::ELEMENT && $reader->nodeType !== \XMLReader::TEXT);
     }
     
     protected function parseRootAttributes(\XMLReader $reader)

@@ -97,13 +97,11 @@ class NodeBuilder
         $class = $this->class;
         $container = new $class($this->attributes);
 
-        if($this->parentContainer)
-        {
+        if ($this->parentContainer) {
             $this->parentContainer->getNode()->add($container);
         }
 
-        foreach($this->childBuilders as $childBuilder)
-        {
+        foreach ($this->childBuilders as $childBuilder) {
             $container->add($childBuilder->getNode());
         }
 

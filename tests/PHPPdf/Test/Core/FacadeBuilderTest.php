@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core;
 
-use PHPPdf\Core\FacadeBuilder,
-    PHPPdf\Cache\CacheImpl,
-    PHPPdf\Core\FacadeConfiguration;
+use PHPPdf\Core\FacadeBuilder;
+use PHPPdf\Cache\CacheImpl;
+use PHPPdf\Core\FacadeConfiguration;
 use PHPPdf\Util\StringFilter;
 
 class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
@@ -29,7 +29,7 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      */
     public function returnFacadeOnBuildMethod()
-    {        
+    {
         $facade = $this->builder->build();
         $this->assertInstanceOf('PHPPdf\Core\Facade', $facade);
         $configurationLoader = $this->readAttribute($facade, 'configurationLoader');

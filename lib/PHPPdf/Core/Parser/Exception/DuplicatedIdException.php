@@ -12,7 +12,7 @@ use PHPPdf\Parser\Exception\ParseException;
 
 /**
  * Occurs when id has been duplicated
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class DuplicatedIdException extends ParseException

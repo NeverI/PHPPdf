@@ -13,8 +13,7 @@ class FontTest extends TestCase
     
     public function setUp()
     {
-        if(!interface_exists('Imagine\Image\ImagineInterface', true))
-        {
+        if (!interface_exists('Imagine\Image\ImagineInterface', true)) {
             $this->fail('Imagine library is missing. You have to download dependencies, for example by using "vendors.php" file.');
         }
 
@@ -33,7 +32,7 @@ class FontTest extends TestCase
      * @test
      */
     public function getWidthOfText()
-    {        
+    {
         $text = 'some text';
         $fontSize = 12;
         

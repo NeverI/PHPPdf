@@ -20,14 +20,11 @@ class EngineFactoryImplTest extends TestCase
      */
     public function engineCreationSuccess($type, $expectedClass)
     {
-        try
-        {
+        try {
             $engine = $this->factory->createEngine($type);
             
             $this->assertInstanceOf($expectedClass, $engine);
-        }
-        catch(\Imagine\Exception\RuntimeException $e)
-        {
+        } catch (\Imagine\Exception\RuntimeException $e) {
             $this->markTestSkipped('Exception from Imagine library, propably some graphics library is not installed');
         }
     }
@@ -63,16 +60,13 @@ class EngineFactoryImplTest extends TestCase
      */
     public function imageEngineCreationSuccess($type)
     {
-        try
-        {
+        try {
             $engine = $this->factory->createEngine(EngineFactoryImpl::TYPE_IMAGE, array(
                 EngineFactoryImpl::OPTION_ENGINE => $type,
             ));
             
             $this->assertInstanceOf('PHPPdf\Core\Engine\Imagine\Engine', $engine);
-        }
-        catch(\Imagine\Exception\RuntimeException $e)
-        {
+        } catch (\Imagine\Exception\RuntimeException $e) {
             $this->markTestSkipped('Exception from Imagine library, propably some graphics library is not installed');
         }
     }

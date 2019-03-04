@@ -3,7 +3,6 @@
 
 namespace PHPPdf\Test\Core\Engine\Imagine\GraphicsContextTest;
 
-
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Color;
@@ -75,8 +74,7 @@ class AbstractGraphicsContextTest_ImageAssert
         $actualRgb = $this->rgb($actualColor);
         $expectedRgb = $this->rgb($expectedColor);
 
-        for($i=0; $i<3; $i++)
-        {
+        for ($i=0; $i<3; $i++) {
             \PHPUnit_Framework_Assert::assertLessThanOrEqual(
                 255*0.03,//3% precision
                 abs($actualRgb[$i] - $expectedRgb[$i]),

@@ -17,7 +17,7 @@ class NodeObjectMother
     public function getPageMock($x, $y)
     {
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        			   ->getMock();
+                       ->getMock();
         $gcMock->expects($this->test->once())
                  ->method('drawPolygon')
                  ->with($x, $y, GraphicsContext::SHAPE_DRAW_STROKE);
@@ -56,8 +56,7 @@ class NodeObjectMother
                   ->method('getHeight')
                   ->will($this->test->returnValue($height));
                   
-        if($gc)
-        {
+        if ($gc) {
             $nodeMock->expects($this->test->atLeastOnce())
                       ->method('getGraphicsContext')
                       ->will($this->test->returnValue($gc));

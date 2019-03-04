@@ -26,7 +26,7 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * For simplification in this test each character width = 1
-     * 
+     *
      * @test
      * @dataProvider textProvider
      */
@@ -79,14 +79,14 @@ class TextDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         return array(
             array(
-            	'some text with some words', 
-                array('some ', 'text ', 'with ', 'some ', 'words'), 
-                array(5, 5, 5, 5, 5), 
+                'some text with some words',
+                array('some ', 'text ', 'with ', 'some ', 'words'),
+                array(5, 5, 5, 5, 5),
             ),
             array(
-            	'some text with some words ', 
-                array('some ', 'text ', 'with ', 'some ', 'words ', ''), 
-                array(5, 5, 5, 5, 6, 0), 
+                'some text with some words ',
+                array('some ', 'text ', 'with ', 'some ', 'words ', ''),
+                array(5, 5, 5, 5, 6, 0),
             ),
             //very long word, split it!
             array(
@@ -144,7 +144,7 @@ class TextDimensionFormatterTest_Font implements Font
     public function getCurrentResourceIdentifier()
     {
         throw new \BadMethodCallException();
-    }    
+    }
     public function getWidthOfText($text, $fontSize)
     {
         return strlen($text);

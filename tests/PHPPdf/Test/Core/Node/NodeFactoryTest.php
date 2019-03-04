@@ -2,8 +2,8 @@
 
 namespace PHPPdf\Test\Core\Node;
 
-use PHPPdf\Core\Node\NodeFactory,
-    PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Node\NodeFactory;
+use PHPPdf\Core\Node\Container;
 
 class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -97,12 +97,12 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
                   
         $product->expects($this->once())
                 ->method($invokeMethodName)
-                ->with($invokeMethodArg);                  
+                ->with($invokeMethodArg);
         
         $this->factory->addPrototype($key, $prototype, array($invokeMethodName => $invokeMethodArgTag));
         $this->factory->addInvokeArg($invokeMethodArgTag, $invokeMethodArg);
         
-        $this->assertTrue($product === $this->factory->create($key));        
+        $this->assertTrue($product === $this->factory->create($key));
     }
     
     /**
@@ -115,8 +115,7 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $key = 'key';
         $this->factory->addPrototype($key, $prototype, array(), $aliases);
         
-        foreach($aliases as $alias)
-        {
+        foreach ($aliases as $alias) {
             $this->assertTrue($prototype === $this->factory->getPrototype($alias));
             
             $copy = $this->factory->create($alias);

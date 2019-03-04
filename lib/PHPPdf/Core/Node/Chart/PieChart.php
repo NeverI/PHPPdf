@@ -36,29 +36,23 @@ class PieChart extends Circle
     
     public function setChartValues($values)
     {
-        if(is_string($values))
-        {
+        if (is_string($values)) {
             $values = explode('|', $values);
             $values = array_map('floatval', $values);
-        }
-        elseif(!is_array($values))
-        {
+        } elseif (!is_array($values)) {
             throw new InvalidArgumentException('chart-values attribute should be an array or string');
-        }        
+        }
         
         $this->setAttributeDirectly('chart-values', $values);
     }
     
     public function setChartColors($colors)
     {
-        if(is_string($colors))
-        {
+        if (is_string($colors)) {
             $colors = explode('|', $colors);
-        }
-        elseif(!is_array($colors))
-        {
+        } elseif (!is_array($colors)) {
             throw new InvalidArgumentException('chart-colors attribute should be an array or string');
-        }   
+        }
         
         $this->setAttributeDirectly('chart-colors', $colors);
     }
@@ -67,7 +61,7 @@ class PieChart extends Circle
     {
         parent::doDraw($document, $tasks);
         
-        $callback = function(PieChart $node, Document $document, Point $point){
+        $callback = function (PieChart $node, Document $document, Point $point) {
             $gc = $node->getGraphicsContext();
             
             $values = $node->getAttribute('chart-values');
@@ -76,13 +70,10 @@ class PieChart extends Circle
             $totalValues = array_sum($values);
             arsort($values);
             
-            if($totalValues > 0)
-            {             
-                $start = 0;  
-                foreach($values as $i => $value)
-                {
-                    if(!isset($colors[$i]))
-                    {
+            if ($totalValues > 0) {
+                $start = 0;
+                foreach ($values as $i => $value) {
+                    if (!isset($colors[$i])) {
                         throw new InvalidArgumentException(sprintf('Color number %d for pie chart value (%d) is missing.', $i, $value));
                     }
 
@@ -90,7 +81,9 @@ class PieChart extends Circle
                     $relativeValue = $value/$totalValues;
                     $end = $start + 359.999999*$relativeValue;
                     
-                    if($start == $end) continue;
+                    if ($start == $end) {
+                        continue;
+                    }
                     
                     $gc->saveGS();
                     $gc->setFillColor($color);

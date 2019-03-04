@@ -21,8 +21,7 @@ $facade = PHPPdf\Core\FacadeBuilder::create()
 //                                               ->setUseCacheForStylesheetConstraint(true)
                                                ->build();
 
-if($_SERVER['argc'] < 3) 
-{
+if ($_SERVER['argc'] < 3) {
     echo 'Pass example name and destination file path, for example `cli.php example-name /some/destination/file.pdf`'.PHP_EOL;
     echo 'Available examples:'.PHP_EOL;
     $examples = get_examples();
@@ -35,13 +34,11 @@ $destinationPath = $_SERVER['argv'][2];
 $documentFilename = __DIR__.'/'.$name.'.xml';
 $stylesheetFilename = __DIR__.'/'.$name.'-style.xml';
 
-if(!is_readable($documentFilename) || !is_readable($stylesheetFilename))
-{
+if (!is_readable($documentFilename) || !is_readable($stylesheetFilename)) {
     die(sprintf('Example "%s" dosn\'t exist.', $name));
 }
 
-if(!is_writable(dirname($destinationPath)))
-{
+if (!is_writable(dirname($destinationPath))) {
     die(sprintf('"%s" isn\'t writable.', $destinationPath));
 }
 

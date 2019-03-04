@@ -15,7 +15,7 @@ abstract class InputStreamTest extends TestCase
      * @test
      */
     public function properSeeking()
-    {        
+    {
         $this->assertEquals(0, $this->stream->seek(10));
         $this->assertEquals(10, $this->stream->tell());
         $this->assertEquals(0, $this->stream->seek(10, InputStream::SEEK_SET));
@@ -32,7 +32,7 @@ abstract class InputStreamTest extends TestCase
      * @test
      */
     public function properReading()
-    {        
+    {
         $this->assertEquals('some', $this->stream->read(4));
         $this->assertEquals(' string', $this->stream->read(7));
         $this->stream->seek(-1, InputStream::SEEK_END);

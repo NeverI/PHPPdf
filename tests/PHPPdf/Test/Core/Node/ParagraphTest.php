@@ -34,14 +34,12 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function trimTextElementsThatTextElementsAreSeparatedAtMostByOneSpace(array $texts)
     {
-        foreach($texts as $text)
-        {
+        foreach ($texts as $text) {
             $this->paragraph->add(new Text($text));
         }
         
         $isPreviousTextEndsWithWhiteChars = false;
-        foreach($this->paragraph->getChildren() as $textNode)
-        {
+        foreach ($this->paragraph->getChildren() as $textNode) {
             $isStartsWithWhiteChars = ltrim($textNode->getText()) != $textNode->getText();
             
             $this->assertFalse($isStartsWithWhiteChars && $isPreviousTextEndsWithWhiteChars);
@@ -75,8 +73,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $emptyText = new Text('    ');
         $lastText = new Text('abc');
         
-        foreach(array($firstText, $emptyText, $lastText) as $text)
-        {
+        foreach (array($firstText, $emptyText, $lastText) as $text) {
             $this->paragraph->add($text);
         }
         
@@ -92,8 +89,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $expectedTasks = array();
         
-        for($i=0; $i<3; $i++)
-        {
+        for ($i=0; $i<3; $i++) {
             $line = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\Line')
                          ->setMethods(array('format'))
                          ->disableOriginalConstructor()
@@ -120,20 +116,20 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $tasks = new DrawingTaskHeap();
         
-        for($i=0; $i<3; $i++)
-        {
+        for ($i=0; $i<3; $i++) {
             $text = $this->getMockBuilder('PHPPdf\Core\Node\Text')
                          ->setMethods(array('collectOrderedDrawingTasks'))
                          ->disableOriginalConstructor()
                          ->getMock();
             
-            $taskStub = new DrawingTask(function(){});
+            $taskStub = new DrawingTask(function () {
+            });
             $expectedTasks[] = $taskStub;
                              
             $text->expects($this->once())
                  ->method('collectOrderedDrawingTasks')
                  ->with($documentStub, $this->isInstanceOf('PHPPdf\Core\DrawingTaskHeap'))
-                 ->will($this->returnCallback(function() use($tasks, $taskStub){
+                 ->will($this->returnCallback(function () use ($tasks, $taskStub) {
                      $tasks->insert($taskStub);
                  }));
                      
@@ -175,7 +171,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * |_____________|              | <- breaking here
      * |                            |
      * |____________________________|
-     * 
+     *
      * @test
      */
     public function breaking()
@@ -218,8 +214,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $text1->setAttribute('line-height', 100);
         $text2->setAttribute('line-height', 100);
         
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $line = new Line($paragraph, 0, $i*100);
             $part = new LinePart('', 500, 0, $text1);
             $line->addPart($part);
@@ -232,8 +227,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $line->addPart(new LinePart('', $width/2, 250, $text2));
         $paragraph->addLine($line);
         
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $line = new Line($paragraph, 0, ($i+3)*100);
             $part = new LinePart('', 500, 0, $text2);
             $line->addPart($part);
@@ -268,11 +262,9 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->assertEquals(1, count($paragraph->getChildren()));
         $this->assertEquals(2, count($paragraphProduct->getChildren()));
         
-        foreach($paragraphProduct->getLines() as $i => $line)
-        {
+        foreach ($paragraphProduct->getLines() as $i => $line) {
             $this->assertEquals($i*100, $line->getYTranslation());
-            foreach($line->getParts() as $part)
-            {
+            foreach ($line->getParts() as $part) {
 //                $this->assertTrue($part->getText() !== $text1);
 //                $this->assertTrue($part->getText() !== $text2);
             }
@@ -285,8 +277,7 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function minWidthIsMaxOfLineMinWidth(array $linesWidths)
     {
-        foreach($linesWidths as $width)
-        {
+        foreach ($linesWidths as $width) {
             $line = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\Line')
                          ->setMethods(array('getTotalWidth'))
                          ->disableOriginalConstructor()
@@ -307,10 +298,10 @@ class ParagraphTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         return array(
             array(array(
-                10, 20 ,30            
+                10, 20 ,30
             )),
             array(array(
-                20, 20 ,10            
+                20, 20 ,10
             )),
         );
     }

@@ -4,25 +4,24 @@ namespace PHPPdf\Test\Core\Node\Paragraph;
 
 use PHPPdf\Core\Node\Node;
 use PHPPdf\Core\Node\Paragraph;
-use PHPPdf\Core\Point,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Paragraph\Line;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Paragraph\Line;
 
 class LineTest extends \PHPPdf\PHPUnit\Framework\TestCase
-{    
+{
     /**
      * @test
      * @dataProvider textAlignProvider
      */
     public function applyAlignOnLineParts($paragraphFirstPoint, $width, $align, $widthOfParts, $expectedTranslation)
-    {        
+    {
         $paragraph = $this->createParagraph($paragraphFirstPoint, $width, 0, 0, $align);
         
         $xTranslation = 0;
         $line = new Line($paragraph, $xTranslation, 0);
         
-        foreach($widthOfParts as $widthOfPart)
-        {
+        foreach ($widthOfParts as $widthOfPart) {
             $linePart = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\LinePart')
                              ->setMethods(array('getWidth'))
                              ->disableOriginalConstructor()
@@ -130,10 +129,9 @@ class LineTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $numberOfSpaces = count($linePartSizes) * $numberOfWordsPerPart - 1;
         $totalWidth = array_sum($linePartSizes);
 
-        $expectedWordSpacing = ($paragraphWidth - $totalWidth)/$numberOfSpaces;        
+        $expectedWordSpacing = ($paragraphWidth - $totalWidth)/$numberOfSpaces;
         
-        foreach($linePartSizes as $width)
-        {
+        foreach ($linePartSizes as $width) {
             $linePart = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\LinePart')
                              ->setMethods(array('setWordSpacing', 'getWidth', 'getNumberOfWords'))
                              ->disableOriginalConstructor()

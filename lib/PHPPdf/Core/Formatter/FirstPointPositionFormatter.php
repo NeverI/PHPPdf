@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Document;
 
 class FirstPointPositionFormatter extends BaseFormatter
 {
@@ -18,8 +18,7 @@ class FirstPointPositionFormatter extends BaseFormatter
     {
         $node->makeAttributesSnapshot(array('height', 'width'));
         $boundary = $node->getBoundary();
-        if($boundary->isClosed())
-        {
+        if ($boundary->isClosed()) {
             return;
         }
 
@@ -42,27 +41,21 @@ class FirstPointPositionFormatter extends BaseFormatter
 
         $previousSibling = $node->getPreviousSibling();
 
-        if($previousSibling)
-        {
+        if ($previousSibling) {
             list($siblingEndX, $siblingEndY) = $previousSibling->getDiagonalPoint()->toArray();
             list($siblingStartX, $siblingStartY) = $previousSibling->getFirstPoint()->toArray();
 
-            if($this->isNodeInSameRowAsPreviousSibling($node, $previousSibling))
-            {
+            if ($this->isNodeInSameRowAsPreviousSibling($node, $previousSibling)) {
                 $preferredXCoord += $previousSibling->getMarginRight() + $siblingEndX - $parentX;
                 $preferredYCoord = $siblingStartY + $previousSibling->getMarginTop() - $node->getMarginTop();
-                if($previousSibling instanceof Nodes\Text)
-                {
+                if ($previousSibling instanceof Nodes\Text) {
                     $preferredYCoord -= $previousSibling->getLineHeightRecursively() * (count($previousSibling->getLineSizes()) - 1);
                 }
-            }
-            else
-            {
+            } else {
                 $preferredYCoord = $siblingEndY - ($previousSibling->getMarginBottom() + $node->getMarginTop());
             }
             
-            if($this->isLineBreak($node, $previousSibling))
-            {
+            if ($this->isLineBreak($node, $previousSibling)) {
                 $preferredYCoord -= $node->getLineHeightRecursively();
             }
         }
@@ -72,8 +65,7 @@ class FirstPointPositionFormatter extends BaseFormatter
     {
         $oneOfNodesIsInline = $previousSibling->isInline() && $node->isInline();
         
-        if(!$oneOfNodesIsInline)
-        {
+        if (!$oneOfNodesIsInline) {
             return false;
         }
 

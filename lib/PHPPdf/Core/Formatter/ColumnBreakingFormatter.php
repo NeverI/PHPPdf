@@ -10,15 +10,15 @@ namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Point;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Node\ColumnableContainer,
-    PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Node\ColumnableContainer;
+use PHPPdf\Core\Node\Container;
 
 /**
- * Formats columnable container, breaks containers into columns. 
- * 
+ * Formats columnable container, breaks containers into columns.
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ColumnBreakingFormatter extends BaseFormatter
@@ -34,10 +34,8 @@ class ColumnBreakingFormatter extends BaseFormatter
 
         $nodes = $node instanceof ColumnableContainer ? array($node) : $node->getChildren();
         
-        foreach($nodes as $node)
-        {
-            if($node instanceof ColumnableContainer)
-            {
+        foreach ($nodes as $node) {
+            if ($node instanceof ColumnableContainer) {
                 $container = $this->moveAllChildrenToSingleContainer($node);
                 
                 $this->breakContainerIntoColumns($node, $container);
@@ -54,8 +52,7 @@ class ColumnBreakingFormatter extends BaseFormatter
     {
         $container = new Container();
 
-        foreach($columnableContainer->getChildren() as $child)
-        {
+        foreach ($columnableContainer->getChildren() as $child) {
             $container->add($child);
         }
         
@@ -65,7 +62,7 @@ class ColumnBreakingFormatter extends BaseFormatter
         
         $this->setDimension($columnableContainer, $container);
         
-        return $container;        
+        return $container;
     }
     
     private function setDimension(ColumnableContainer $columnableContainer, Container $container)
@@ -89,20 +86,14 @@ class ColumnBreakingFormatter extends BaseFormatter
         $numberOfBreaks = 0;
         $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
         
-        do
-        {
-            if($this->shouldBeBroken($container, $breakYCoord))
-            {
+        do {
+            if ($this->shouldBeBroken($container, $breakYCoord)) {
                 $container = $this->breakContainer($container, $breakYCoord, $numberOfBreaks);
                 $breakYCoord = $this->getBreakYCoord($columnableContainer, $numberOfBreaks++, $container);
-            }
-            else
-            {
+            } else {
                 $container = null;
             }
-            
-        }
-        while($container);
+        } while ($container);
     }
     
     private function getBreakYCoord(ColumnableContainer $columnableContainer, $numberOfBreaks, Container $container = null)
@@ -112,10 +103,8 @@ class ColumnBreakingFormatter extends BaseFormatter
         $rowNumber = $this->getNumberOfRow($columnableContainer, $numberOfBreaks);
         $columnNumber = $this->getNumberOfColumn($columnableContainer, $numberOfBreaks);
         
-        if($this->staticBreakYCoord !== null)
-        {
-            if($columnNumber == ($numberOfColumns - 1))
-            {
+        if ($this->staticBreakYCoord !== null) {
+            if ($columnNumber == ($numberOfColumns - 1)) {
                 $this->stopBreaking = true;
             }
             return $this->staticBreakYCoord;
@@ -127,19 +116,16 @@ class ColumnBreakingFormatter extends BaseFormatter
         
         $forcedBreakYCoord = null;
         
-        foreach($container->getChildren() as $child)
-        {
-            if($child->getAttribute('break'))
-            {                
+        foreach ($container->getChildren() as $child) {
+            if ($child->getAttribute('break')) {
                 $forcedBreakYCoord = $child->getDiagonalPoint()->getY();
                 break;
             }
-        }        
+        }
         
         $minBreakYCoord = $this->getDiagonalYCoordOfColumn($columnableContainer, $container, $columnNumber, $rowNumber);
         
-        if($forcedBreakYCoord === null)
-        {
+        if ($forcedBreakYCoord === null) {
             return $minBreakYCoord;
         }
 
@@ -164,16 +150,13 @@ class ColumnBreakingFormatter extends BaseFormatter
     {
         $numberOfColumns = $columnableContainer->getAttribute('number-of-columns');
         
-        if($this->shouldColumnsBeEqual($columnableContainer, $container, $columnNumber, $rowNumber))
-        {
+        if ($this->shouldColumnsBeEqual($columnableContainer, $container, $columnNumber, $rowNumber)) {
             $prefferedContainerSize = $container->getHeight() / $numberOfColumns;
             
             $this->staticBreakYCoord = $container->getFirstPoint()->getY() - $prefferedContainerSize;
             
             return $this->staticBreakYCoord;
-        }
-        else
-        {
+        } else {
             return $this->getCurrentPageDiagonalYCoord($columnableContainer, $rowNumber);
         }
     }
@@ -195,7 +178,7 @@ class ColumnBreakingFormatter extends BaseFormatter
     }
     
     private function shouldColumnsBeEqual(ColumnableContainer $columnableContainer, Container $container, $columnNumber, $rowNumber)
-    {       
+    {
         $parent = $columnableContainer->getParent();
         $height = $container->getFirstPoint()->getY() - ($this->getPageDiagonalYCoord($columnableContainer) - ($rowNumber*$parent->getHeight()));
         $freeSpace = $height * ($columnableContainer->getAttribute('number-of-columns') - $columnNumber);
@@ -205,8 +188,7 @@ class ColumnBreakingFormatter extends BaseFormatter
     
     private function shouldBeBroken(Container $container, $pageYCoordEnd)
     {
-        if($this->stopBreaking)
-        {
+        if ($this->stopBreaking) {
             return false;
         }
         
@@ -221,8 +203,7 @@ class ColumnBreakingFormatter extends BaseFormatter
         
         $productOfBroke = $container->breakAt($breakPoint);
         
-        if($productOfBroke)
-        {
+        if ($productOfBroke) {
             $this->resizeAndMoveContainersToColumnHeight($container, $productOfBroke, $numberOfBreaks);
             
             $container->getParent()->add($productOfBroke);
@@ -238,7 +219,7 @@ class ColumnBreakingFormatter extends BaseFormatter
         $numberOfBreaks--;
         $columnableContainer = $originalContainer->getParent();
         $numberOfRow = $this->getNumberOfRow($columnableContainer, $numberOfBreaks);
-        $numberOfColumn = $this->getNumberOfColumn($columnableContainer, $numberOfBreaks);        
+        $numberOfColumn = $this->getNumberOfColumn($columnableContainer, $numberOfBreaks);
         
         $yCoord = $this->getCurrentPageDiagonalYCoord($columnableContainer, $numberOfRow);
         
@@ -246,8 +227,7 @@ class ColumnBreakingFormatter extends BaseFormatter
         
         $enlarge = $originalContainer->getDiagonalPoint()->getY() - $yCoord;
         
-        if($enlarge > 0)
-        {
+        if ($enlarge > 0) {
             $originalContainer->resize(0, $enlarge);
             $productOfBroke->translate(0, $enlarge);
         }
@@ -262,13 +242,10 @@ class ColumnBreakingFormatter extends BaseFormatter
         
         $isInTheSameRowAsOriginalContainer = $numberOfContainers % $numberOfColumns != 1;
         
-        if($isInTheSameRowAsOriginalContainer)
-        {
+        if ($isInTheSameRowAsOriginalContainer) {
             $xCoordTranslate = $originalContainer->getWidth() + $columnableContainer->getAttribute('margin-between-columns');
             $firstPoint = $originalContainer->getFirstPoint()->translate($xCoordTranslate, 0);
-        }
-        else
-        {
+        } else {
             $xCoordTranslate = $numberOfColumns*$originalContainer->getWidth() + ($numberOfColumns-1)*$columnableContainer->getAttribute('margin-between-columns');
             $firstPoint = $originalContainer->getDiagonalPoint()->translate(-$xCoordTranslate, 0);
         }
@@ -311,8 +288,7 @@ class ColumnBreakingFormatter extends BaseFormatter
     {
         $min = PHP_INT_MAX;
         
-        foreach($containers as $container)
-        {
+        foreach ($containers as $container) {
             $min = min($container->getDiagonalPoint()->getY(), $min);
         }
         

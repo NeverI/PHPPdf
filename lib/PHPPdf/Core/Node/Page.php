@@ -136,8 +136,7 @@ class Page extends Container
         $height = $this->getRealHeight();
 
         $boundary = $this->getBoundary();
-        if($boundary->isClosed())
-        {
+        if ($boundary->isClosed()) {
             $boundary->reset();
         }
 
@@ -147,8 +146,7 @@ class Page extends Container
                  ->setNext(0, 0)
                  ->close();
 
-        foreach(array('margin-top', 'margin-bottom', 'margin-left', 'margin-right') as $name)
-        {
+        foreach (array('margin-top', 'margin-bottom', 'margin-left', 'margin-right') as $name) {
             $value = $this->getAttribute($name);
             $this->translateMargin($name, $value);
         }
@@ -163,12 +161,9 @@ class Page extends Container
 
     public function setPageSize($param1, $param2 = null)
     {
-        if($param2 === null)
-        {
+        if ($param2 === null) {
             list($width, $height) = $this->getPageDimensions($param1);
-        }
-        else
-        {
+        } else {
             $width = $param1;
             $height = $param2;
         }
@@ -191,27 +186,20 @@ class Page extends Container
         $const = str_replace('LANDSCAPE', '', $const, $isLandscape);
         $const = 'PHPPdf\Core\Node\Page::SIZE_'.$const;
 
-        if(defined($const))
-        {
+        if (defined($const)) {
             $pageSize = constant($const);
-        }
-        else
-        {
+        } else {
             //page size is passed directly, so it is not a landscape
             $isLandscape = false;
         }
 
-        if(!preg_match('/^(?P<width>[0-9]+.*):(?P<height>[0-9]+.*)$/', $pageSize, $matches))
-        {
+        if (!preg_match('/^(?P<width>[0-9]+.*):(?P<height>[0-9]+.*)$/', $pageSize, $matches)) {
             throw new InvalidArgumentException(sprintf('page-size attribute should be in "width:height" format, "%s" given.', $pageSize));
         }
 
-        if($isLandscape)
-        {
+        if ($isLandscape) {
             return array($matches['height'], $matches['width']);
-        }
-        else
-        {
+        } else {
             return array($matches['width'], $matches['height']);
         }
     }
@@ -243,10 +231,8 @@ class Page extends Container
 
         $document->attachGraphicsContext($this->getGraphicsContext());
 
-        if(!$this->preparedTemplate)
-        {
-            foreach($this->getTemplateDrawingTasksAndFormatPlaceholders($document) as $task)
-            {
+        if (!$this->preparedTemplate) {
+            foreach ($this->getTemplateDrawingTasksAndFormatPlaceholders($document) as $task) {
                 $tasks->insert($task);
             }
         }
@@ -256,8 +242,7 @@ class Page extends Container
 
     public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->runtimeNodes as $node)
-        {
+        foreach ($this->runtimeNodes as $node) {
             $node->evaluate();
             $node->collectOrderedDrawingTasks($document, $tasks);
         }
@@ -270,8 +255,7 @@ class Page extends Container
 
     private function assignGraphicsContextIfIsNull(Document $document)
     {
-        if($this->graphicsContext === null)
-        {
+        if ($this->graphicsContext === null) {
             $this->setGraphicsContext($document->createGraphicsContext($this->getRealWidth().':'.$this->getRealHeight(), $this->getEncoding()));
             $this->setGraphicsContextDefaultStyle($document);
         }
@@ -293,8 +277,7 @@ class Page extends Container
     private function setGraphicsContextDefaultStyle(Document $document)
     {
         $font = $this->getFont($document);
-        if($font && $this->getAttribute('font-size'))
-        {
+        if ($font && $this->getAttribute('font-size')) {
             $this->graphicsContext->setFont($font, $this->getAttribute('font-size'));
         }
 
@@ -323,8 +306,7 @@ class Page extends Container
         $boundary = clone $this->getBoundary();
         $copy = parent::copy();
 
-        if($this->graphicsContext)
-        {
+        if ($this->graphicsContext) {
             $graphicsContext = $this->getGraphicsContext();
             $clonedGraphicsContext = $graphicsContext->copy();
             $copy->graphicsContext = $clonedGraphicsContext;
@@ -332,8 +314,7 @@ class Page extends Container
 
         $copy->setBoundary($boundary);
 
-        foreach($this->runtimeNodes as $index => $node)
-        {
+        foreach ($this->runtimeNodes as $index => $node) {
             $clonedNode = $node->copyAsRuntime();
             $clonedNode->setPage($copy);
             $copy->runtimeNodes[$index] = $clonedNode;
@@ -427,31 +408,22 @@ class Page extends Container
     {
         $boundary = $this->getBoundary();
         $x = $y = 0;
-        if($name == 'margin-left')
-        {
+        if ($name == 'margin-left') {
             $indexes = array(0, 3, 4);
             $x = $value;
-        }
-        elseif($name == 'margin-right')
-        {
+        } elseif ($name == 'margin-right') {
             $indexes = array(1, 2);
             $x = -$value;
-        }
-        elseif($name == 'margin-top')
-        {
+        } elseif ($name == 'margin-top') {
             $indexes = array(0, 1, 4);
             $y = $value;
-        }
-        else
-        {
+        } else {
             $indexes = array(2, 3);
             $y = -$value;
         }
 
-        foreach($indexes as $index)
-        {
-            if(isset($boundary[$index]))
-            {
+        foreach ($indexes as $index) {
+            if (isset($boundary[$index])) {
                 $boundary->pointTranslate($index, $x, $y);
             }
         }
@@ -482,8 +454,7 @@ class Page extends Container
     {
         $height = $contaienr->getHeight();
 
-        if($height === null || !is_numeric($height))
-        {
+        if ($height === null || !is_numeric($height)) {
             throw new InvalidArgumentException('Height of header and footer must be set.');
         }
     }
@@ -584,8 +555,7 @@ class Page extends Container
 
     public function getContext()
     {
-        if($this->context === null)
-        {
+        if ($this->context === null) {
             throw new LogicException('PageContext has not been set.');
         }
 
@@ -604,12 +574,9 @@ class Page extends Container
 
     public function getPlaceholder($name)
     {
-        if($name === 'footer')
-        {
+        if ($name === 'footer') {
             return $this->getFooter();
-        }
-        elseif($name === 'header')
-        {
+        } elseif ($name === 'header') {
             return $this->getHeader();
         }
 
@@ -618,8 +585,7 @@ class Page extends Container
 
     public function setPlaceholder($name, Node $node)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'footer':
                 return $this->setFooter($node);
             case 'header':
@@ -646,8 +612,7 @@ class Page extends Container
     {
         $gc = $this->getGraphicsContextFromSourceDocument($document);
 
-        if($gc !== null)
-        {
+        if ($gc !== null) {
             $gc = $gc->copy();
 
             $this->setGraphicsContext($gc);
@@ -665,16 +630,14 @@ class Page extends Container
     {
         $fileOfSourcePage = $this->getAttribute('document-template');
 
-        if($fileOfSourcePage)
-        {
+        if ($fileOfSourcePage) {
             $engine = $document->loadEngine($fileOfSourcePage, $this->getEncoding());
 
             $graphicsContexts = $engine->getAttachedGraphicsContexts();
 
             $count = count($graphicsContexts);
 
-            if($count == 0)
-            {
+            if ($count == 0) {
                 return null;
             }
 
@@ -690,10 +653,8 @@ class Page extends Container
     public function flush()
     {
         $placeholders = array('footer', 'header', 'watermark');
-        foreach($placeholders as $placeholder)
-        {
-            if($this->$placeholder)
-            {
+        foreach ($placeholders as $placeholder) {
+            if ($this->$placeholder) {
                 $this->$placeholder->flush();
                 $this->$placeholder = null;
             }

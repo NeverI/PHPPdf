@@ -10,12 +10,12 @@ namespace PHPPdf\Core\Formatter;
 
 use PHPPdf\Core\Node\ColumnableContainer;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
 
 /**
  * TODO: refactoring
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageBreakingFormatter extends BaseFormatter
@@ -31,26 +31,21 @@ class PageBreakingFormatter extends BaseFormatter
         $this->totalVerticalTranslation = 0;
 
         $children = $this->node->getChildren();
-        foreach($this->node->getChildren() as $child)
-        {
+        foreach ($this->node->getChildren() as $child) {
             $child->translate(0, -$this->totalVerticalTranslation);
-            if(!$node->isMarkedAsFormatted($child) && $child instanceof ColumnableContainer)
-            {
-                $columnFormatter->format($child, $document);   
+            if (!$node->isMarkedAsFormatted($child) && $child instanceof ColumnableContainer) {
+                $columnFormatter->format($child, $document);
     
                 $verticalTranslation = $columnFormatter->getLastVerticalTranslation();
-            }
-            else
-            {
+            } else {
                 $verticalTranslation = 0;
             }
 
-            $this->breakChildIfNecessary($child);            
+            $this->breakChildIfNecessary($child);
             $this->totalVerticalTranslation += -$verticalTranslation;
         }
         
-        foreach($node->getPages() as $page)
-        {
+        foreach ($node->getPages() as $page) {
             $page->setGraphicsContextFromSourceDocumentIfNecessary($document);
         }
         
@@ -63,27 +58,19 @@ class PageBreakingFormatter extends BaseFormatter
         $childHasBeenBroken = false;
         $childMayBeBroken = true;
         
-        if($this->shouldParentBeAutomaticallyBroken($node))
-        {
+        if ($this->shouldParentBeAutomaticallyBroken($node)) {
             $pageYCoordEnd = $node->getDiagonalPoint()->getY() + 1;
-        }
-        else
-        {
+        } else {
             $pageYCoordEnd = $this->getPageYCoordEnd();
         }
 
-        do
-        {
-            if($this->shouldBeBroken($node, $pageYCoordEnd))
-            {
+        do {
+            if ($this->shouldBeBroken($node, $pageYCoordEnd)) {
                 $node = $this->breakChildAndGetProductOfBreaking($node);
                 $this->getSubjectOfBreaking()->markAsFormatted($node);
                 $childHasBeenBroken = true;
-            }
-            else
-            {
-                if(!$childHasBeenBroken)
-                {
+            } else {
+                if (!$childHasBeenBroken) {
                     $this->addToSubjectOfBreaking($node);
                 }
 
@@ -91,8 +78,7 @@ class PageBreakingFormatter extends BaseFormatter
             }
             
             $pageYCoordEnd = $this->getPageYCoordEnd();
-        }
-        while($childMayBeBroken);
+        } while ($childMayBeBroken);
     }
     
     private function shouldParentBeAutomaticallyBroken(Node $node)
@@ -115,8 +101,7 @@ class PageBreakingFormatter extends BaseFormatter
 
         $gapBeetwenBottomOfOriginalNodeAndEndOfPage = 0;
 
-        if($breakNode)
-        {           
+        if ($breakNode) {
             $gapBeetwenBottomOfOriginalNodeAndEndOfPage = $node->getDiagonalPoint()->getY() - $end;
 
             $gap = $originalHeight - (($node->getFirstPoint()->getY() - $node->getDiagonalPoint()->getY()) + ($breakNode->getFirstPoint()->getY() - $breakNode->getDiagonalPoint()->getY()));

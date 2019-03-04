@@ -70,7 +70,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $oldText = $this->text->getText();
 
-        $this->text->add($text);        
+        $this->text->add($text);
         $this->text->preFormat($this->document);
 
         $this->assertEquals($oldText.$anotherText, $this->text->getText());
@@ -82,8 +82,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function minimumWidthIsTheWidestLinePart(array $lineSizes)
     {
-        foreach($lineSizes as $width)
-        {
+        foreach ($lineSizes as $width) {
             $linePart = new LinePart('', $width, 0, $this->text);
         }
 
@@ -102,7 +101,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     */    
+     */
     public function useTextTransformatorToSettingText()
     {
         $textStub = 'some text';
@@ -125,22 +124,17 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function setWordsSizes(array $words, array $sizes, $expectedException)
     {
-        try
-        {
+        try {
             $this->text->setWordsSizes($words, $sizes);
             
-            if($expectedException)
-            {
+            if ($expectedException) {
                 $this->fail('expected exception');
             }
             
             $this->assertEquals($words, $this->text->getWords());
             $this->assertEquals($sizes, $this->text->getWordsSizes());
-        }
-        catch(\InvalidArgumentException $e)
-        {
-            if(!$expectedException)
-            {
+        } catch (\InvalidArgumentException $e) {
+            if (!$expectedException) {
                 $this->fail('unexpected exception');
             }
         }
@@ -184,13 +178,12 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @test
      */
     public function getDrawingTasksFromLineParts()
-    {       
+    {
         $documentStub = $this->createDocumentStub();
         
         $tasks = new DrawingTaskHeap();
         
-        for($i=0; $i<3; $i++)
-        {
+        for ($i=0; $i<3; $i++) {
             $linePart = $this->getMockBuilder('PHPPdf\Core\Node\Paragraph\LinePart')
                              ->setMethods(array('collectOrderedDrawingTasks'))
                              ->disableOriginalConstructor()

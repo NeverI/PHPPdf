@@ -17,7 +17,7 @@ use PHPPdf\Core\Engine\Image as BaseImage;
 
 /**
  * Image implementation for Imagine
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Image implements BaseImage
@@ -29,24 +29,18 @@ class Image implements BaseImage
     public function __construct($imagePath, ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
-        if($imagePath instanceof ImageInterface)
-        {
+        if ($imagePath instanceof ImageInterface) {
             $this->image = $imagePath;
-        }
-        else
-        {
+        } else {
             $this->image = $this->createImage($imagePath);
         }
     }
     
     private function createImage($path)
     {
-        try
-        {
+        try {
             return $this->imagine->open($path);
-        }
-        catch(\Imagine\Exception\Exception $e)
-        {
+        } catch (\Imagine\Exception\Exception $e) {
             throw InvalidResourceException::invalidImageException($path, $e);
         }
     }

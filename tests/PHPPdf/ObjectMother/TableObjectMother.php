@@ -6,7 +6,7 @@ class TableObjectMother
 {
     private $test;
 
-    public function  __construct(\PHPUnit_Framework_TestCase $test)
+    public function __construct(\PHPUnit_Framework_TestCase $test)
     {
         $this->test = $test;
     }
@@ -17,8 +17,7 @@ class TableObjectMother
 
         $cell = $this->getCellMockWithResizeExpectations($width, $newWidth);
 
-        if($translateX !== false)
-        {
+        if ($translateX !== false) {
             $cell->expects($this->test->once())
                  ->method('translate')
                  ->with($translateX, 0);
@@ -38,14 +37,11 @@ class TableObjectMother
              ->method('setWidth')
              ->with($newWidth);
 
-        if($invokeResizeMethod)
-        {
+        if ($invokeResizeMethod) {
             $cell->expects($this->test->once())
                  ->method('resize')
                  ->with($newWidth - $width);
-        }
-        else
-        {
+        } else {
             $cell->expects($this->test->never())
                  ->method('resize');
         }

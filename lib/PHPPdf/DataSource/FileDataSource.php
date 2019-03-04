@@ -12,7 +12,7 @@ use PHPPdf\Exception\InvalidArgumentException;
 
 /**
  * File data source class
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class FileDataSource extends DataSource
@@ -21,8 +21,7 @@ class FileDataSource extends DataSource
 
     public function __construct($filePath)
     {
-        if(!is_readable($filePath))
-        {
+        if (!is_readable($filePath)) {
             throw new InvalidArgumentException(sprintf('File "%s" dosn\'t exist or is unreadable.', $filePath));
         }
 

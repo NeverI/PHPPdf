@@ -29,8 +29,7 @@ class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
     
     private function setSizesIfOneOfDimensionIsntSet(Node $node, Document $document)
     {
-        if($this->isImageAndSizesArentSet($node))
-        {
+        if ($this->isImageAndSizesArentSet($node)) {
             $width = $node->getWidth();
             $height = $node->getHeight();
             $source = $node->createSource($document);
@@ -39,8 +38,7 @@ class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
             $originalHeight = $source->getOriginalHeight();
             $originalRatio = $originalHeight ? $originalWidth/$originalHeight : 0;
 
-            if(!$width && !$height)
-            {
+            if (!$width && !$height) {
                 list($width, $height) = $this->setDimensionsFromParent($source, $node);
             }
             
@@ -63,15 +61,11 @@ class ImageConvertAttributesFormatter extends ConvertAttributesFormatter
         $width = $sourceImage->getOriginalWidth();
         $height = $sourceImage->getOriginalHeight();
 
-        if($width > $parent->getWidth() || $height > $parent->getHeight())
-        {
-            if($parent->getWidth() > $parent->getHeight())
-            {
+        if ($width > $parent->getWidth() || $height > $parent->getHeight()) {
+            if ($parent->getWidth() > $parent->getHeight()) {
                 $height = $parent->getHeight();
                 $width = null;
-            }
-            else
-            {
+            } else {
                 $width = $parent->getWidth();
                 $height = null;
             }

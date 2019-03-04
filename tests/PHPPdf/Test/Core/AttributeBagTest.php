@@ -49,16 +49,14 @@ class AttributeBagTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $bags = array();
         $expected = array();
 
-        for($i=0; $i<10; $i++)
-        {
+        for ($i=0; $i<10; $i++) {
             $bag = new AttributeBag();
             $attributes = array(
                 'someName'.$i => $i,
                 'anotherSomeName'.$i => $i,
             );
 
-            foreach($attributes as $name => $value)
-            {
+            foreach ($attributes as $name => $value) {
                 $bag->add($name, $value);
             }
             $bags[] = $bag;

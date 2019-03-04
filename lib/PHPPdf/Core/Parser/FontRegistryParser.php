@@ -31,12 +31,9 @@ class FontRegistryParser extends XmlParser
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($reader->name === 'font')
-        {
+        if ($reader->name === 'font') {
             $this->parseFont($reader);
-        }
-        else
-        {
+        } else {
             $this->parseFontStyle($reader);
         }
     }
@@ -45,8 +42,7 @@ class FontRegistryParser extends XmlParser
     {
         $name = trim($reader->getAttribute('name'));
 
-        if(!$name)
-        {
+        if (!$name) {
             throw new ParseException('Font name is required.');
         }
 
@@ -67,12 +63,9 @@ class FontRegistryParser extends XmlParser
     {
         $src = $reader->getAttribute('src');
 
-        if($src)
-        {
+        if ($src) {
             $font = $src;
-        }
-        else
-        {
+        } else {
             throw new ParseException(sprintf('File or type attribute are required in font "%s: %s" definition.', $name, $style));
         }
 
@@ -81,8 +74,7 @@ class FontRegistryParser extends XmlParser
 
     protected function parseEndElement(\XMLReader $reader)
     {
-        if($reader->name === 'font')
-        {
+        if ($reader->name === 'font') {
             $registry = &$this->getLastElementFromStack();
             $registry[$this->currentFontName] = $this->currentFontStyles;
 

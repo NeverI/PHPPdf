@@ -34,8 +34,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $this->page->collectOrderedDrawingTasks($this->document, $tasks);
 
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -56,8 +55,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $this->page->collectOrderedDrawingTasks($this->document, $tasks);
 
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -124,16 +122,14 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $unitConverter = $this->getMock('PHPPdf\Core\UnitConverter');
         $this->page->setUnitConverter($unitConverter);
         
-        foreach(array(0, 2) as $i)
-        {
+        foreach (array(0, 2) as $i) {
             $unitConverter->expects($this->at($i))
                           ->method('convertUnit')
                           ->with($originalVerticalMargin)
                           ->will($this->returnValue($verticalMargin));
         }
         
-        foreach(array(1, 3) as $i)
-        {
+        foreach (array(1, 3) as $i) {
             $unitConverter->expects($this->at($i))
                           ->method('convertUnit')
                           ->with($originalHorizontalMargin)
@@ -184,8 +180,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->with($this->equalTo(true))
              ->will($this->returnValue($mock));
 
-        if($height !== null)
-        {
+        if ($height !== null) {
             $mock->expects($this->atLeastOnce())
                  ->method('getHeight')
                  ->will($this->returnValue($height));
@@ -271,8 +266,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $copyBoundary = $copy->getBoundary();
         $boundary = $this->page->getBoundary();
-        foreach($copyBoundary as $i => $point)
-        {
+        foreach ($copyBoundary as $i => $point) {
             $this->assertTrue($point === $boundary[$i]);
         }
     }
@@ -283,7 +277,9 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function drawingTasksFromPlaceholderAreInResultOfGetDrawingTasksIfPrepareTemplateMethodHasNotBeenInvoked($invoke)
     {
-        $tasks = array(new DrawingTask(function(){}), new DrawingTask(function(){}));
+        $tasks = array(new DrawingTask(function () {
+        }), new DrawingTask(function () {
+        }));
         
         $header = $this->getMock('PHPPdf\Core\Node\Container', array('format', 'getHeight', 'collectOrderedDrawingTasks'));
         $header->expects($this->once())
@@ -297,16 +293,14 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->page->setHeader($header);
         
-        if($invoke)
-        {
+        if ($invoke) {
             $this->page->prepareTemplate($this->document);
         }
         
         $actualTasks = new DrawingTaskHeap();
         $this->page->collectOrderedDrawingTasks($this->document, $actualTasks);
         
-        foreach($actualTasks as $task)
-        {
+        foreach ($actualTasks as $task) {
             $this->assertEquals(!$invoke, in_array($task, $tasks));
         }
     }
@@ -365,9 +359,8 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @dataProvider pageSizesProvider
      */
     public function resizeBoundaryWhenPageSizeIsSet($width, $height, array $margins)
-    {        
-        foreach($margins as $name => $value)
-        {
+    {
+        foreach ($margins as $name => $value) {
             $this->page->setAttribute($name, $value);
         }
 
@@ -404,7 +397,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     public function humanReadablePageSizeProvider()
     {
-        $landscape = function($size){
+        $landscape = function ($size) {
             return implode(':', array_reverse(explode(':', $size)));
         };
 
@@ -587,8 +580,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->page->setAttribute('document-template', $fileOfSourcePage);
         
-        if($numberOfPage !== null)
-        {
+        if ($numberOfPage !== null) {
             $pageContext = $this->getMockBuilder('PHPPdf\Core\Node\PageContext')
                                 ->setMethods(array('getPageNumber'))
                                 ->disableOriginalConstructor()
@@ -612,8 +604,7 @@ class PageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                          ->getMock();
 
         $sourceGcs = array();
-        for($i=0; $i<$numberOfSourceGcs; $i++)
-        {
+        for ($i=0; $i<$numberOfSourceGcs; $i++) {
             $sourceGc = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
                              ->getMock();
             $sourceGcs[] = $sourceGc;

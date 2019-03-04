@@ -13,8 +13,7 @@ class ImageTest extends TestCase
      */
     public function createImageObject()
     {
-        try
-        {
+        try {
             $imagine = new Imagine();
             $image = new Image(TEST_RESOURCES_DIR.'/domek.png', $imagine);
             
@@ -22,15 +21,10 @@ class ImageTest extends TestCase
             
             $this->assertEquals($imagineImage->getSize()->getHeight(), $image->getOriginalHeight());
             $this->assertEquals($imagineImage->getSize()->getWidth(), $image->getOriginalWidth());
-        }
-        catch(\Imagine\Exception\RuntimeException $e)
-        {
-            if($e->getMessage() == 'Gd not installed')
-            {
+        } catch (\Imagine\Exception\RuntimeException $e) {
+            if ($e->getMessage() == 'Gd not installed') {
                 $this->markTestSkipped($e->getMessage());
-            }
-            else
-            {
+            } else {
                 throw $e;
             }
         }
@@ -42,22 +36,15 @@ class ImageTest extends TestCase
      */
     public function throwExceptionOnUnexistedImage()
     {
-        try
-        {
+        try {
             $imagine = new Imagine();
             $image = new Image('some path', $imagine);
             
             $image->getWrappedImage();
-            
-        }
-        catch(\Imagine\Exception\RuntimeException $e)
-        {
-            if($e->getMessage() == 'Gd not installed')
-            {
+        } catch (\Imagine\Exception\RuntimeException $e) {
+            if ($e->getMessage() == 'Gd not installed') {
                 $this->markTestSkipped($e->getMessage());
-            }
-            else
-            {
+            } else {
                 throw $e;
             }
         }

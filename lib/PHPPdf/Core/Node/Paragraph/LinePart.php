@@ -9,12 +9,12 @@
 namespace PHPPdf\Core\Node\Paragraph;
 
 use PHPPdf\Core\DrawingTaskHeap;
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\DrawingTask,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Node\Drawable,
-    PHPPdf\Core\Node\Text;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Node\Drawable;
+use PHPPdf\Core\Node\Text;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -41,8 +41,7 @@ class LinePart implements Drawable
     
     public function setWords($words)
     {
-        if(is_array($words))
-        {
+        if (is_array($words)) {
             $words = implode('', $words);
         }
         
@@ -52,8 +51,7 @@ class LinePart implements Drawable
     
     public function getNumberOfWords()
     {
-        if($this->numberOfWords === null)
-        {
+        if ($this->numberOfWords === null) {
             $this->numberOfWords = count(explode(' ', rtrim($this->words)));
         }
         
@@ -75,7 +73,7 @@ class LinePart implements Drawable
     
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        $tasks->insert(new DrawingTask(function(Text $text, $point, $words, $width, $document, $linePartWordSpacing, Point $translation) {
+        $tasks->insert(new DrawingTask(function (Text $text, $point, $words, $width, $document, $linePartWordSpacing, Point $translation) {
             $gc = $text->getGraphicsContext();
             $gc->saveGS();
             $fontSize = $text->getFontSizeRecursively();
@@ -84,54 +82,48 @@ class LinePart implements Drawable
             $gc->setFont($font, $fontSize);
             $color = $text->getRecurseAttribute('color');
 
-            if($color)
-            {
+            if ($color) {
                 $gc->setFillColor($color);
             }
             
             $alpha = $text->getAlpha();
             
-            if($alpha !== null)
-            {
+            if ($alpha !== null) {
                 $gc->setAlpha($alpha);
             }
             
             $rotationNode = $text->getAncestorWithRotation();
         
-            if($rotationNode)
-            {
+            if ($rotationNode) {
                 $middlePoint = $rotationNode->getMiddlePoint();
                 $gc->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
             }
  
-            if(!$translation->isZero())
-            {
+            if (!$translation->isZero()) {
                 $point = $point->translate($translation->getX(), $translation->getY());
             }
             
             $yCoord = $point->getY() - $fontSize;
             $wordSpacing = 0;
             
-            if($linePartWordSpacing !== null)
-            {
+            if ($linePartWordSpacing !== null) {
                 $wordSpacing = $linePartWordSpacing;
             }
             $gc->drawText($words, $point->getX(), $point->getY() - $fontSize, $text->getEncoding(), $wordSpacing);
             
-            $textDecoration = $text->getTextDecorationRecursively();        
+            $textDecoration = $text->getTextDecorationRecursively();
             
-            switch($textDecoration)
-            {
+            switch ($textDecoration) {
                 case Node::TEXT_DECORATION_NONE:
                     $lineDecorationYTranslation = false;
                     break;
-                case Node::TEXT_DECORATION_UNDERLINE;
+                case Node::TEXT_DECORATION_UNDERLINE:
                     $lineDecorationYTranslation = -1;
                     break;
                 case Node::TEXT_DECORATION_LINE_THROUGH:
                     $lineDecorationYTranslation = $fontSize / 3;
                     break;
-                case Node::TEXT_DECORATION_OVERLINE;
+                case Node::TEXT_DECORATION_OVERLINE:
                     $lineDecorationYTranslation = $fontSize - 1;
                     break;
                 default:
@@ -140,11 +132,9 @@ class LinePart implements Drawable
                     break;
             }
 
-            if($lineDecorationYTranslation !== false)
-            {
+            if ($lineDecorationYTranslation !== false) {
                 $gc->setLineWidth(0.5);
-                if($color)
-                {
+                if ($color) {
                     $gc->setLineColor($color);
                 }
                 
@@ -182,12 +172,10 @@ class LinePart implements Drawable
     
     public function setText(Text $text)
     {
-        if($this->text !== $text)
-        {
+        if ($this->text !== $text) {
             $oldText = $this->text;
             
-            if($oldText)
-            {
+            if ($oldText) {
                 $oldText->removeLinePart($this);
             }
             
@@ -199,8 +187,7 @@ class LinePart implements Drawable
     public function getWidth()
     {
         $width = $this->width;
-        if($this->wordSpacing !== null)
-        {
+        if ($this->wordSpacing !== null) {
             $width += $this->getWordSpacingSum();
         }
 
@@ -209,8 +196,7 @@ class LinePart implements Drawable
     
     public function getWordSpacingSum()
     {
-        if($this->wordSpacing === null)
-        {
+        if ($this->wordSpacing === null) {
             return 0;
         }
         

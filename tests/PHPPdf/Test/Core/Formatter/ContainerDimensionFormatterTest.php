@@ -35,16 +35,14 @@ class ContainerDimensionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $children[] = $this->objectMother->getNodeStub(0, 500, 100, 200);
         $children[] = $this->objectMother->getNodeStub(0, 300, 200, 200);
 
-        foreach($children as $child)
-        {
+        foreach ($children as $child) {
             $composeNode->add($child);
         }
         
         $this->formatter->format($composeNode, $this->createDocumentStub());
 
         $height = 0;
-        foreach($children as $child)
-        {
+        foreach ($children as $child) {
             $height += $child->getHeight();
         }
 

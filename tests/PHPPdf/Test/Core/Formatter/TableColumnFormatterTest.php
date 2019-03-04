@@ -2,9 +2,9 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\TableColumnFormatter,
-    PHPPdf\ObjectMother\TableObjectMother,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\TableColumnFormatter;
+use PHPPdf\ObjectMother\TableObjectMother;
+use PHPPdf\Core\Document;
 
 class TableColumnFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -33,11 +33,9 @@ class TableColumnFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $enlargeColumnWidth = ($tableWidth - $totalColumnsWidth)/$numberOfColumns;
 
         $rows = array();
-        foreach($cellsInRowsWidths as $cellsWidths)
-        {
+        foreach ($cellsInRowsWidths as $cellsWidths) {
             $cells = array();
-            foreach($cellsWidths as $column => $width)
-            {
+            foreach ($cellsWidths as $column => $width) {
                 $cell = $this->objectMother->getCellMockWithResizeExpectations($width, $columnsWidths[$column] + $enlargeColumnWidth, false);
                 $cell->expects($this->atLeastOnce())
                      ->method('getNumberOfColumn')

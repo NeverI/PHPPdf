@@ -92,13 +92,13 @@ class CachingStylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $secondAttributes = array('attribute3' => 'value3', 'attribute2' => 'value2x');
         $secondBag = new BagContainer($secondAttributes);
         
-        $firstStylesheetConstraint = new CachingStylesheetConstraint();        
+        $firstStylesheetConstraint = new CachingStylesheetConstraint();
         $firstConstraint = $this->createStylesheetConstraint($firstAttributes, $tag, $class);
         $firstStylesheetConstraint->addConstraint($tag, $firstConstraint);
         $this->writeAttribute($firstStylesheetConstraint, 'resultMap', array($query => $firstBag));
 
-        $secondStylesheetConstraint = new CachingStylesheetConstraint();        
-        $secondConstraint = $this->createStylesheetConstraint($secondAttributes, $tag, $class);        
+        $secondStylesheetConstraint = new CachingStylesheetConstraint();
+        $secondConstraint = $this->createStylesheetConstraint($secondAttributes, $tag, $class);
         $secondStylesheetConstraint->addConstraint($tag, $secondConstraint);
         $this->writeAttribute($secondStylesheetConstraint, 'resultMap', array($query => $secondBag));
         

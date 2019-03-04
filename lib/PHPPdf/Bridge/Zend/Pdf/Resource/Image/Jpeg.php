@@ -17,7 +17,7 @@ use ZendPdf\Exception;
 
 /**
  * Content loading type has been changed, remote files are supported.
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Jpeg extends BaseJpeg
@@ -29,8 +29,8 @@ class Jpeg extends BaseJpeg
         }
 
         $gd_options = gd_info();
-        if ( (!isset($gd_options['JPG Support'])  || $gd_options['JPG Support']  != true)  &&
-             (!isset($gd_options['JPEG Support']) || $gd_options['JPEG Support'] != true)  ) {
+        if ((!isset($gd_options['JPG Support'])  || $gd_options['JPG Support']  != true)  &&
+             (!isset($gd_options['JPEG Support']) || $gd_options['JPEG Support'] != true)) {
             throw new Exception\RuntimeException('JPG support is not configured properly.');
         }
 
@@ -62,18 +62,18 @@ class Jpeg extends BaseJpeg
         $imageDictionary->BitsPerComponent = new InternalType\NumericObject($imageInfo['bits']);
         if ($imageInfo[2] == IMAGETYPE_JPEG) {
             $imageDictionary->Filter       = new InternalType\NameObject('DCTDecode');
-        } else if ($imageInfo[2] == IMAGETYPE_JPEG2000){
+        } elseif ($imageInfo[2] == IMAGETYPE_JPEG2000) {
             $imageDictionary->Filter       = new InternalType\NameObject('JPXDecode');
         }
 
         $isRemote = stripos($imageFileName, 'http') === 0;
        
-        if (($stream = $this->open($isRemote, $imageFileName)) === false ) {
+        if (($stream = $this->open($isRemote, $imageFileName)) === false) {
             throw new Exception\IOException("Can not open '$imageFileName' file for reading.");
         }
         $byteCount = $stream->size();
         $this->_resource->value = '';
-        while ( $byteCount > 0 && ($nextBlock = $stream->read($byteCount)) != false ) {
+        while ($byteCount > 0 && ($nextBlock = $stream->read($byteCount)) != false) {
             $this->_resource->value .= $nextBlock;
             $byteCount -= strlen($nextBlock);
         }
@@ -91,26 +91,19 @@ class Jpeg extends BaseJpeg
     
     private function open($isRemote, $imageFileName)
     {
-        try 
-        {
-            if($isRemote)
-            {
+        try {
+            if ($isRemote) {
                 $content = @file_get_contents($imageFileName);
                 
-                if($content === false)
-                {
+                if ($content === false) {
                     return false;
                 }
                 
                 return new StringInputStream($content);
-            }
-            else
-            {
+            } else {
                 return new FopenInputStream($imageFileName, 'rb');
             }
-        }
-        catch(\PHPPdf\Exception $e)
-        {
+        } catch (\PHPPdf\Exception $e) {
             return false;
         }
     }

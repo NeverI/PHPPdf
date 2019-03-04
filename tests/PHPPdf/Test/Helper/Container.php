@@ -32,4 +32,4 @@ class Container extends \PHPPdf\Core\Node\Container
     {
         return $this->getAttributeDirectly('real-width') ?: parent::getRealWidth();
     }
-} 
+}

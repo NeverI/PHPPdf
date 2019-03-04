@@ -17,7 +17,7 @@ use PHPPdf\Core\DrawingTaskHeap;
 
 /**
  * Barcode node class
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Barcode extends Node
@@ -73,8 +73,7 @@ class Barcode extends Node
     {
         $const = sprintf('%s::TYPE_%s', __CLASS__, strtoupper($type));
         
-        if(!defined($const))
-        {
+        if (!defined($const)) {
             throw new InvalidArgumentException(sprintf('Barcode type "%s" dosn\'t exist.', $type));
         }
         
@@ -128,7 +127,7 @@ class Barcode extends Node
     
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        $callback = function(Barcode $node, Document $document){
+        $callback = function (Barcode $node, Document $document) {
             $barcode = $node->getBarcode($document);
             $gc = $node->getGraphicsContext();
             $gc->drawBarcode($node->getFirstPoint()->getX(), $node->getFirstPoint()->getY(), $barcode);
@@ -140,10 +139,8 @@ class Barcode extends Node
     protected function getDrawingTasksFromComplexAttributes(Document $document, DrawingTaskHeap $tasks)
     {
         $complexAttributes = $document->getComplexAttributes($this->complexAttributeBag);
-        foreach($complexAttributes as $complexAttribute)
-        {
-            if(!$complexAttribute instanceof Background)
-            {
+        foreach ($complexAttributes as $complexAttribute) {
+            if (!$complexAttribute instanceof Background) {
                 $this->insertComplexAttributeTask($complexAttribute, $tasks, $document);
             }
         }
@@ -154,8 +151,7 @@ class Barcode extends Node
      */
     public function getBarcode(Document $document)
     {
-        if($this->barcode === null)
-        {
+        if ($this->barcode === null) {
             $this->barcode = $this->createBarcode($document);
         }
         
@@ -164,8 +160,7 @@ class Barcode extends Node
     
     private function createBarcode(Document $document)
     {
-        try
-        {
+        try {
             $foreColor = $this->convertBarcodeColor($document, $this->getRecurseAttribute('color'));
             $background = $this->getComplexAttributes('background');
             $backgroundColor = isset($background['color']) ? $this->convertBarcodeColor($document, $background['color']) : '#FFFFFF';
@@ -189,16 +184,15 @@ class Barcode extends Node
             ));
             
             return $barcode;
-        }
-        catch(\Zend\Barcode\Exception $e)
-        {
+        } catch (\Zend\Barcode\Exception $e) {
             throw new InvalidArgumentException('Invalid arguments passed to barcode, see cause exception for more details.', $previous->getCode(), $e);
         }
     }
     
     private function convertBarcodeColor(Document $document, $color)
     {
-        return strtoupper($document->getColorFromPalette($color));;
+        return strtoupper($document->getColorFromPalette($color));
+        ;
     }
     
     private function getOrientation()

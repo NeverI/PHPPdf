@@ -13,7 +13,7 @@ use PHPPdf\Cache\Cache;
 
 /**
  * Configuration loader
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface Loader

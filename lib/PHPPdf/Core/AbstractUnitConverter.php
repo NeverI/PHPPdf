@@ -12,15 +12,14 @@ use PHPPdf\Exception\InvalidArgumentException;
 
 /**
  * Unit converter
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 abstract class AbstractUnitConverter implements UnitConverter
 {
     protected function doConvertUnit($value, $unit)
     {
-        switch($unit)
-        {
+        switch ($unit) {
             case self::UNIT_PIXEL:
                 return $this->convertPxUnit($value);
             case self::UNIT_CENTIMETER:
@@ -50,8 +49,7 @@ abstract class AbstractUnitConverter implements UnitConverter
 
     public function convertPercentageValue($percent, $value)
     {
-        if(strpos($percent, '%') !== false)
-        {
+        if (strpos($percent, '%') !== false) {
             $percent = (double) $percent;
             $percent = $value*$percent / 100;
         }

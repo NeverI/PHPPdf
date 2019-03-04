@@ -23,7 +23,7 @@ class Font extends AbstractFont
     
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
-     * 
+     *
      * @return ZendPdf\Resource\Font
      */
     public function getCurrentWrappedFont()
@@ -33,26 +33,19 @@ class Font extends AbstractFont
 
     private function getResourceByStyle($style)
     {
-        try
-        {
-            if(!isset($this->fonts[$style]))
-            {
+        try {
+            if (!isset($this->fonts[$style])) {
                 $data = $this->fontResources[$style];
-                if($this->isNamedFont($data))
-                {
+                if ($this->isNamedFont($data)) {
                     $name = $this->retrieveFontName($data);
                     $this->fonts[$style] = ZendFont::fontWithName($name);
-                }
-                else 
-                {
+                } else {
                     $this->fonts[$style] = ZendFont::fontWithPath($data);
                 }
             }
             
             return $this->fonts[$style];
-        }
-        catch(\ZendPdf\Exception\ExceptionInterface $e)
-        {
+        } catch (\ZendPdf\Exception\ExceptionInterface $e) {
             throw InvalidResourceException::invalidFontException($this->fontResources[$style], $e);
         }
     }
@@ -66,8 +59,7 @@ class Font extends AbstractFont
     {
         $const = sprintf('ZendPdf\Font::FONT_%s', str_replace('-', '_', strtoupper($name)));
 
-        if(!defined($const))
-        {
+        if (!defined($const)) {
             throw new InvalidArgumentException(sprintf('Unrecognized font name: "%s".".', $name));
         }
 
@@ -90,11 +82,9 @@ class Font extends AbstractFont
         $length = strlen($text);
         $chars = array();
         $bytes = 1;
-        for($i=0; $i<$length; $i+=$bytes)
-        {
+        for ($i=0; $i<$length; $i+=$bytes) {
             list($char, $bytes) = $this->ordUtf8($text, $i, $bytes);
-            if($char !== false)
-            {
+            if ($char !== false) {
                 $chars[] = $char;
             }
         }
@@ -112,32 +102,22 @@ class Font extends AbstractFont
 
         $char = false;
 
-        if ($index < $len)
-        {
+        if ($index < $len) {
             $h = ord($text{$index});
 
-            if($h <= 0x7F)
-            {
+            if ($h <= 0x7F) {
                 $bytes = 1;
                 $char = $h;
-            }
-            elseif ($h < 0xC2)
-            {
+            } elseif ($h < 0xC2) {
                 $char = false;
-            }
-            elseif ($h <= 0xDF && $index < $len - 1)
-            {
+            } elseif ($h <= 0xDF && $index < $len - 1) {
                 $bytes = 2;
                 $char = ($h & 0x1F) <<  6 | (ord($text{$index + 1}) & 0x3F);
-            }
-            elseif($h <= 0xEF && $index < $len - 2)
-            {
+            } elseif ($h <= 0xEF && $index < $len - 2) {
                 $bytes = 3;
                 $char = ($h & 0x0F) << 12 | (ord($text{$index + 1}) & 0x3F) << 6
                                          | (ord($text{$index + 2}) & 0x3F);
-            }
-            elseif($h <= 0xF4 && $index < $len - 3)
-            {
+            } elseif ($h <= 0xF4 && $index < $len - 3) {
                 $bytes = 4;
                 $char = ($h & 0x0F) << 18 | (ord($text{$index + 1}) & 0x3F) << 12
                                          | (ord($text{$index + 2}) & 0x3F) << 6

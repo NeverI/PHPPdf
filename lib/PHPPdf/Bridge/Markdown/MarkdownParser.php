@@ -9,15 +9,11 @@ class MarkdownParser implements Parser
 {
     public function __construct()
     {
-        if(!function_exists('Markdown'))
-        {
+        if (!function_exists('Markdown')) {
             $markdownPath = __DIR__.'/../../../vendor/Markdown/markdown.php';
-            if(file_exists($markdownPath))
-            {
+            if (file_exists($markdownPath)) {
                 require_once $markdownPath;
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException('PHP Markdown library not found. Maybe you should call "> php vendors.php" command from root dir of PHPPdf library to download dependencies?');
             }
         }

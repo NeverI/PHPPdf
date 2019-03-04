@@ -2,8 +2,8 @@
 
 namespace PHPPdf\Test\Core\Node;
 
-use PHPPdf\Core\Node\PageContext,
-    PHPPdf\Core\Node\DynamicPage;
+use PHPPdf\Core\Node\PageContext;
+use PHPPdf\Core\Node\DynamicPage;
 
 class PageContextTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

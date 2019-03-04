@@ -30,8 +30,7 @@ class BasicListItemTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->item->setWidth($width);
         $this->invokeMethod($this->item, 'setBoundary', array($boundary));
         
-        foreach($isLeafs as $i => $isLeaf)
-        {
+        foreach ($isLeafs as $i => $isLeaf) {
             $node = $this->getMockBuilder('PHPPdf\Core\Node\Node')
                           ->setMethods(array('isLeaf', 'hasLeafDescendants', 'isAbleToExistsAboveCoord', 'breakAt'))
                           ->getMock();

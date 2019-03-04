@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\BasicList;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\BasicList;
 
 class ListFormatter extends BaseFormatter
 {
@@ -20,12 +20,10 @@ class ListFormatter extends BaseFormatter
         
         $node->assignEnumerationStrategyFromFactory();
         
-        if($position === BasicList::LIST_POSITION_INSIDE)
-        {
+        if ($position === BasicList::LIST_POSITION_INSIDE) {
             $widthOfEnumerationChar = $node->getEnumerationStrategy()->getWidthOfTheBiggestPosibleEnumerationElement($document, $node);
             
-            foreach($node->getChildren() as $child)
-            {
+            foreach ($node->getChildren() as $child) {
                 $marginLeft = $widthOfEnumerationChar + $child->getMarginLeft();
                 $child->setAttribute('margin-left', $marginLeft);
             }

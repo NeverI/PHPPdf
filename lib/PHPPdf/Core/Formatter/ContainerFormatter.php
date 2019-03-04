@@ -8,9 +8,9 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Formatter\Formatter,
-    PHPPdf\Core\Node as Nodes,
-    PHPPdf\Core\Formatter\Chain;
+use PHPPdf\Core\Formatter\Formatter;
+use PHPPdf\Core\Node as Nodes;
+use PHPPdf\Core\Formatter\Chain;
 
 /**
  * Sets chain to children nodes
@@ -21,8 +21,7 @@ class ContainerFormatter extends BaseFormatter
 {
     public function format(Nodes\Node $node, \PHPPdf\Core\Document $document)
     {
-        foreach($node->getChildren() as $child)
-        {
+        foreach ($node->getChildren() as $child) {
             $child->format($document);
         }
     }

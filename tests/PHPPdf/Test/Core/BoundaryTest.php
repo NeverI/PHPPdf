@@ -70,8 +70,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $this->boundary->translate($vector[0], $vector[1]);
 
-        for($it1 = $this->boundary, $it2 = $old; $it1->valid() && $it2->valid(); $it1->next(), $it2->next())
-        {
+        for ($it1 = $this->boundary, $it2 = $old; $it1->valid() && $it2->valid(); $it1->next(), $it2->next()) {
             $point1 = $it1->current();
             $point2 = $it2->current();
 
@@ -92,8 +91,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $old = clone $this->boundary;
 
         $this->boundary->pointTranslate(0, 1, 1);
-        foreach(array(1, 2, 3) as $index)
-        {
+        foreach (array(1, 2, 3) as $index) {
             $this->assertEquals($old[$index], $this->boundary[$index]);
         }
         $this->assertEquals($old[0]->translate(1, 1), $this->boundary[0]);
@@ -108,8 +106,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $maxX = -(PHP_INT_MAX - 1);
         $minY = PHP_INT_MAX;
         
-        foreach($points as $point)
-        {
+        foreach ($points as $point) {
             $this->boundary->setNext($point[0], $point[1]);
             
             $maxX = max($maxX, $point[0]);
@@ -257,6 +254,6 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
         
         $this->boundary->translate(50, 50);
         
-        $this->assertEquals(array(100, 0), $this->boundary->getMiddlePoint()->toArray());        
+        $this->assertEquals(array(100, 0), $this->boundary->getMiddlePoint()->toArray());
     }
 }

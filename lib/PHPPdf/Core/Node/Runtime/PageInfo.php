@@ -12,7 +12,7 @@ namespace PHPPdf\Core\Node\Runtime;
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class PageInfo extends PageText
-{    
+{
     protected static function setDefaultAttributes()
     {
         parent::setDefaultAttributes();

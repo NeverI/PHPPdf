@@ -12,10 +12,10 @@ use PHPPdf\Core\Boundary;
 
 use PHPPdf\Exception\InvalidArgumentException;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Engine\GraphicsContext,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Document;
 
 /**
  * Base class of complex attribute
@@ -35,13 +35,11 @@ abstract class ComplexAttribute
 
     private function setRadius($radius)
     {
-        if(is_string($radius) && \strpos($radius, ' ') !== false)
-        {
+        if (is_string($radius) && \strpos($radius, ' ') !== false) {
             $radius = explode(' ', $radius);
             $count = count($radius);
 
-            while($count < 4)
-            {
+            while ($count < 4) {
                 $radius[] = current($radius);
                 $count++;
             }
@@ -76,32 +74,27 @@ abstract class ComplexAttribute
         
         $rotationNode = $node->getAncestorWithRotation();
         
-        if($color || $isAlphaSet || $rotationNode)
-        {
+        if ($color || $isAlphaSet || $rotationNode) {
             $graphicsContext->saveGS();
         }
         
-        if($rotationNode)
-        {
+        if ($rotationNode) {
             $middlePoint = $rotationNode->getMiddlePoint();
             $graphicsContext->rotate($middlePoint->getX(), $middlePoint->getY(), $rotationNode->getRotate());
         }
         
-        if($alpha !== null)
-        {
+        if ($alpha !== null) {
             $graphicsContext->setAlpha($alpha);
         }
 
-        if($color)
-        {
+        if ($color) {
             $graphicsContext->setLineColor($color);
             $graphicsContext->setFillColor($color);
         }
 
         $this->doEnhance($graphicsContext, $node, $document);
         
-        if($color || $isAlphaSet || $rotationNode)
-        {
+        if ($color || $isAlphaSet || $rotationNode) {
             $graphicsContext->restoreGs();
         }
     }
@@ -113,8 +106,7 @@ abstract class ComplexAttribute
         $x = array();
         $y = array();
 
-        foreach($points as $point)
-        {
+        foreach ($points as $point) {
             $x[] = $point[0];
             $y[] = $point[1];
         }
@@ -141,8 +133,7 @@ abstract class ComplexAttribute
     {
         $const = sprintf('%s::%s_%s', get_class($this), $majorName, strtoupper($miniorName));
 
-        if(!defined($const))
-        {
+        if (!defined($const)) {
             throw new InvalidArgumentException(sprintf('Invalid value for "%s" property, "%s" given.', strtolower($majorName), $miniorName));
         }
 
@@ -158,8 +149,7 @@ abstract class ComplexAttribute
     {
         $positionTranslation = $node->getPositionTranslation();
 
-        if($positionTranslation && ($positionTranslation->getX() != 0 || $positionTranslation->getY() != 0))
-        {
+        if ($positionTranslation && ($positionTranslation->getX() != 0 || $positionTranslation->getY() != 0)) {
             $boundary = clone $boundary;
             $boundary->translate($positionTranslation->getX(), $positionTranslation->getY());
         }

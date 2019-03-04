@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Core\Node\Behaviour;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -19,7 +19,7 @@ class StickyNote extends Behaviour
     private $text;
     
     public function __construct($text)
-    {        
+    {
         $this->text = (string) $text;
     }
     

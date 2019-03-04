@@ -10,7 +10,7 @@ namespace PHPPdf\Core;
 
 /**
  * Unit converter
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface UnitConverter

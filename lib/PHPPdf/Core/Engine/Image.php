@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Engine;
 
 /**
  * Image
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface Image

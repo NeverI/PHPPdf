@@ -61,10 +61,10 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
                  ->with(self::IMAGE_PATH)
                  ->will($this->returnValue($imageResource));
                  
-        $pageMock = $this->getMock('PHPPdf\Core\Node\Page', array('getGraphicsContext'));      
+        $pageMock = $this->getMock('PHPPdf\Core\Node\Page', array('getGraphicsContext'));
 
         $gcMock = $this->getMockBuilder('PHPPdf\Core\Engine\GraphicsContext')
-        			   ->getMock();
+                       ->getMock();
 
         $expectedXCoord = self::IMAGE_X_COORD;
         $expectedYCoord = self::IMAGE_Y_COORD;
@@ -74,8 +74,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $drawExpectation = $gcMock->expects($this->once())
                                   ->method('drawImage');
         
-        if($keepRatio)
-        {
+        if ($keepRatio) {
             $sourceRatio = $sourceHeight / $sourceWidth;
             
             $gcMock->expects($this->once())
@@ -85,18 +84,15 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
             $drawExpectation->after('clipRectangleInvocation');
 
-            if($sourceRatio > 1)
-            {
+            if ($sourceRatio > 1) {
                 $expectedHeight = $expectedWidth * $sourceRatio;
                 $expectedYCoord += ($expectedHeight - self::IMAGE_HEIGHT)/2;
-            }
-            else
-            {
+            } else {
                 $expectedWidth = $expectedHeight/$sourceRatio;
                 $expectedXCoord -= ($expectedWidth - self::IMAGE_WIDTH)/2;
             }
         }
-        			   
+                       
         $drawExpectation->with($imageResource, $expectedXCoord, $expectedYCoord-$expectedHeight, $expectedXCoord + $expectedWidth, $expectedYCoord);
 
         $pageMock->expects($this->once())
@@ -108,8 +104,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $this->image->collectOrderedDrawingTasks($document, $tasks);
 
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -157,37 +152,26 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $engine = $this->getMock('PHPPdf\Core\Engine\Engine');
         $engineImage = $this->getMock('PHPPdf\Core\Engine\Image');
 
-        if($invalidSrc)
-        {
+        if ($invalidSrc) {
             $this->expectsEngineCreateImageFailure($engine);
-        }
-        else
-        {
+        } else {
             $this->expectsEngineCreateImageSuccess($engine, $engineImage);
         }
 
-        try
-        {
+        try {
             $actualSource = $this->image->createSource($engine);
             
-            if(!$ignoreError && $invalidSrc)
-            {
+            if (!$ignoreError && $invalidSrc) {
                 $this->fail('error shouldn\'t be ignored');
             }
             
-            if($invalidSrc)
-            {
+            if ($invalidSrc) {
                 $this->assertInstanceOf('PHPPdf\Core\Engine\EmptyImage', $actualSource);
-            }
-            else
-            {
+            } else {
                 $this->assertEquals($engineImage, $actualSource);
             }
-        }
-        catch(InvalidResourceException $e)
-        {
-            if($ignoreError)
-            {
+        } catch (InvalidResourceException $e) {
+            if ($ignoreError) {
                 $this->fail('error should be ignored');
             }
         }

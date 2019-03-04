@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Engine;
 
 /**
  * Empty image.
- * 
+ *
  * This class can be used in situation when original image can't be
  * created (file does not exist etc.) and we decide to ignore this error.
  *
@@ -25,21 +25,20 @@ class EmptyImage implements Image
     {
         static $instance;
         
-        if(!$instance)
-        {
+        if (!$instance) {
             $instance = new self();
         }
         
         return $instance;
     }
     
-	public function getOriginalHeight()
-	{
-		return 0;
-	}
+    public function getOriginalHeight()
+    {
+        return 0;
+    }
 
-	public function getOriginalWidth()
-	{
-		return 0;
-	}
+    public function getOriginalWidth()
+    {
+        return 0;
+    }
 }

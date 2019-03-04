@@ -10,7 +10,7 @@ namespace PHPPdf\DataSource;
 
 /**
  * String data source class
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class StringDataSource extends DataSource

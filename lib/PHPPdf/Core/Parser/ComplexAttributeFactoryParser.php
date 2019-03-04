@@ -14,9 +14,9 @@ use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
 
 /**
  * ComplexAttribute factory parser
- * 
+ *
  * Parses config file for complexAttributes and creates ComplexAttributeFactory
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class ComplexAttributeFactoryParser extends XmlParser
@@ -31,15 +31,13 @@ class ComplexAttributeFactoryParser extends XmlParser
 
     protected function parseElement(\XMLReader $reader)
     {
-        if($reader->name === self::COMPLEX_ATTRIBUTE_TAG)
-        {
+        if ($reader->name === self::COMPLEX_ATTRIBUTE_TAG) {
             $root = $this->getLastElementFromStack();
 
             $name = trim($reader->getAttribute('name'));
             $class = trim($reader->getAttribute('class'));
 
-            if(!$name || !$class)
-            {
+            if (!$name || !$class) {
                 throw new ParseException('"name" and "class" attributes are required.');
             }
 

@@ -2,13 +2,13 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Formatter\TableFormatter,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\Boundary,
-    PHPPdf\Core\Node\Table\Row,
-    PHPPdf\Core\Node\Table,
-    PHPPdf\ObjectMother\TableObjectMother,
-    PHPPdf\Core\Node\Table\Cell;
+use PHPPdf\Core\Formatter\TableFormatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Boundary;
+use PHPPdf\Core\Node\Table\Row;
+use PHPPdf\Core\Node\Table;
+use PHPPdf\ObjectMother\TableObjectMother;
+use PHPPdf\Core\Node\Table\Cell;
 
 class TableFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -35,25 +35,20 @@ class TableFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $numberOfColumns = count($columnsWidths);
 
         $rows = array();
-        foreach($cellsWidthInRows as $widths)
-        {
+        foreach ($cellsWidthInRows as $widths) {
             $diffBetweenTableAndColumnsWidths = $tableWidth - $totalWidth - array_sum($columnsMarginsLeft) - array_sum($columnsMarginsRight);
             $translate = 0;
             $cells = array();
-            foreach($widths as $column => $width)
-            {
+            foreach ($widths as $column => $width) {
                 $bothMargins = $columnsMarginsLeft[$column] + $columnsMarginsRight[$column];
                 $columnWidth = $columnsWidths[$column];
                 $minWidth = $minWidthsOfColumns[$column] + $bothMargins;
                 $widthMargin = $columnWidth - $minWidth;
 
-                if($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $widthMargin)
-                {
+                if ($diffBetweenTableAndColumnsWidths < 0 && -$diffBetweenTableAndColumnsWidths >= $widthMargin) {
                     $columnWidth = $minWidth;
                     $diffBetweenTableAndColumnsWidths += $widthMargin;
-                }
-                elseif($diffBetweenTableAndColumnsWidths < 0)
-                {
+                } elseif ($diffBetweenTableAndColumnsWidths < 0) {
                     $columnWidth += $diffBetweenTableAndColumnsWidths;
                     $diffBetweenTableAndColumnsWidths = 0;
                 }

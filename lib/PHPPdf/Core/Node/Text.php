@@ -20,11 +20,11 @@ use PHPPdf\Core\DrawingTask;
 
 /**
  * Text node
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Text extends Node
-{   
+{
     private $text;
     private $textTransformator = null;
     
@@ -57,8 +57,7 @@ class Text extends Node
 
     public function setText($text)
     {
-        if($this->textTransformator !== null)
-        {
+        if ($this->textTransformator !== null) {
             $text = $this->textTransformator->transform($text);
         }
         
@@ -67,8 +66,7 @@ class Text extends Node
     
     protected function beforeFormat(Document $document)
     {
-        foreach($this->childTexts as $text)
-        {
+        foreach ($this->childTexts as $text) {
             $text->beforeFormat($document);
             
             $this->text .= $text->getText();
@@ -92,8 +90,7 @@ class Text extends Node
     public function getMinWidth()
     {
         $minWidth = 0;
-        foreach($this->lineParts as $part)
-        {
+        foreach ($this->lineParts as $part) {
             $minWidth = max($minWidth, $part->getWidth());
         }
         return $minWidth;
@@ -101,8 +98,7 @@ class Text extends Node
 
     protected function doDraw(Document $document, DrawingTaskHeap $tasks)
     {
-        foreach($this->lineParts as $part)
-        {
+        foreach ($this->lineParts as $part) {
             $part->collectOrderedDrawingTasks($document, $tasks);
         }
     }
@@ -110,8 +106,7 @@ class Text extends Node
     protected function doBreakAt($height)
     {
         $clone = null;
-        if($height > 0)
-        {
+        if ($height > 0) {
             $clone = $this->copy();
 
             $this->setAttribute('padding-bottom', 0);
@@ -145,8 +140,7 @@ class Text extends Node
 
     public function add(Node $node)
     {
-        if(!$node instanceof Text)
-        {
+        if (!$node instanceof Text) {
             return;
         }
         $this->childTexts[] = $node;
@@ -154,8 +148,7 @@ class Text extends Node
     
     public function setWordsSizes(array $words, array $sizes)
     {
-        if(count($words) != count($sizes))
-        {
+        if (count($words) != count($sizes)) {
             throw new InvalidArgumentException(sprintf('Words and sizes of words arrays have to have the same length.'));
         }
 
@@ -182,8 +175,7 @@ class Text extends Node
     {
         parent::translate($x, $y);
         
-        foreach($this->pointsOfWordsLines as $i => $point)
-        {
+        foreach ($this->pointsOfWordsLines as $i => $point) {
             $this->pointsOfWordsLines[$i] = $point->translate($x, $y);
         }
     }
@@ -202,8 +194,7 @@ class Text extends Node
     {
         $key = array_search($linePart, $this->lineParts, true);
         
-        if($key !== false)
-        {
+        if ($key !== false) {
             unset($this->lineParts[$key]);
         }
     }

@@ -61,8 +61,7 @@ class Engine extends AbstractEngine
     {
         $data = (string) $data;
 
-        if(!isset($this->images[$data]))
-        {
+        if (!isset($this->images[$data])) {
             $this->images[$data] = new Image($data, $this->unitConverter);
         }
         
@@ -81,8 +80,7 @@ class Engine extends AbstractEngine
     {
         $this->getZendPdf()->properties['Producer'] = sprintf('PHPPdf %s', \PHPPdf\Version::VERSION);
         
-        foreach($this->graphicsContexts as $gc)
-        {
+        foreach ($this->graphicsContexts as $gc) {
             $gc->commit();
         }
 
@@ -94,8 +92,7 @@ class Engine extends AbstractEngine
      */
     public function getZendPdf()
     {
-        if(!$this->zendPdf)
-        {
+        if (!$this->zendPdf) {
             $this->zendPdf = new PdfDocument();
         }
         
@@ -115,8 +112,7 @@ class Engine extends AbstractEngine
      */
     public function getOutline($id)
     {
-        if(!isset($this->outlines[$id]))
-        {
+        if (!isset($this->outlines[$id])) {
             throw new RuntimeException(sprintf('Bookmark with id "%s" dosn\'t exist.', $id));
         }
         
@@ -125,23 +121,19 @@ class Engine extends AbstractEngine
     
     public function loadEngine($file, $encoding)
     {
-        if(isset(self::$loadedEngines[$file]))
-        {
+        if (isset(self::$loadedEngines[$file])) {
             return self::$loadedEngines[$file];
         }
         
-        if(!is_readable($file))
-        {
+        if (!is_readable($file)) {
             throw InvalidResourceException::fileDosntExistException($file);
         }
 
-        try
-        {
+        try {
             $pdf = PdfDocument::load($file);
             $engine = new self($pdf, $this->unitConverter);
             
-            foreach($pdf->pages as $page)
-            {
+            foreach ($pdf->pages as $page) {
                 $gc = new GraphicsContext($engine, $page, $encoding);
                 $engine->attachGraphicsContext($gc);
             }
@@ -149,17 +141,14 @@ class Engine extends AbstractEngine
             self::$loadedEngines[$file] = $engine;
             
             return $engine;
-        }
-        catch(\ZendPdf\Exception $e)
-        {
+        } catch (\ZendPdf\Exception $e) {
             throw InvalidResourceException::invalidPdfFileException($file, $e);
         }
     }
     
     public function setMetadataValue($name, $value)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'Trapped':
                 $value = $value === 'null' ? null : Util::convertBooleanValue($value);
                 $this->getZendPdf()->properties[$name] = $value;

@@ -29,8 +29,7 @@ class ElasticPageFormatterTest extends TestCase
     {
         $page = new Page(array('page-size' => '500:'.$originalHeight));
         
-        foreach($childrenDiagonalYCoord as $yCoord)
-        {
+        foreach ($childrenDiagonalYCoord as $yCoord) {
             $node = $this->nodeObjectMother->getNodeStub(0, $page->getHeight(), 100, $page->getHeight() - $yCoord);
             $page->add($node);
         }
@@ -44,8 +43,7 @@ class ElasticPageFormatterTest extends TestCase
         
         $this->assertEquals($expectedHeight, $page->getRealHeight());
         
-        foreach($page->getChildren() as $i => $child)
-        {
+        foreach ($page->getChildren() as $i => $child) {
             $expectedDiagonalYCoord = $childrenDiagonalYCoord[$i] - $translation;
             
             $actualDiagonalYCoord = $child->getDiagonalPoint()->getY();

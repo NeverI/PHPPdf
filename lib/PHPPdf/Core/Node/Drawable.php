@@ -13,7 +13,7 @@ use PHPPdf\Core\Document;
 
 /**
  * Element being able to draw
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface Drawable

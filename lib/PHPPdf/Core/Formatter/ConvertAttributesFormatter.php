@@ -8,10 +8,10 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Formatter\BaseFormatter,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Util,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Formatter\BaseFormatter;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Util;
+use PHPPdf\Core\Document;
 
 /**
  * Convert values of some attributes
@@ -43,13 +43,11 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $parent = $node->getParent();
 
-        if($parent !== null && $this->hasAutoMargins($node))
-        {
+        if ($parent !== null && $this->hasAutoMargins($node)) {
             $parentWidth = $parent->getWidthWithoutPaddings();
             $nodeWidth = $node->getWidth();
 
-            if($nodeWidth > $parentWidth)
-            {
+            if ($nodeWidth > $parentWidth) {
                 $parentWidth = $nodeWidth;
                 $parent->setWidth($nodeWidth);
             }
@@ -86,16 +84,13 @@ class ConvertAttributesFormatter extends BaseFormatter
     {
         $color = $node->getAttribute('color');
         
-        if($color)
-        {
+        if ($color) {
             $node->setAttribute('color', $document->getColorFromPalette($color));
         }
         
-        if($node->hasAttribute('chart-colors'))
-        {
+        if ($node->hasAttribute('chart-colors')) {
             $colors = $node->getAttribute('chart-colors');
-            foreach($colors as $key => $color)
-            {
+            foreach ($colors as $key => $color) {
                 $colors[$key] = $document->getColorFromPalette($color);
             }
             $node->setAttribute('chart-colors', $colors);

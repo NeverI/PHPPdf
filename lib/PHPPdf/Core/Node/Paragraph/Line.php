@@ -39,8 +39,7 @@ class Line
     
     public function addParts(array $parts)
     {
-        foreach($parts as $part)
-        {
+        foreach ($parts as $part) {
             $this->addPart($part);
         }
     }
@@ -78,8 +77,7 @@ class Line
     private function getHorizontalTranslation()
     {
         $align = $this->paragraph->getRecurseAttribute('text-align');
-        switch($align)
-        {
+        switch ($align) {
             case Node::ALIGN_LEFT:
             case Node::ALIGN_JUSTIFY:
                 return 0;
@@ -100,8 +98,7 @@ class Line
     public function getTotalWidth()
     {
         $width = 0;
-        foreach($this->parts as $part)
-        {
+        foreach ($this->parts as $part) {
             $width += $part->getWidth();
         }
         
@@ -120,8 +117,7 @@ class Line
     {
         $height = 0;
         
-        foreach($this->parts as $part)
-        {
+        foreach ($this->parts as $part) {
             $height = max($height, $part->getHeight());
         }
         
@@ -132,8 +128,7 @@ class Line
     {
         $this->setXTranslation($this->getHorizontalTranslation());
         
-        if(!$formatJustify || $this->paragraph->getRecurseAttribute('text-align') !== Node::ALIGN_JUSTIFY)
-        {
+        if (!$formatJustify || $this->paragraph->getRecurseAttribute('text-align') !== Node::ALIGN_JUSTIFY) {
             return;
         }
 
@@ -142,8 +137,7 @@ class Line
         $wordSpacing = $numberOfSpaces ? ($this->getRealWidth() - $this->getTotalWidth()) / $numberOfSpaces : null;
 
         $wordSpacingSum = 0;
-        foreach($this->parts as $part)
-        {
+        foreach ($this->parts as $part) {
             $part->setWordSpacing($wordSpacing);
             $part->horizontalTranslate($wordSpacingSum);
             $wordSpacingSum += $part->getWordSpacingSum();
@@ -154,8 +148,7 @@ class Line
     {
         $count = 0;
         
-        foreach($this->parts as $part)
-        {
+        foreach ($this->parts as $part) {
             $count += $part->getNumberOfWords();
         }
         
@@ -164,8 +157,7 @@ class Line
     
     public function flush()
     {
-        foreach($this->parts as $part)
-        {
+        foreach ($this->parts as $part) {
             $part->flush();
         }
         

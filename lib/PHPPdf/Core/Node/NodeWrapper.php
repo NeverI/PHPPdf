@@ -10,7 +10,7 @@ namespace PHPPdf\Core\Node;
 
 /**
  * Wrapper/placeholder for node object
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 final class NodeWrapper implements NodeAware

@@ -3,7 +3,6 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-
 use PHPPdf\Core\Formatter\ImageRatioFormatter;
 use PHPPdf\Test\Helper\NodeAssert;
 use PHPPdf\Test\Helper\NodeBuilder;
@@ -54,4 +53,3 @@ class ImageRatioFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         );
     }
 }
- 

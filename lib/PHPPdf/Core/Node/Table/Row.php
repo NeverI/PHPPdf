@@ -17,7 +17,7 @@ use PHPPdf\Core\Node\Node;
 
 /**
  * Row of the table
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Row extends Container implements Listener
@@ -38,8 +38,7 @@ class Row extends Container implements Listener
 
     public function add(Node $node)
     {
-        if(!$node instanceof Cell)
-        {
+        if (!$node instanceof Cell) {
             throw new InvalidArgumentException(sprintf('Invalid child node type, expected PHPPdf\Core\Node\Table\Cell, %s given.', get_class($node)));
         }
 
@@ -47,8 +46,7 @@ class Row extends Container implements Listener
         $this->numberOfColumns += $node->getColspan();
         $parent = $this->getParent();
 
-        if($parent)
-        {
+        if ($parent) {
             $node->addListener($parent);
         }
 
@@ -65,8 +63,7 @@ class Row extends Container implements Listener
     {
         $height = $node->getHeight();
 
-        if($height > $this->maxHeightOfCells)
-        {
+        if ($height > $this->maxHeightOfCells) {
             $this->maxHeightOfCells = $height;
         }
     }
@@ -75,8 +72,7 @@ class Row extends Container implements Listener
     {
         $margin = $cell->getAttribute($marginType);
 
-        if($margin > $this->marginsOfCells[$marginType])
-        {
+        if ($margin > $this->marginsOfCells[$marginType]) {
             $this->marginsOfCells[$marginType] = $margin;
         }
     }
@@ -95,8 +91,7 @@ class Row extends Container implements Listener
     {
         $height = parent::getHeight();
 
-        if($height === null)
-        {
+        if ($height === null) {
             $height = $this->getAncestorByType('PHPPdf\Core\Node\Table')->getRowHeight();
         }
 
@@ -116,8 +111,7 @@ class Row extends Container implements Listener
 
     public function attributeChanged(Node $node, $attributeName, $oldValue)
     {
-        if($attributeName === 'height')
-        {
+        if ($attributeName === 'height') {
             $this->setMaxHeightOfCellsIfHeightOfPassedCellIsGreater($node);
         }
     }

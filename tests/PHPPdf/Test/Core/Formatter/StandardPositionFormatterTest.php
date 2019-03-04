@@ -2,12 +2,12 @@
 
 namespace PHPPdf\Test\Core\Formatter;
 
-use PHPPdf\Core\Document,
-    PHPPdf\Core\Point,
-    PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Node\Container,
-    PHPPdf\Core\Node\Page,
-    PHPPdf\Core\Formatter\StandardPositionFormatter;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\Point;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Node\Container;
+use PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Formatter\StandardPositionFormatter;
 
 class StandardPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -36,8 +36,7 @@ class StandardPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $node->getBoundary()->setNext($page->getFirstPoint());
         $child->getBoundary()->setNext($page->getFirstPoint());
 
-        foreach(array($node, $child) as $g)
-        {
+        foreach (array($node, $child) as $g) {
             $this->formatter->format($g, $this->createDocumentStub());
         }
 

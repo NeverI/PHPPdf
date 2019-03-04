@@ -3,9 +3,9 @@
 namespace PHPPdf\Test\Core;
 
 use PHPPdf\Core\DrawingTaskHeap;
-use PHPPdf\Core\Document,
-    PHPPdf\Font\Registry as FontRegistry,
-    PHPPdf\Core\Node\Page;
+use PHPPdf\Core\Document;
+use PHPPdf\Font\Registry as FontRegistry;
+use PHPPdf\Core\Node\Page;
 
 class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
@@ -24,8 +24,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function invokeDrawingTasksOfPagesWhenDrawMethodIsInvoked($assertArguments = true)
     {
         $tasks = array();
-        for($i=0; $i<3; $i++)
-        {
+        for ($i=0; $i<3; $i++) {
             $taskMock = $this->getMockBuilder('PHPPdf\Core\DrawingTask')
                              ->setMethods(array('invoke'))
                              ->disableOriginalConstructor()
@@ -41,8 +40,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
                         ->method('format')
                         ->id(1);
         
-        if($assertArguments)
-        {
+        if ($assertArguments) {
             $matcher->with($this->document);
         }
 
@@ -125,13 +123,11 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $complexAttributeFactoryMock = $this->getMock('PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory', array('create'));
         
         $at = 0;
-        foreach($complexAttributesParameters as $name => $params)
-        {
+        foreach ($complexAttributesParameters as $name => $params) {
             $complexAttributeFactoryMock->expects($this->at($at++))
                                    ->method('create')
                                    ->with($this->equalTo($name), $this->equalTo(array_diff_key($params, array('name' => true))))
                                    ->will($this->returnValue($complexAttributesMap[$name]));
-            
         }
 
         $this->document->setComplexAttributeFactory($complexAttributeFactoryMock);
@@ -255,8 +251,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $previousValue = $value;
         $filters = array();
-        foreach($filterValues as $filterValue)
-        {
+        foreach ($filterValues as $filterValue) {
             $filter = $this->getMock('PHPPdf\Util\StringFilter');
             $filter->expects($this->once())
                    ->method('filter')
@@ -266,7 +261,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $filters[] = $filter;
         }
 
-        $this->document->setStringFilters($filters);   
+        $this->document->setStringFilters($filters);
 
         $fontDefinition = array('normal' => $value);
         $font = $this->getMock('PHPPdf\Core\Engine\Font');

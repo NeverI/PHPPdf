@@ -29,7 +29,7 @@ class Image implements BaseImage
     
     /**
      * Constructor
-     * 
+     *
      * @param string $path Path to image
      * @param UnitConverter $unitConverter Converter that converts image's size from pixels to standard unit
      */
@@ -38,8 +38,7 @@ class Image implements BaseImage
         $this->path = $path;
         $this->unitConverter = $unitConverter;
         
-        if(!$this->pathExists($path) || ($data = @getimagesize($path)) === false)
-        {
+        if (!$this->pathExists($path) || ($data = @getimagesize($path)) === false) {
             throw InvalidResourceException::invalidImageException($path);
         }
         
@@ -50,45 +49,32 @@ class Image implements BaseImage
     
     private function createImage($path)
     {
-        try
-        {
+        try {
             $imageType = $this->type;
             
-            if($imageType === IMAGETYPE_JPEG || $imageType === IMAGETYPE_JPEG2000)
-            {
+            if ($imageType === IMAGETYPE_JPEG || $imageType === IMAGETYPE_JPEG2000) {
                 return new Jpeg($path);
-            }
-            elseif($imageType === IMAGETYPE_PNG)
-            {
+            } elseif ($imageType === IMAGETYPE_PNG) {
                 return new Png($path);
-            }
-            elseif($imageType === IMAGETYPE_TIFF_II || $imageType === IMAGETYPE_TIFF_MM)
-            {
+            } elseif ($imageType === IMAGETYPE_TIFF_II || $imageType === IMAGETYPE_TIFF_MM) {
                 return new Tiff($path);
-            }
-            else
-            {
+            } else {
                 throw InvalidResourceException::unsupportetImageTypeException($path);
             }
-        }
-        catch(\ZendPdf\Exception $e)
-        {
+        } catch (\ZendPdf\Exception $e) {
             throw InvalidResourceException::invalidImageException($path, $e);
         }
     }
     
     private function pathExists($path)
     {
-        if(is_file($path))
-        {
+        if (is_file($path)) {
             return true;
         }
         
-        if(stripos($path, 'http') === 0)
-        {
+        if (stripos($path, 'http') === 0) {
             $fp = @fopen($path, 'r');
-            if($fp)
-            {
+            if ($fp) {
                 fclose($fp);
                 return true;
             }
@@ -109,13 +95,12 @@ class Image implements BaseImage
     
     /**
      * @internal Public method within PHPPdf\Core\Engine\ZF namespace
-     * 
+     *
      * @return ZendPdf\Resource\Image
      */
     public function getWrappedImage()
     {
-        if(!$this->zendImage)
-        {
+        if (!$this->zendImage) {
             $this->zendImage = $this->createImage($this->path);
             $this->path = null;
         }

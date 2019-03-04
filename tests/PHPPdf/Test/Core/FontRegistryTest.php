@@ -2,8 +2,8 @@
 
 namespace PHPPdf\Test\Font;
 
-use PHPPdf\Core\FontRegistry,
-    PHPPdf\Core\Engine\Font;
+use PHPPdf\Core\FontRegistry;
+use PHPPdf\Core\Engine\Font;
 
 class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

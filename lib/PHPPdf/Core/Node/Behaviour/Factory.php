@@ -28,18 +28,15 @@ class Factory
      */
     public function create($name, $mainArg, array $options = array())
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'href':
-                if(strpos($mainArg, '#') === 0)
-                {
+                if (strpos($mainArg, '#') === 0) {
                     //anchor detected, go to "ref" section
                     $mainArg = substr($mainArg, 1);
-                }
-                else
-                {
+                } else {
                     return new GoToUrl($mainArg);
                 }
+                // no break
             case 'ref':
                 return new GoToInternal($this->nodeManager->get($mainArg));
             case 'bookmark':

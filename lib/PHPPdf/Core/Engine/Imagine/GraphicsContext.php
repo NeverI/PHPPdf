@@ -25,10 +25,10 @@ use Zend\Barcode\Object\ObjectInterface as Barcode;
 
 /**
  * Graphics context for Imagine
- * 
+ *
  * * TODO: lineDashingPattern for doDrawPolygon
  * * TODO: support for lineWidth
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class GraphicsContext extends AbstractGraphicsContext
@@ -62,12 +62,9 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $this->imagine = $imagine;
 
-        if($imageOrSize instanceof ImageInterface)
-        {
+        if ($imageOrSize instanceof ImageInterface) {
             $this->image = $imageOrSize;
-        }
-        else
-        {
+        } else {
             list($width, $height) = explode(':', $imageOrSize);
             $this->image = $imagine->create(new Box($width, $height));
         }
@@ -84,16 +81,13 @@ class GraphicsContext extends AbstractGraphicsContext
 
         $clip = null;
         
-        foreach($stack as $state)
-        {            
-            if($clip = end($state['clips']))
-            {
+        foreach ($stack as $state) {
+            if ($clip = end($state['clips'])) {
                 break;
             }
         }
         
-        if(!$clip)
-        {
+        if (!$clip) {
             $clip = array($this->image, new Point(0, 0), 0);
         }
         
@@ -122,8 +116,7 @@ class GraphicsContext extends AbstractGraphicsContext
     {
         $state = array_shift($this->stateStack);
         
-        if($state === null)
-        {
+        if ($state === null) {
             $state = self::$originalState;
         }
         
@@ -132,12 +125,10 @@ class GraphicsContext extends AbstractGraphicsContext
         
         list($image, $point) = $this->getCurrentClip();
         
-        foreach($clips as $clip)
-        {
+        foreach ($clips as $clip) {
             list($clipImage, $clipPoint, $angle, $p) = $clip;
             
-            if($angle != 0)
-            {
+            if ($angle != 0) {
                 $clipImage->rotate($angle);
                 $clipPoint = $p;
             }
@@ -176,8 +167,7 @@ class GraphicsContext extends AbstractGraphicsContext
         $imageHeight = $box->getHeight();
         $imageWidth = $box->getWidth();
         
-        if($requestedHeight != $imageHeight || $requestedWidth != $imageWidth)
-        {
+        if ($requestedHeight != $imageHeight || $requestedWidth != $imageWidth) {
             $newBox = new Box($requestedWidth, $requestedHeight);
             $imagineImage->resize($newBox);
         }
@@ -196,13 +186,11 @@ class GraphicsContext extends AbstractGraphicsContext
 
     private function pasteImage(ImageInterface $image, ImageInterface $imageToPaste, PointInterface $pastePoint)
     {
-        if(!$this->boxContains($image->getSize(), $imageToPaste->getSize(), $pastePoint))
-        {
+        if (!$this->boxContains($image->getSize(), $imageToPaste->getSize(), $pastePoint)) {
             $rectangle = Rectangle::createWithSize($image->getSize())
                 ->intersection(Rectangle::create($pastePoint, $imageToPaste->getSize()));
 
-            if($rectangle !== null)
-            {
+            if ($rectangle !== null) {
                 $croppingPoint = new Point(
                     $rectangle->getStartingPoint()->getX() - $pastePoint->getX(),
                     $rectangle->getStartingPoint()->getY() - $pastePoint->getY()
@@ -212,9 +200,7 @@ class GraphicsContext extends AbstractGraphicsContext
 
                 $image->paste($imageToPaste, $this->ensureNonNegativePoint($pastePoint));
             }
-        }
-        else
-        {
+        } else {
             $image->paste($imageToPaste, $pastePoint);
         }
     }
@@ -229,8 +215,7 @@ class GraphicsContext extends AbstractGraphicsContext
 
     private function ensureNonNegativePoint(PointInterface $point)
     {
-        if($point->getX() < 0 || $point->getY() < 0)
-        {
+        if ($point->getX() < 0 || $point->getY() < 0) {
             return new Point(max(0, $point->getX()), max(0, $point->getY()));
         }
 
@@ -249,16 +234,13 @@ class GraphicsContext extends AbstractGraphicsContext
     
     //TODO: width of line
     protected function doDrawLine($x1, $y1, $x2, $y2)
-    {        
+    {
         $lineStyle = $this->state['lineDashingPattern'];
 
-        if($lineStyle === self::DASHING_PATTERN_SOLID)
-        {
+        if ($lineStyle === self::DASHING_PATTERN_SOLID) {
             list($image, $point) = $this->getCurrentClip();
             $image->draw()->line($this->translatePoint($point, $x1, $this->convertYCoord($y1)), $this->translatePoint($point, $x2, $this->convertYCoord($y2)), $this->createColor($this->state['lineColor']));
-        }
-        else
-        {
+        } else {
             $this->doDrawDottedLine($x1, $y1, $x2, $y2);
         }
     }
@@ -275,8 +257,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $rotated = false;
         
-        if($x1 == $x2)
-        {
+        if ($x1 == $x2) {
             //rotate coordinate system by 90 deegres
             $tmp1 = $y1;
             $y1 = $x1;
@@ -290,12 +271,11 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $pattern = $lineStyle === self::DASHING_PATTERN_DOTTED ? array(1, 2) : (array) $lineStyle;
         
-        $on = false;            
+        $on = false;
         $patternLength = count($pattern);
-        $currentX = min($x1, $x2);  
+        $currentX = min($x1, $x2);
 
-        if($currentX !== $x1)
-        {
+        if ($currentX !== $x1) {
             $x2 = $x1;
             $x1 = $currentX;
             
@@ -306,19 +286,17 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $factor = ($y2 - $y1)/($x2 - $x1);
         
-        for($i=1; $currentX < $x2; $i++)
-        {
+        for ($i=1; $currentX < $x2; $i++) {
             $length = $pattern[$i % $patternLength];
             $nextX = $currentX + $length;
 
-            if($on)
-            {
+            if ($on) {
                 $nextY = $this->linear($nextX, $x1, $y1, $factor);
                 $currentY = $this->linear($currentX, $x1, $y1, $factor);
                 $image->draw()->line($this->translatePoint($point, $rotated ? $currentY : $currentX, $rotated ? $currentX : $currentY), $this->translatePoint($point, $rotated ? $nextY : $nextX, $rotated ? $nextX : $nextY), $color);
             }
             
-            $currentX = $nextX;                
+            $currentX = $nextX;
             $on = !$on;
         }
     }
@@ -326,7 +304,8 @@ class GraphicsContext extends AbstractGraphicsContext
     private function linear($x, $x1, $y1, $factor)
     {
         // y = (y2 - y1)(x - x1)/(x2 - x1) + y1
-        return $factor*($x - $x1) + $y1;;
+        return $factor*($x - $x1) + $y1;
+        ;
     }
     
     private function createColor($color)
@@ -357,25 +336,21 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $coords = array();
         
-        foreach($x as $i => $coord)
-        {
+        foreach ($x as $i => $coord) {
             $coords[] = $this->translatePoint($point, $coord, $this->convertYCoord($y[$i]));
         }
         
         $polygons = array();
         
-        if($this->isFillShape($type))
-        {
+        if ($this->isFillShape($type)) {
             $polygons[] = array($this->createColor($this->state['fillColor']), true);
         }
         
-        if($this->isStrokeShape($type))
-        {
+        if ($this->isStrokeShape($type)) {
             $polygons[] = array($this->createColor($this->state['lineColor']), false);
         }
         
-        foreach($polygons as $polygon)
-        {
+        foreach ($polygons as $polygon) {
             list($color, $fill) = $polygon;
             $image->draw()->polygon($coords, $color, $fill);
         }
@@ -404,12 +379,9 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $position = $this->translatePoint($point, $x, $this->convertYCoord($y) - $size);
         
-        if($wordSpacing === 0)
-        {
+        if ($wordSpacing === 0) {
             $image->draw()->text($text, $imagineFont, $position);
-        }
-        else
-        {
+        } else {
             $this->richDrawText($text, $image, $wordSpacing, $imagineFont, $position);
         }
     }
@@ -420,10 +392,8 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $wordSpacing = $wordSpacing + $this->getWidthOfSpaceChar($font);
 
-        foreach($words as $word)
-        {
-            if($word !== '')
-            {
+        foreach ($words as $word) {
+            if ($word !== '') {
                 $box = $font->box($word);
                 $image->draw()->text($word, $font, $point);
                 $point = new Point($point->getX() + $box->getWidth() + $wordSpacing, $point->getY());
@@ -456,8 +426,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $circleBox = new Box($radius*2, $radius*2);
         
-        if($this->isStrokeShape($fillType))
-        {
+        if ($this->isStrokeShape($fillType)) {
             $color = $this->createColor($this->state['lineColor']);
             
             
@@ -470,11 +439,9 @@ class GraphicsContext extends AbstractGraphicsContext
                   ->arc($rightBottomCircleCenter, $circleBox, 0, 90, $color)
                   ->arc($leftBottomCircleCenter, $circleBox, 90, 180, $color)
             ;
-            
         }
         
-        if($this->isFillShape($fillType))
-        {
+        if ($this->isFillShape($fillType)) {
             $color = $this->createColor($this->state['fillColor']);
             
             $image->draw()->polygon(array($leftStartPoint, $rightStartPoint, $rightEndPoint, $leftEndPoint), $color, true)
@@ -535,8 +502,7 @@ class GraphicsContext extends AbstractGraphicsContext
         
         $rotatePoint = new Point($x, $y);
         
-        foreach($pointsToRotate as $pointToRotate)
-        {
+        foreach ($pointsToRotate as $pointToRotate) {
             $rotatedPoint = $this->rotatePoint($angle, $pointToRotate, $rotatePoint);
             $xs[] = $rotatedPoint->getX();
             $ys[] = $rotatedPoint->getY();
@@ -628,16 +594,14 @@ class GraphicsContext extends AbstractGraphicsContext
         $point = $this->translatePoint($point, $x, $this->convertYCoord($y));
         $box = new Box($width, $height);
         
-        if($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
-        {        
+        if ($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE) {
             $color = $this->createColor($this->state['fillColor']);
-            $image->draw()->ellipse($point, $box, $color, true);          
+            $image->draw()->ellipse($point, $box, $color, true);
         }
         
-        if($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
-        {        
+        if ($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE) {
             $color = $this->createColor($this->state['lineColor']);
-            $image->draw()->ellipse($point, $box, $color, false);            
+            $image->draw()->ellipse($point, $box, $color, false);
         }
     }
     
@@ -649,13 +613,11 @@ class GraphicsContext extends AbstractGraphicsContext
         $color = $this->createColor($this->state['fillColor']);
         $box = new Box($width, $height);
         
-        if($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
-        {
+        if ($fillType === self::SHAPE_DRAW_FILL || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE) {
             $image->draw()->pieSlice($point, $box, $start, $end, $color, true);
         }
         
-        if($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE)
-        {
+        if ($fillType === self::SHAPE_DRAW_STROKE || $fillType === self::SHAPE_DRAW_FILL_AND_STROKE) {
             $image->draw()->pieSlice($point, $box, $start, $end, $color, false);
         }
     }

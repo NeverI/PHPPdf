@@ -14,7 +14,8 @@ class RotationTest extends AbstractGraphicsContextTest
     {
         //given
 
-        $width = 100; $height = 50;
+        $width = 100;
+        $height = 50;
         $color = '#000000';
 
         //when
@@ -37,7 +38,8 @@ class RotationTest extends AbstractGraphicsContextTest
     {
         //given
 
-        $width = 100; $height = 50;
+        $width = 100;
+        $height = 50;
         $color = '#000000';
 
         //when
@@ -66,7 +68,7 @@ class RotationTest_GcWrapper
     private $width;
     private $height;
 
-    function __construct(GraphicsContext $gc, $width, $height)
+    public function __construct(GraphicsContext $gc, $width, $height)
     {
         $this->gc = $gc;
         $this->width = $width;

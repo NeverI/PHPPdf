@@ -65,14 +65,13 @@ class ListFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
              ->method('assignEnumerationStrategyFromFactory');
              
         $enumerationStrategy->expects($this->once())
-                            ->method('getWidthOfTheBiggestPosibleEnumerationElement') 
+                            ->method('getWidthOfTheBiggestPosibleEnumerationElement')
                             ->with($documentStub, $list)
                             ->will($this->returnValue($widthOfEnumerationChar));
 
         $children = array();
         $leftMargin = 10;
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $child = $this->getMock('PHPPdf\Core\Node\Container', array('setAttribute', 'getMarginLeft'));
             $child->expects($this->once())
                   ->method('getMarginLeft')

@@ -25,11 +25,11 @@ use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * Document to generate
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class Document extends AbstractStringFilterContainer implements Engine
-{   
+{
     const DRAWING_PRIORITY_BACKGROUND1 = 60;
     const DRAWING_PRIORITY_BACKGROUND2 = 50;
     const DRAWING_PRIORITY_BACKGROUND3 = 40;
@@ -65,19 +65,16 @@ class Document extends AbstractStringFilterContainer implements Engine
 
     /**
      * Create complexAttributes objects depends on bag content
-     * 
+     *
      * @return array Array of ComplexAttribute objects
      */
     public function getComplexAttributes(AttributeBag $bag)
     {
         $complexAttributes = array();
 
-        if($this->complexAttributeFactory !== null)
-        {
-            foreach($bag->getAll() as $id => $parameters)
-            {
-                if(!isset($parameters['name']))
-                {
+        if ($this->complexAttributeFactory !== null) {
+            foreach ($bag->getAll() as $id => $parameters) {
+                if (!isset($parameters['name'])) {
                     throw new InvalidArgumentException('"name" attribute is required.');
                 }
 
@@ -86,8 +83,7 @@ class Document extends AbstractStringFilterContainer implements Engine
                 
                 $complexAttribute = $this->complexAttributeFactory->create($name, $parameters);
                 
-                if(!$complexAttribute->isEmpty())
-                {
+                if (!$complexAttribute->isEmpty()) {
                     $complexAttributes[] = $complexAttribute;
                 }
             }
@@ -131,8 +127,7 @@ class Document extends AbstractStringFilterContainer implements Engine
      */
     public function getFontRegistry()
     {
-        if($this->fontRegistry === null)
-        {
+        if ($this->fontRegistry === null) {
             $this->fontRegistry = new FontRegistry($this);
         }
 
@@ -153,34 +148,26 @@ class Document extends AbstractStringFilterContainer implements Engine
      */
     public function draw($pages)
     {
-        if($this->isProcessed())
-        {
+        if ($this->isProcessed()) {
             throw new LogicException(sprintf('Pdf has alredy been drawed.'));
         }
 
         $this->processed = true;
 
 
-        if(is_array($pages))
-        {
+        if (is_array($pages)) {
             $pageCollection = new PageCollection();
 
-            foreach($pages as $page)
-            {
-                if(!$page instanceof Page)
-                {
+            foreach ($pages as $page) {
+                if (!$page instanceof Page) {
                     throw new DrawingException(sprintf('Not all elements of passed array are PHPPdf\Core\Node\Page type. One of them is "%s".', get_class($page)));
                 }
 
                 $pageCollection->add($page);
             }
-        }
-        elseif($pages instanceof PageCollection)
-        {
+        } elseif ($pages instanceof PageCollection) {
             $pageCollection = $pages;
-        }
-        else
-        {
+        } else {
             throw new InvalidArgumentException(sprintf('Argument of draw method must be an array of pages or PageCollection object, "%s" given.', get_class($pages)));
         }
 
@@ -192,13 +179,12 @@ class Document extends AbstractStringFilterContainer implements Engine
 
     public function invokeTasks($tasks)
     {
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
 
-    public function addDrawingTask(Callable $callable, $priority = self::DRAWING_PRIORITY_FOREGROUND3)
+    public function addDrawingTask(callable $callable, $priority = self::DRAWING_PRIORITY_FOREGROUND3)
     {
         $this->drawingTasksQueue->insert($callable, $priority);
     }
@@ -214,8 +200,7 @@ class Document extends AbstractStringFilterContainer implements Engine
      */
     public function getFormatter($className)
     {
-        if(!isset($this->formatters[$className]))
-        {
+        if (!isset($this->formatters[$className])) {
             $this->formatters[$className] = $this->createFormatter($className);
         }
 
@@ -224,20 +209,16 @@ class Document extends AbstractStringFilterContainer implements Engine
 
     private function createFormatter($className)
     {
-        try
-        {
+        try {
             $class = new \ReflectionClass($className);
             $formatter = $class->newInstance();
 
-            if(!$formatter instanceof Formatters\Formatter)
-            {
+            if (!$formatter instanceof Formatters\Formatter) {
                 throw new RuntimeException(sprintf('Class "%s" dosn\'t implement PHPPdf\Formatrer\Formatter interface.', $className));
             }
 
             return $formatter;
-        }
-        catch(\ReflectionException $e)
-        {
+        } catch (\ReflectionException $e) {
             throw new RuntimeException(sprintf('Class "%s" dosn\'t exist or haven\'t default constructor.', $className), 0, $e);
         }
     }
@@ -264,14 +245,12 @@ class Document extends AbstractStringFilterContainer implements Engine
     
     public function createFont($data)
     {
-        foreach($data as $name => $value)
-        {
-            foreach($this->stringFilters as $filter)
-            {
+        foreach ($data as $name => $value) {
+            foreach ($this->stringFilters as $filter) {
                 $value = $filter->filter($value);
             }
 
-			$data[$name] = $value;
+            $data[$name] = $value;
         }
         
         return $this->engine->createFont($data);
@@ -299,16 +278,14 @@ class Document extends AbstractStringFilterContainer implements Engine
     
     public function addFontDefinitions(array $definitions)
     {
-        foreach($definitions as $name => $definition)
-        {
+        foreach ($definitions as $name => $definition) {
             $this->setFontDefinition($name, $definition);
         }
     }
     
     public function convertUnit($value, $unit = null)
     {
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             return $this->unitConverter->convertUnit($value);
         }
 
@@ -317,8 +294,7 @@ class Document extends AbstractStringFilterContainer implements Engine
     
     public function convertPercentageValue($value, $width)
     {
-        if($this->unitConverter)
-        {
+        if ($this->unitConverter) {
             return $this->unitConverter->convertPercentageValue($value, $width);
         }
         
@@ -343,18 +319,17 @@ class Document extends AbstractStringFilterContainer implements Engine
         $this->colorPalette = $colorPalette;
     }
     
-	public function addColorsToPalette(array $colors)
-	{
-		$this->colorPalette->merge($colors);
-	}
-	
-	public function getColorFromPalette($color)
-	{
-	    if($this->colorPalette)
-	    {
-    	    return $this->colorPalette->get($color);
-	    }
-	    
-	    return $color;
-	}
+    public function addColorsToPalette(array $colors)
+    {
+        $this->colorPalette->merge($colors);
+    }
+    
+    public function getColorFromPalette($color)
+    {
+        if ($this->colorPalette) {
+            return $this->colorPalette->get($color);
+        }
+        
+        return $color;
+    }
 }

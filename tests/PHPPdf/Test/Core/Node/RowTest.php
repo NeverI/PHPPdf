@@ -98,8 +98,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function setNumberOfColumnForCells(array $colspans)
     {
         $i = 0;
-        foreach($colspans as $colspan)
-        {
+        foreach ($colspans as $colspan) {
             $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('setNumberOfColumn', 'getColspan'));
             $cell->expects($this->atLeastOnce())
                  ->method('getColspan')
@@ -112,8 +111,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
             $i += $colspan;
         }
 
-        foreach($cells as $cell)
-        {
+        foreach ($cells as $cell) {
             $this->row->add($cell);
         }
     }
@@ -169,8 +167,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $cells = $this->createMockedCellsWithHeights($heights);
 
-        foreach($cells as $cell)
-        {
+        foreach ($cells as $cell) {
             $this->row->attributeChanged($cell, 'height', null);
         }
 
@@ -189,8 +186,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private function createMockedCellsWithHeights(array $heights)
     {
         $cells = array();
-        foreach($heights as $height)
-        {
+        foreach ($heights as $height) {
             $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('getHeight'));
             $cell->expects($this->atLeastOnce())
                  ->method('getHeight')
@@ -209,8 +205,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $cells = $this->createMockedCellsWithHeights($heights);
 
-        foreach($cells as $cell)
-        {
+        foreach ($cells as $cell) {
             $this->row->add($cell);
         }
 
@@ -225,8 +220,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $cells = $this->createMockedCellsWidthVerticalMargins($marginsTop, $marginsBottom);
 
-        foreach($cells as $cell)
-        {
+        foreach ($cells as $cell) {
             $this->row->add($cell);
         }
 
@@ -248,8 +242,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
     {
         $cells = array();
 
-        for($i=0, $count = count($marginsTop); $i<$count; $i++)
-        {
+        for ($i=0, $count = count($marginsTop); $i<$count; $i++) {
             $cell = $this->getMock('PHPPdf\Core\Node\Table\Cell', array('getMarginTop', 'getMarginBottom'));
             $cell->expects($this->atLeastOnce())
                  ->method('getMarginTop')

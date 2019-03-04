@@ -9,8 +9,8 @@
 namespace PHPPdf\Core\Node\Behaviour;
 
 use PHPPdf\Core\Point;
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Engine\GraphicsContext;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Engine\GraphicsContext;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -21,8 +21,7 @@ abstract class Behaviour
     
     public function attach(GraphicsContext $gc, Node $node)
     {
-        if(!$this->isPassive())
-        {
+        if (!$this->isPassive()) {
             $this->doAttach($gc, $node);
         }
     }

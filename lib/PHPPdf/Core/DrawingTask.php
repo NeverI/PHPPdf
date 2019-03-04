@@ -56,12 +56,9 @@ class DrawingTask
     {
         $diff = ($this->priority - $task->priority);
 
-        if($diff === 0)
-        {
+        if ($diff === 0) {
             return ($task->order - $this->order);
-        }
-        else
-        {
+        } else {
             return $diff;
         }
     }

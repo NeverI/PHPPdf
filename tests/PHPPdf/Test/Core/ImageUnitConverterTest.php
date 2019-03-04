@@ -6,7 +6,7 @@ use PHPPdf\Core\ImageUnitConverter;
 use PHPPdf\PHPUnit\Framework\TestCase;
 
 class ImageUnitConverterTest extends TestCase
-{    
+{
     /**
      * @test
      * @dataProvider unitProvider

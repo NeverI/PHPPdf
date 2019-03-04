@@ -35,22 +35,18 @@ class Font extends AbstractFont
 
         $font = $this->imagine->font($this->fontResources[$this->currentStyle], $fontSize, $color);
         
-        try
-        {
+        try {
             $box = $font->box($text);
             
             return $box->getWidth();
-        }
-        catch(\InvalidArgumentException $e)
-        {
+        } catch (\InvalidArgumentException $e) {
             return 0;
         }
     }
     
     private function createColor($color)
     {
-        if(!$color instanceof ImagineColor)
-        {
+        if (!$color instanceof ImagineColor) {
             $color = new ImagineColor($color);
         }
 

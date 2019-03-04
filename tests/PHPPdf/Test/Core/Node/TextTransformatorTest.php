@@ -15,7 +15,7 @@ class TextTransformatorTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     /**
      * @test
-     */    
+     */
     public function replaceReplacements()
     {
         $this->transformator->setReplacements(array('a' => 'b'));

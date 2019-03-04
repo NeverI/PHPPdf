@@ -10,7 +10,7 @@ namespace PHPPdf\InputStream;
 
 /**
  * Input stream interface
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface InputStream

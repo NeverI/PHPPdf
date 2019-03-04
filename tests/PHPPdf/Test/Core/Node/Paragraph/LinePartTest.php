@@ -35,24 +35,23 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
         $linePartWidthGross = self::WIDTH +  ($this->getWordsCount() - 1)*$wordSpacing;
 
-	    $expectedXCoord = $startPoint->getX() + self::X_TRANSLATION;
-	    $expectedYCoord = $startPoint->getY() - $fontSize - (self::LINE_HEIGHT - $lineHeightOfText);
-	    
-	    $expectedWordSpacing = $wordSpacing !== null ? $wordSpacing : 0;
+        $expectedXCoord = $startPoint->getX() + self::X_TRANSLATION;
+        $expectedYCoord = $startPoint->getY() - $fontSize - (self::LINE_HEIGHT - $lineHeightOfText);
+        
+        $expectedWordSpacing = $wordSpacing !== null ? $wordSpacing : 0;
 
         $gc = $this->getMock('PHPPdf\Core\Engine\GraphicsContext');
 
         $this->expectDrawText($gc, Point::getInstance($expectedXCoord, $expectedYCoord), $fontStub, $fontSize, $expectedWordSpacing);
            
-        if($expectedLineDecorationYCoord === false)
-        {
+        if ($expectedLineDecorationYCoord === false) {
             $gc->expects($this->never())
                ->method('drawLine');
-        }
-        else
-        {
+        } else {
             $expectedYCoord = $expectedYCoord + $expectedLineDecorationYCoord;
-            $this->expectDrawLine($gc, self::COLOR,
+            $this->expectDrawLine(
+                $gc,
+                self::COLOR,
                 Point::getInstance($expectedXCoord, $expectedYCoord),
                 Point::getInstance($expectedXCoord + $linePartWidthGross, $expectedYCoord)
             );
@@ -75,8 +74,7 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $tasks = new DrawingTaskHeap();
         $linePart->collectOrderedDrawingTasks($documentStub, $tasks);
         
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $task->invoke();
         }
     }
@@ -103,7 +101,6 @@ class LinePartTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private function expectDrawText($gc, Point $startPoint, $font, $fontSize, $wordSpacing)
     {
-
         $gc->expects($this->once())
             ->method('drawText')
             ->with(self::WORDS, $startPoint->getX(), $startPoint->getY(), self::ENCODING, $wordSpacing);

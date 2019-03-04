@@ -10,16 +10,16 @@ namespace PHPPdf\Core\Node;
 
 use PHPPdf\Core\DrawingTaskHeap;
 use PHPPdf\Core\Node\BasicList\EnumerationStrategyFactory;
-use PHPPdf\Core\Node\BasicList\ImageEnumerationStrategy,
-    PHPPdf\Core\Node\BasicList\EnumerationStrategy,
-    PHPPdf\Core\Node\BasicList\OrderedEnumerationStrategy,
-    PHPPdf\Core\Node\BasicList\UnorderedEnumerationStrategy,
-    PHPPdf\Core\Document,
-    PHPPdf\Core\DrawingTask;
+use PHPPdf\Core\Node\BasicList\ImageEnumerationStrategy;
+use PHPPdf\Core\Node\BasicList\EnumerationStrategy;
+use PHPPdf\Core\Node\BasicList\OrderedEnumerationStrategy;
+use PHPPdf\Core\Node\BasicList\UnorderedEnumerationStrategy;
+use PHPPdf\Core\Document;
+use PHPPdf\Core\DrawingTask;
 
 /**
  * Class of the list element
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 class BasicList extends Container
@@ -75,17 +75,16 @@ class BasicList extends Container
     
     /**
      * Sets list type
-     * 
+     *
      * Implementation of this method also clears enumeration strategy property
-     * 
+     *
      * @param string List type
      */
     public function setType($type)
     {
         $const = sprintf('%s::TYPE_%s', __CLASS__, strtoupper($type));
         
-        if(defined($const))
-        {
+        if (defined($const)) {
             $type = constant($const);
         }
         
@@ -100,7 +99,7 @@ class BasicList extends Container
     }
     
     public function setImage($image)
-    {        
+    {
         $this->setAttributeDirectly('image', $image);
     }
     
@@ -108,8 +107,7 @@ class BasicList extends Container
     {
         $image = $this->getAttribute('image');
 
-        if(is_string($image))
-        {
+        if (is_string($image)) {
             $image = $document->createImage($image);
             $this->setAttribute('image', $image);
         }
@@ -124,21 +122,17 @@ class BasicList extends Container
     {
         parent::doDraw($document, $tasks);
         
-        $tasks->insert(new DrawingTask(function(Node $node, Document $document) {
+        $tasks->insert(new DrawingTask(function (Node $node, Document $document) {
             $gc = $node->getGraphicsContext();
 
             $enumerationStrategy = $node->getEnumerationStrategy();
             $enumerationStrategy->setIndex(0);
             
-            foreach($node->getChildren() as $i => $child)
-            {
-                if($node->isOmitEnumerationOfFirstElement())
-                {
+            foreach ($node->getChildren() as $i => $child) {
+                if ($node->isOmitEnumerationOfFirstElement()) {
                     $node->setOmitEnumerationOfFirstElement(false);
                     $enumerationStrategy->incrementIndex();
-                }
-                else
-                {
+                } else {
                     $enumerationStrategy->drawEnumeration($document, $node, $gc, $i);
                 }
             }
@@ -152,8 +146,7 @@ class BasicList extends Container
      */
     public function getEnumerationStrategy()
     {
-        if($this->enumerationStrategy === null)
-        {
+        if ($this->enumerationStrategy === null) {
             $this->assignEnumerationStrategyFromFactory();
         }
         
@@ -192,8 +185,7 @@ class BasicList extends Container
         
         $currentNumberOfChildren = $this->getNumberOfChildren() + ($node ? $node->getNumberOfChildren() : 0);
         
-        if($node && $currentNumberOfChildren > $numberOfChildren)
-        {
+        if ($node && $currentNumberOfChildren > $numberOfChildren) {
             $node->setOmitEnumerationOfFirstElement(true);
         }
         

@@ -2,8 +2,8 @@
 
 namespace PHPPdf\Test\Core\Parser;
 
-use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory,
-    PHPPdf\Core\Parser\ComplexAttributeFactoryParser;
+use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
+use PHPPdf\Core\Parser\ComplexAttributeFactoryParser;
 
 class ComplexAttributeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {

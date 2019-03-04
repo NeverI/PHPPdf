@@ -29,8 +29,8 @@ class MarkdownDocumentParser implements DocumentParser, FacadeAware
     private $facade;
     
     public function __construct(DocumentParser $documentParser, Parser $markdownParser = null)
-    {        
-        $this->documentParser = $documentParser;        
+    {
+        $this->documentParser = $documentParser;
         $this->markdownParser = $markdownParser ? : new MarkdownParser();
     }
     
@@ -64,8 +64,7 @@ class MarkdownDocumentParser implements DocumentParser, FacadeAware
     
     private function getStylesheetConstraint()
     {
-        if($this->facade)
-        {
+        if ($this->facade) {
             $markdownStylesheet = DataSource::fromFile($this->stylesheetFilepath ? : __DIR__.'/../../Resources/markdown/stylesheet.xml');
 
             return $this->facade->retrieveStylesheetConstraint($markdownStylesheet);

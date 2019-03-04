@@ -72,8 +72,7 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     public function pageNumeration()
     {
-        for($i=0; $i<2; $i++)
-        {
+        for ($i=0; $i<2; $i++) {
             $this->page->createNextPage();
         }
 
@@ -81,8 +80,7 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->assertEquals(2, count($pages));
 
         $i=1;
-        foreach($pages as $page)
-        {
+        foreach ($pages as $page) {
             $this->assertEquals($i, $page->getContext()->getPageNumber());
             $i++;
         }
@@ -93,7 +91,7 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
      * @dataProvider methodsProvider
      */
     public function delegateMethodInvocationsToPrototype($methodName, $arg1, $arg2)
-    {        
+    {
         $prototype = $this->getMockBuilder('PHPPdf\Core\Node\Page')
                           ->setMethods(array($methodName))
                           ->getMock();
@@ -136,7 +134,8 @@ class DynamicPageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     public function getUnorderedTasksFromPages()
     {
         $expectedTasks = new DrawingTaskHeap();
-        $expectedTasks->insert(new DrawingTask(function(){}));
+        $expectedTasks->insert(new DrawingTask(function () {
+        }));
         
         $page = $this->getMockBuilder('PHPPdf\Core\Node\Page')
                      ->setMethods(array('copy', 'collectUnorderedDrawingTasks'))

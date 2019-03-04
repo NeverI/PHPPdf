@@ -32,10 +32,10 @@ class BookmarkTest extends \PHPPdf\PHPUnit\Framework\TestCase
            ->method('addBookmark')
            ->with($bookmark->getUniqueId(), $name, $top);
            
-        $bookmark->attach($gc, $node);  
+        $bookmark->attach($gc, $node);
         
         //one bookmark may by attached only once
-        $bookmark->attach($gc, $node);        
+        $bookmark->attach($gc, $node);
     }
     
     private function getNodeStub($x, $y, $width, $height)
@@ -69,7 +69,7 @@ class BookmarkTest extends \PHPPdf\PHPUnit\Framework\TestCase
            ->method('addBookmark')
            ->with($bookmark->getUniqueId(), $this->anything(), $this->anything(), $parentBookmark->getUniqueId());
            
-        $bookmark->attach($gc, $node);  
+        $bookmark->attach($gc, $node);
     }
     
     /**

@@ -8,8 +8,8 @@
 
 namespace PHPPdf\Core\Formatter;
 
-use PHPPdf\Core\Node\Node,
-    PHPPdf\Core\Document;
+use PHPPdf\Core\Node\Node;
+use PHPPdf\Core\Document;
 
 /**
  * @author Piotr Śliwa <peter.pl7@gmail.com>
@@ -30,22 +30,18 @@ class TableColumnFormatter extends BaseFormatter
         $tableWidth = $node->getWidth();
         $enlargeColumnWidth = $numberOfColumns ? ($tableWidth - $totalColumnsWidth)/count($columnsWidths) : 0;
 
-        foreach($columnsWidths as $index => $width)
-        {
+        foreach ($columnsWidths as $index => $width) {
             $columnsWidths[$index] += $enlargeColumnWidth;
         }
 
-        foreach($node->getChildren() as $row)
-        {
-            foreach($row->getChildren() as /* @var $cell PHPPdf\Core\Node\Table\Cell */ $cell)
-            {
+        foreach ($node->getChildren() as $row) {
+            foreach ($row->getChildren() as /* @var $cell PHPPdf\Core\Node\Table\Cell */ $cell) {
                 $column = $cell->getNumberOfColumn();
                 $colspan = $cell->getColspan();
 
                 $newWidth = 0;
 
-                for($i=0; $i<$colspan; $i++)
-                {
+                for ($i=0; $i<$colspan; $i++) {
                     $newWidth += $columnsWidths[$column+$i];
                 }
 

@@ -30,38 +30,34 @@ class NodeFactory implements \Serializable
         $this->prototypes[$name] = $node;
         $this->invocationsMethodsOnCreate[$name] = $invocationsMethodsOnCreate;
         
-        foreach($aliases as $alias)
-        {
+        foreach ($aliases as $alias) {
             $this->aliases[$alias] = $name;
         }
     }
     
     public function addAliases($name, array $aliases)
     {
-        if(!isset($this->prototypes[$name]))
-        {
+        if (!isset($this->prototypes[$name])) {
             UnregisteredNodeException::nodeNotRegisteredException($name);
         }
         
-        foreach($aliases as $alias)
-        {
+        foreach ($aliases as $alias) {
             $this->aliases[$alias] = $name;
         }
     }
     
     public function addPrototypes(array $prototypes)
     {
-        foreach($prototypes as $name => $node)
-        {
+        foreach ($prototypes as $name => $node) {
             $this->addPrototype($name, $node);
         }
     }
     
     /**
      * Adds method and argument tag to invoke after creating
-     * 
+     *
      * @see create()
-     * 
+     *
      * @param string $name Name of prototype
      * @param string $invocationMethodName Name of setter method
      * @param string $invocationMethodArgId Argument id, {@see addInvokeArg()}
@@ -73,7 +69,7 @@ class NodeFactory implements \Serializable
     
     /**
      * Adds argument witch can be used as argument of setter method on factory products
-     * 
+     *
      * @param string $tag Tag of argument
      * @param mixed $value Value of argument
      */
@@ -96,7 +92,7 @@ class NodeFactory implements \Serializable
      * Create copy of node stored under passed name
      *
      * @param string Name/key of prototype
-     * 
+     *
      * @return Node Deep copy of node stored under passed name
      * @throws PHPPdf\Exception\UnregisteredNodeException If prototype with passed name dosn't exist
      */
@@ -105,12 +101,10 @@ class NodeFactory implements \Serializable
         $name = $this->resolveName($name);
 
         $prototype = $this->getPrototype($name);
-        $product = $prototype->copy();        
+        $product = $prototype->copy();
         
-        foreach($this->invocationsMethodsOnCreate[$name] as $methodName => $argTag)
-        {
-            if(isset($this->invokeArgs[$argTag]))
-            {
+        foreach ($this->invocationsMethodsOnCreate[$name] as $methodName => $argTag) {
+            if (isset($this->invokeArgs[$argTag])) {
                 $arg = $this->invokeArgs[$argTag];
                 $product->$methodName($arg);
             }
@@ -127,8 +121,7 @@ class NodeFactory implements \Serializable
     {
         $name = (string) $name;
 
-        if(!$this->hasPrototype($name))
-        {
+        if (!$this->hasPrototype($name)) {
             UnregisteredNodeException::nodeNotRegisteredException($name);
         }
         
@@ -139,13 +132,11 @@ class NodeFactory implements \Serializable
     
     private function resolveName($name)
     {
-        if(isset($this->prototypes[$name]))
-        {
+        if (isset($this->prototypes[$name])) {
             return $name;
         }
         
-        if(!isset($this->aliases[$name]))
-        {
+        if (!isset($this->aliases[$name])) {
             UnregisteredNodeException::nodeNotRegisteredException($name);
         }
         
@@ -177,14 +168,12 @@ class NodeFactory implements \Serializable
         $invocationsMethodsOnCreate = $data['invocationsMethodsOnCreate'];
         $invokeArgs = $data['invokeArgs'];
 
-        foreach($prototypes as $name => $prototype)
-        {
+        foreach ($prototypes as $name => $prototype) {
             $invocationsMethods = isset($invocationsMethodsOnCreate[$name]) ? $invocationsMethodsOnCreate[$name] : array();
             $this->addPrototype($name, $prototype, $invocationsMethods);
-        }   
+        }
 
-        foreach($invokeArgs as $tag => $value)
-        {
+        foreach ($invokeArgs as $tag => $value) {
             $this->addInvokeArg($tag, $value);
         }
         

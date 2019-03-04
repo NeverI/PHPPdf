@@ -15,7 +15,7 @@ use PHPPdf\Core\ComplexAttribute\ComplexAttributeFactory;
 
 /**
  * Document praser interface
- * 
+ *
  * @author Piotr Śliwa <peter.pl7@gmail.com>
  */
 interface DocumentParser extends Parser
