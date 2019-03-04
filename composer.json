@@ -30,8 +30,8 @@
     "sort-packages": true
   },
   "autoload": {
-    "psr-0": {
-      "PHPPdf": "lib/"
+    "psr-4": {
+      "PHPPdf\\": "lib/PHPPdf/"
     }
   }
 }
