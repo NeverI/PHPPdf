@@ -13,7 +13,7 @@ class StandardPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $formatter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formatter = new StandardPositionFormatter();
     }

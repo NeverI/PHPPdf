@@ -19,7 +19,7 @@ class ImageTest extends \PHPPdf\PHPUnit\Framework\TestCase
     
     private $image;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->image = new Image(array(
             'width' => 100,

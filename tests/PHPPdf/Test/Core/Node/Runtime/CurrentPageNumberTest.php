@@ -17,7 +17,7 @@ class CurrentPageNumberTest extends \PHPPdf\PHPUnit\Framework\TestCase
      */
     private $node;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->node = new CurrentPageNumber();
     }

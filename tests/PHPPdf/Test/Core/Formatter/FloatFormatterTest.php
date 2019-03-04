@@ -17,7 +17,7 @@ class FloatFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $formatter = null;
     private $document;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formatter = new FloatFormatter();
         $this->document = $this->createDocumentStub();

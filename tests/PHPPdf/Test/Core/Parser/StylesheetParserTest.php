@@ -9,9 +9,12 @@ use PHPPdf\Core\Parser\StylesheetConstraint;
 
 class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
+    /**
+     * @var StylesheetParser
+     */
     private $parser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new StylesheetParser();
     }
@@ -50,7 +53,6 @@ class StylesheetParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 XML;
         $constraintContainer = $this->parser->parse($xml);
 
-        $this->assertEquals(1, count($constraintContainer->count()));
         $this->assertTrue($this->hasConstraint($constraintContainer, 'tag'));
         $constraint = $this->getConstraint($constraintContainer, 'tag');
         $this->assertEquals(array('someName' => 'someValue'), $constraint->getAll());

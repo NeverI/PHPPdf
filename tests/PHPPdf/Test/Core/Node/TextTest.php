@@ -20,7 +20,7 @@ class TextTest extends \PHPPdf\PHPUnit\Framework\TestCase
     const PAGE_WIDTH = 700;
     const PAGE_HEIGHT = 700;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->text = new Text('some text');
         $this->page = new Page(array(

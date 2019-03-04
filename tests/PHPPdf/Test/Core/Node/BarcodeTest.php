@@ -15,7 +15,7 @@ class BarcodeTest extends TestCase
     private $gc;
     private $page;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->barcode = new Barcode();
         $this->objectMother = new NodeObjectMother($this);

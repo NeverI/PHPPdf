@@ -12,7 +12,7 @@ class DocumentTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $document;
     private $engine;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->engine = $this->getMock('PHPPdf\Core\Engine\Engine');
         $this->document = new Document($this->engine);

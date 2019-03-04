@@ -9,7 +9,7 @@ class RowTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $row = null;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->row = new Row();
     }

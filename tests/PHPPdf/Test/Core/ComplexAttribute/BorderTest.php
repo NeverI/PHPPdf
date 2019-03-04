@@ -23,7 +23,7 @@ class BorderTest extends ComplexAttributeTest
         $this->objectMother = new NodeObjectMother($this);
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->border = new Border();
         $this->document = new Document($this->getMock('PHPPdf\Core\Engine\Engine'));

@@ -28,7 +28,7 @@ class Background extends ComplexAttribute
     const REPEAT_X = 1;
     const REPEAT_Y = 2;
     const REPEAT_ALL = 3;
-    
+
     const POSITION_LEFT = 'left';
     const POSITION_RIGHT = 'right';
     const POSITION_TOP = 'top';
@@ -53,7 +53,7 @@ class Background extends ComplexAttribute
         $this->setImageDimension($imageWidth, $imageHeight);
         $this->setPosition($positionX, $positionY);
     }
-    
+
     private function setPosition($positionX, $positionY)
     {
         $allowedXPositions = array(self::POSITION_LEFT, self::POSITION_CENTER, self::POSITION_RIGHT);
@@ -69,15 +69,15 @@ class Background extends ComplexAttribute
         $this->positionX = $positionX;
         $this->positionY = $positionY;
     }
-    
+
     private function isNumeric($value)
     {
         if (is_numeric($value)) {
             return true;
         }
-        
+
         $numericValue = (string) (double) $value;
-        
+
         return $numericValue === substr($value, 0, strlen($numericValue));
     }
 
@@ -86,21 +86,21 @@ class Background extends ComplexAttribute
         if (!is_numeric($repeat)) {
             $repeat = $this->getConstantValue('REPEAT', $repeat);
         }
-        
+
         $this->repeat = $repeat;
     }
-    
+
     public function getRepeat()
     {
         return $this->repeat;
     }
-    
+
     private function setImageDimension($width, $height)
     {
         if ($this->image === null) {
             return;
         }
-        
+
         $this->imageWidth = $width;
         $this->imageHeight = $height;
     }
@@ -118,7 +118,7 @@ class Background extends ComplexAttribute
             $this->drawCircleBackground($graphicsContext, $node, $document);
         }
     }
-    
+
     private function drawRectangleBackground(GraphicsContext $graphicsContext, Node $node, Document $document)
     {
         if ($this->getColor() !== null) {
@@ -126,7 +126,7 @@ class Background extends ComplexAttribute
             if ($this->getRadius() !== null) {
                 $firstPoint = $boundary->getPoint(3);
                 $diagonalPoint = $boundary->getPoint(1);
-                
+
                 $this->drawRoundedBoundary($graphicsContext, $firstPoint->getX(), $firstPoint->getY(), $diagonalPoint->getX(), $diagonalPoint->getY(), GraphicsContext::SHAPE_DRAW_FILL_AND_STROKE);
             } else {
                 $this->drawBoundary($graphicsContext, $boundary, GraphicsContext::SHAPE_DRAW_FILL);
@@ -145,7 +145,7 @@ class Background extends ComplexAttribute
 
             $graphicsContext->saveGS();
             $graphicsContext->clipRectangle($x, $y, $x+$this->getWidth($node), $y-$this->getHeight($node));
- 
+
             $repeatX = $this->repeat & self::REPEAT_X;
             $repeatY = $this->repeat & self::REPEAT_Y;
 
@@ -161,11 +161,11 @@ class Background extends ComplexAttribute
 
                 $currentX += $width;
             } while ($repeatX && $currentX < $endX);
-            
+
             $graphicsContext->restoreGS();
         }
     }
-    
+
     private function getXCoord(Node $node, $width, $x, UnitConverter $converter)
     {
         switch ($this->positionX) {
@@ -178,10 +178,15 @@ class Background extends ComplexAttribute
             case self::POSITION_LEFT:
                 return $x;
             default:
-                return $x + $converter->convertUnit($converter->convertPercentageValue($this->positionX, $node->getWidth()));
+                return (float) $x + $converter->convertUnit(
+                        $converter->convertPercentageValue(
+                            $this->positionX,
+                            $node->getWidth()
+                        )
+                    );
         }
     }
-    
+
     private function getYCoord(Node $node, $height, $y, UnitConverter $converter)
     {
         switch ($this->positionY) {
@@ -197,7 +202,7 @@ class Background extends ComplexAttribute
                 return $y - $converter->convertUnit($converter->convertPercentageValue($this->positionY, $node->getHeight()));
         }
     }
-    
+
     private function getImageDimension(UnitConverter $converter, $image, Node $node)
     {
         $width = $converter->convertUnit($this->imageWidth);
@@ -206,16 +211,16 @@ class Background extends ComplexAttribute
         if (!$width && !$height) {
             return array($image->getOriginalWidth(), $image->getOriginalHeight());
         }
-        
+
         list($width, $height) = $this->convertPercentageDimension($converter, $node, $width, $height);
 
         $ratio = $image->getOriginalWidth() / $image->getOriginalHeight();
-            
+
         list($width, $height) = Util::calculateDependantSizes($width, $height, $ratio);
-        
+
         return array($width, $height);
     }
-    
+
     private function convertPercentageDimension(UnitConverter $converter, Node $node, $width, $height)
     {
         $width = $converter->convertPercentageValue($width, $this->getWidth($node));
@@ -229,32 +234,32 @@ class Background extends ComplexAttribute
         if ($this->useRealDimension) {
             return $node->getRealFirstPoint();
         }
-        
+
         return $node->getFirstPoint();
     }
-    
+
     private function getDiagonalPoint(Node $node)
     {
         if ($this->useRealDimension) {
             return $node->getRealDiagonalPoint();
         }
-        
+
         return $node->getDiagonalPoint();
     }
-    
+
     private function getBoundary(Node $node)
     {
         $boundary = $this->useRealDimension ? $node->getRealBoundary() : $node->getBoundary();
-        
+
         return $this->getTranslationAwareBoundary($node, $boundary);
     }
-    
+
     private function getWidth(Node $node)
     {
         if ($this->useRealDimension) {
             return $node->getRealWidth();
         }
-        
+
         return $node->getWidth();
     }
 
@@ -263,20 +268,20 @@ class Background extends ComplexAttribute
         if ($this->useRealDimension) {
             return $node->getRealHeight();
         }
-        
+
         return $node->getHeight();
     }
-    
+
     private function drawCircleBackground(GraphicsContext $gc, Node $node, Document $document)
     {
         $point = $node->getMiddlePoint();
-        
+
         $translation = $node->getPositionTranslation();
-        
+
         if (!$translation->isZero()) {
             $point = $point->translate($translation->getX(), $translation->getY());
         }
-        
+
         $this->drawCircle($gc, $node->getAttribute('radius'), $point->getX(), $point->getY(), GraphicsContext::SHAPE_DRAW_FILL);
     }
 }

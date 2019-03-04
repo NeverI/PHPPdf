@@ -9,7 +9,7 @@ class ComplexAttributeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCa
 {
     private $parser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new ComplexAttributeFactoryParser();
     }

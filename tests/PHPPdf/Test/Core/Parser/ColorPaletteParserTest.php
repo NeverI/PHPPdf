@@ -10,7 +10,7 @@ class ColorPaletteParserTest extends TestCase
 {
     private $parser;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new ColorPaletteParser();
     }

@@ -9,7 +9,7 @@ class PieChartTest extends TestCase
 {
     private $chart;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->chart = new PieChart();
     }

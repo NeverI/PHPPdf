@@ -10,7 +10,7 @@ class NodeFactoryParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $parser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new NodeFactoryParser();
     }

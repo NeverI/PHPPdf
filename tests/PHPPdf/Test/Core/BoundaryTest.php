@@ -9,7 +9,7 @@ class BoundaryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $boundary;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->boundary = new Boundary();
     }

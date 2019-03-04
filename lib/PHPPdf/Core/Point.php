@@ -21,7 +21,7 @@ use PHPPdf\Exception\OutOfBoundsException;
 final class Point implements \ArrayAccess
 {
     private static $zero;
-    
+
     private $x;
     private $y;
 
@@ -42,13 +42,13 @@ final class Point implements \ArrayAccess
             if (self::$zero === null) {
                 self::$zero = new self(0, 0);
             }
-            
+
             return self::$zero;
         }
 
         return new self($x, $y);
     }
-    
+
     public function isZero()
     {
         return $this === self::$zero;
@@ -63,11 +63,11 @@ final class Point implements \ArrayAccess
     {
         return $this->y;
     }
-    
+
     /**
      * Compares y coord in given precision
      *
-     * @param Point $point Point to compare
+     * @param Point $point       Point to compare
      * @param integer $precision Precision of comparision
      *
      * @return integer Positive number if y coord of owner is greater, 0 if values are equal or negative integer if owner is less
@@ -76,34 +76,34 @@ final class Point implements \ArrayAccess
     {
         return $this->compare($this->y, $point->y, $precision);
     }
-    
+
     private function compare($firstNumber, $secondNumber, $precision)
     {
         if ($firstNumber === $secondNumber) {
             return 0;
         }
-        
+
         $firstNumberAsInteger = $this->convertToInteger($firstNumber, $precision);
         $secondNumberAsInteger = $this->convertToInteger($secondNumber, $precision);
-        
+
         if ($firstNumberAsInteger > $secondNumberAsInteger) {
             return 1;
         } elseif ($firstNumberAsInteger === $secondNumberAsInteger) {
             return 0;
         }
-        
+
         return -1;
     }
-    
+
     private function convertToInteger($double, $precision)
     {
-        return (int) ($double * $precision);
+        return (int) ((float) $double * (float) $precision);
     }
-    
+
     /**
      * Compares x coord in given precision
      *
-     * @param Point $point Point to compare
+     * @param Point $point       Point to compare
      * @param integer $precision Precision of comparision
      *
      * @return integer Positive number if x coord of owner is greater, 0 if values are equal or negative integer if owner is less
@@ -120,12 +120,13 @@ final class Point implements \ArrayAccess
      */
     public function toArray()
     {
-        return array($this->x, $this->y);
+        return [$this->x, $this->y];
     }
 
     /**
      * @param integer $x First coordinate of vector
      * @param integer $y Second coordinate of vector
+     *
      * @return PHPPdf\Core\Point Translated point by given vector
      */
     public function translate($x, $y)

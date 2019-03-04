@@ -22,7 +22,7 @@ class Issue3Test extends TestCase
     private $document;
     private $objectMother;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formatter = new FloatFormatter();
         $this->document = $this->createDocumentStub();

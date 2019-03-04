@@ -9,7 +9,7 @@ class XmlParserTest extends TestCase
 {
     private $parser;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new XmlParser();
     }

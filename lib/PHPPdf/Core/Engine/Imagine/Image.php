@@ -11,7 +11,6 @@ namespace PHPPdf\Core\Engine\Imagine;
 
 use Imagine\Image\ImageInterface;
 use PHPPdf\Exception\InvalidResourceException;
-use Imagine\Exception\RuntimeException;
 use Imagine\Image\ImagineInterface;
 use PHPPdf\Core\Engine\Image as BaseImage;
 
@@ -22,10 +21,9 @@ use PHPPdf\Core\Engine\Image as BaseImage;
  */
 class Image implements BaseImage
 {
-    private $imagePath;
     private $imagine;
     private $image;
-    
+
     public function __construct($imagePath, ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
@@ -35,7 +33,7 @@ class Image implements BaseImage
             $this->image = $this->createImage($imagePath);
         }
     }
-    
+
     private function createImage($path)
     {
         try {
@@ -44,12 +42,12 @@ class Image implements BaseImage
             throw InvalidResourceException::invalidImageException($path, $e);
         }
     }
-    
+
     public function getOriginalWidth()
     {
         return $this->getWrappedImage()->getSize()->getWidth();
     }
-    
+
     /**
      * @internal
      */
@@ -57,7 +55,7 @@ class Image implements BaseImage
     {
         return $this->image;
     }
-    
+
     public function getOriginalHeight()
     {
         return $this->getWrappedImage()->getSize()->getHeight();

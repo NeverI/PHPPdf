@@ -10,7 +10,7 @@ class StylesheetConstraintTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $constraint;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->constraint = new StylesheetConstraint();
     }

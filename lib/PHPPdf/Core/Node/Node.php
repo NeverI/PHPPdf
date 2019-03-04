@@ -78,8 +78,11 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     private $ancestorWithRotation = null;
     private $ancestorWithFontSize = null;
-    
-    private $unitConverter = null;
+
+    /**
+     * @var null|UnitConverter
+     */
+    private $unitConverter;
     
     private $closestAncestorWithPosition = null;
     private $positionTranslation = null;
@@ -223,8 +226,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $this->unitConverter = $unitConverter;
     }
-    
-    public function getUnitConverter()
+
+    public function getUnitConverter(): ?UnitConverter
     {
         return $this->unitConverter;
     }
@@ -875,7 +878,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     
     protected function convertUnit($value)
     {
-        if ($this->unitConverter) {
+        if ($this->unitConverter !== null) {
             return $this->unitConverter->convertUnit($value);
         }
         
@@ -1507,7 +1510,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
         
         $potentiallyRelativeValue = $this->getAttribute($name);
 
-        $absoluteValue = $this->unitConverter ? $this->unitConverter->convertPercentageValue($potentiallyRelativeValue, $parentValue) : $potentiallyRelativeValue;
+        $absoluteValue = $this->unitConverter !== null
+            ? $this->unitConverter->convertPercentageValue($potentiallyRelativeValue, $parentValue)
+            : $potentiallyRelativeValue;
 
         if ($absoluteValue !== $potentiallyRelativeValue) {
             $this->setAttribute($name, $absoluteValue);

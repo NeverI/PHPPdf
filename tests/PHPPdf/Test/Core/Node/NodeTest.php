@@ -27,7 +27,7 @@ class NodeTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->objectMother = new NodeObjectMother($this);
     }
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->node = new StubNode();
     }

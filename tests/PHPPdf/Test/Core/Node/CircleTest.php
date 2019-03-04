@@ -8,7 +8,7 @@ class CircleTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $circle;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->circle = new Circle();
     }

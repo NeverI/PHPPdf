@@ -16,7 +16,7 @@ class ContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $node;
     private $objectMother;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->node = new Container();
         $this->objectMother = new NodeObjectMother($this);

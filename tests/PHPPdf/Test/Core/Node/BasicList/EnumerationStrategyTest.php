@@ -10,7 +10,7 @@ abstract class EnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCas
 {
     protected $strategy;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->strategy = $this->createStrategy();
     }

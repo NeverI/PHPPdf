@@ -20,7 +20,7 @@ class TableTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->objectMother = new TableObjectMother($this);
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->table = new Table(array(), new PdfUnitConverter());
     }

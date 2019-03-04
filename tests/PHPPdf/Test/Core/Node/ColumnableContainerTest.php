@@ -14,7 +14,7 @@ class ColumnableContainerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 
     private $column;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->column = new ColumnableContainer();
 

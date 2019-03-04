@@ -10,7 +10,7 @@ class ManagerTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $manager;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->manager = new Manager();
     }

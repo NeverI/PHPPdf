@@ -15,7 +15,7 @@ class ColumnBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $column;
     private $formatter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->page = new Page();
         $this->column = new ColumnableContainer();

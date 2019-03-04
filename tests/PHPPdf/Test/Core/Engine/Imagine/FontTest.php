@@ -11,7 +11,7 @@ class FontTest extends TestCase
     private $imagine;
     private $fontResources;
     
-    public function setUp()
+    protected function setUp(): void
     {
         if (!interface_exists('Imagine\Image\ImagineInterface', true)) {
             $this->fail('Imagine library is missing. You have to download dependencies, for example by using "vendors.php" file.');

@@ -16,7 +16,7 @@ class MarkdownDocumentParserTest extends TestCase
     private $documentParser;
     private $markdownDocumentParser;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->markdownParser = $this->getMock('PHPPdf\Parser\Parser');
         $this->documentParser = $this->getMock('PHPPdf\Core\Parser\DocumentParser');

@@ -54,28 +54,4 @@ class PdfUnitConverterTest extends TestCase
             array('22%', '22%', null, 123),
         );
     }
-    
-    /**
-     * @test
-     * @dataProvider dpiProvider
-     */
-    public function dpiMustBePositiveInteger($dpi, $expectedException)
-    {
-        if ($expectedException) {
-            $this->setExpectedException('InvalidArgumentException');
-        }
-        
-        $converter = new PdfUnitConverter($dpi);
-    }
-    
-    public function dpiProvider()
-    {
-        return array(
-            array(10, false),
-            array(0, true),
-            array(-5, true),
-            array(2.4, true),
-            array(2, false),
-        );
-    }
 }

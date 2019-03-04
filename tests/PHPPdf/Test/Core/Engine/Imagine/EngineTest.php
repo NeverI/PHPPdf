@@ -13,7 +13,7 @@ class EngineTest extends TestCase
     private $engine;
     private $imagine;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->imagine = $this->getMock('Imagine\Image\ImagineInterface');
         $this->engine = new Engine($this->imagine, 'png');

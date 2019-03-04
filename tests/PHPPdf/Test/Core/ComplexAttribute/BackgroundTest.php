@@ -22,7 +22,7 @@ class BackgroundTest extends ComplexAttributeTest
         $this->objectMother = new NodeObjectMother($this);
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('convertUnit'))
@@ -357,18 +357,18 @@ class BackgroundTest extends ComplexAttributeTest
         $document->expects($this->at(1))
                  ->method('convertUnit')
                  ->with($percentWidth)
-                 ->will($this->returnValue($percentWidth));
+                 ->will($this->returnValue((float) $percentWidth));
         $document->expects($this->at(2))
                  ->method('convertUnit')
                  ->with($percentHeight)
-                 ->will($this->returnValue($percentHeight));
+                 ->will($this->returnValue((float) $percentHeight));
         $document->expects($this->at(3))
                  ->method('convertPercentageValue')
-                 ->with($percentWidth, $nodeWidth)
+                 ->with((float) $percentWidth, $nodeWidth)
                  ->will($this->returnValue($expectedWidth));
         $document->expects($this->at(4))
                  ->method('convertPercentageValue')
-                 ->with($percentHeight, $nodeHeight)
+                 ->with((float) $percentHeight, $nodeHeight)
                  ->will($this->returnValue($expectedHeight));
 
         $complexAttribute = new Background(null, $imagePath, Background::REPEAT_NONE, null, false, $percentWidth, $percentHeight);

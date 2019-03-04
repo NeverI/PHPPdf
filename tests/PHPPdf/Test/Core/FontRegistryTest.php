@@ -10,7 +10,7 @@ class FontRegistryTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $registry;
     private $document;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->document = $this->getMockBuilder('PHPPdf\Core\Document')
                                ->setMethods(array('createFont'))

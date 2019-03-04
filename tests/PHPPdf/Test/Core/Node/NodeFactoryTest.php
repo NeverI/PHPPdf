@@ -9,7 +9,7 @@ class NodeFactoryTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $factory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->factory = new NodeFactory();
     }

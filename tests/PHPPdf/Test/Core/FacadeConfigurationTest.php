@@ -8,7 +8,7 @@ class FacadeConfigurationTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $facadeConfiguration;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->facadeConfiguration = FacadeConfiguration::newInstance();
     }

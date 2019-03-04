@@ -13,7 +13,7 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $page;
     private $formatter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->page = new DynamicPage();
         $this->formatter = new PageBreakingFormatter();
@@ -181,56 +181,5 @@ class PageBreakingFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->page->add($container);
 
         $this->formatter->format($this->page, $this->createDocumentStub());
-    }
-
-    /**
-     * @test
-     *
-     * @todo przerobić ten test, aby dotyczył nodeu który się podzielił na dwie strony, tylko że pomiędzy pierwszą częścią nodeu a końcem strony jest "luka" (np. tabela)
-     */
-    public function nextSiblingOfNotBreakableNodeMustBeDirectlyAfterThisNodeIfPageBreakOccurs()
-    {
-        $this->markTestIncomplete();
-
-        $diagonalPoint = Point::getInstance(100, 10);
-
-        $prototype = $this->getMock('PHPPdf\Core\Node\Page', array('copy', 'getHeight', 'getDiagonalPoint'));
-        $this->page->setMarginBottom(10);
-        $prototype->expects($this->exactly(1))
-                  ->method('copy')
-                  ->will($this->returnValue($prototype));
-
-        $prototype->expects($this->atLeastOnce())
-                  ->method('getHeight')
-                  ->will($this->returnValue(100));
-
-        $prototype->expects($this->atLeastOnce())
-                  ->method('getDiagonalPoint')
-                  ->will($this->returnValue($diagonalPoint));
-
-        $this->invokeMethod($this->page, 'setPrototypePage', array($prototype));
-
-        $notBrokenContainer = $this->getContainerMock(array(0, 100), array(50, 30), array('breakAt'));
-        $notBrokenContainer->expects($this->never())
-                             ->method('breakAt');
-
-        $this->page->add($notBrokenContainer);
-
-        $brokenContainer = $this->getContainerMock(array(0, 30), array(50, -10), array('breakAt'));
-        $brokenContainer->expects($this->once())
-                          ->method('breakAt')
-                          ->will($this->returnValue(null));
-
-        $this->page->add($brokenContainer);
-
-        $nextSiblingOfBrokenContainer = $this->getContainerMock(array(0, -10), array(50, -20), array('breakAt'));
-        $nextSiblingOfBrokenContainer->expects($this->never())
-                                       ->method('breakAt');
-
-        $this->page->add($nextSiblingOfBrokenContainer);
-
-        $this->page->collectOrderedDrawingTasks($this->createDocumentStub());
-
-        $this->assertEquals($brokenContainer->getDiagonalPoint()->getY(), $nextSiblingOfBrokenContainer->getFirstPoint()->getY());
     }
 }

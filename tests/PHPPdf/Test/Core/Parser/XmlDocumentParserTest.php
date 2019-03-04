@@ -17,7 +17,7 @@ class XmlDocumentParserTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $documentMock;
     private $complexAttributeFactoryMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->documentMock = $this->getMockBuilder('PHPPdf\Core\Document')
                                    ->disableOriginalConstructor()

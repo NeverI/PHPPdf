@@ -11,7 +11,7 @@ class ImageEnumerationStrategyTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $strategy;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->strategy = new ImageEnumerationStrategy();
     }

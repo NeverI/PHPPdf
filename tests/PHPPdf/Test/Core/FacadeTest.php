@@ -14,7 +14,7 @@ class FacadeTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $loaderMock;
     private $documentParser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loaderMock = $this->getMockBuilder('PHPPdf\Core\Configuration\Loader')
                                  ->getMock();

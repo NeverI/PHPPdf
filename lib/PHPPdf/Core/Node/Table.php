@@ -69,17 +69,17 @@ class Table extends Container implements Listener
     {
         $width = $node->getWidth();
         $columnNumber = $node->getNumberOfColumn();
-        $colspan = $node->getAttribute('colspan');
+        $colspan = (int) $node->getAttribute('colspan');
 
         $isWidthRelative = strpos($width, '%') !== false;
 
         $currentWidth = 0;
-        for ($i=0; $i<$colspan; $i++) {
+        for ($i = 0; $i < $colspan; $i++) {
             $realColumnNumber = $columnNumber + $i;
             $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? $this->widthsOfColumns[$realColumnNumber] : 0;
         }
-        
-        $diff = ($width - $currentWidth)/$colspan;
+
+        $diff = ((float) $width - (float) $currentWidth) / $colspan;
         
         if ($isWidthRelative) {
             $diff .= '%';

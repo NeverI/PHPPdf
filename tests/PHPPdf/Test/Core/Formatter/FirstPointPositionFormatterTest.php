@@ -14,7 +14,7 @@ class FirstPointPositionFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $formatter;
     private $objectMother;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formatter = new FirstPointPositionFormatter();
         $this->objectMother = new NodeObjectMother($this);

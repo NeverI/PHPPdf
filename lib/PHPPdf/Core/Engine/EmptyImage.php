@@ -24,14 +24,14 @@ class EmptyImage implements Image
     public static function getInstance()
     {
         static $instance;
-        
+
         if (!$instance) {
             $instance = new self();
         }
-        
+
         return $instance;
     }
-    
+
     public function getOriginalHeight()
     {
         return 0;

@@ -12,7 +12,7 @@ class FacadeBuilderTest extends \PHPPdf\PHPUnit\Framework\TestCase
     private $builder;
     private $configurationLoader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationLoader = $this->getMockBuilder('PHPPdf\Core\Configuration\Loader')
                                           ->getMock();

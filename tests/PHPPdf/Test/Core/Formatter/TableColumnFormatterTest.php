@@ -16,7 +16,7 @@ class TableColumnFormatterTest extends \PHPPdf\PHPUnit\Framework\TestCase
         $this->objectMother = new TableObjectMother($this);
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->formatter = new TableColumnFormatter();
     }

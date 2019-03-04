@@ -10,7 +10,7 @@ class AbstractFontTest extends TestCase
 {
     private $font;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->font = new StubFont(array(
             Font::STYLE_NORMAL => TEST_RESOURCES_DIR.'/font-judson/normal.ttf',

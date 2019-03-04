@@ -10,7 +10,7 @@ class CellTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $cell;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cell = new Cell();
     }

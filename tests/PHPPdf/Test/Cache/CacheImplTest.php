@@ -8,7 +8,7 @@ class CacheImplTest extends \PHPPdf\PHPUnit\Framework\TestCase
 {
     private $engineMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Zend\Cache\StorageFactory', true)) {
             $this->fail('Zend Framework 2 library is missing. You have to download dependencies, for example by using "vendors.php" file.');

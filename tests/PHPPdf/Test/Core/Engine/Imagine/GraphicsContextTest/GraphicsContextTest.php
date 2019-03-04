@@ -4,7 +4,6 @@ namespace PHPPdf\Test\Core\Engine\Imagine\GraphicsContextTest;
 
 use PHPPdf\Core\Engine\Imagine\Font;
 use PHPPdf\Core\Engine\EmptyImage;
-use PHPPdf\Core\Engine\Imagine\Image;
 use Imagine\Image\Color;
 use PHPPdf\Bridge\Imagine\Image\Point;
 use Imagine\Image\Box;
@@ -18,7 +17,7 @@ class GraphicsContextTest extends TestCase
     private $drawer;
     private $gc;
     
-    public function setUp()
+    protected function setUp(): void
     {
         $this->drawer = $this->getMock('Imagine\Draw\DrawerInterface');
         $this->image = $this->getMock('Imagine\Image\ImageInterface');
@@ -365,20 +364,6 @@ class GraphicsContextTest extends TestCase
                    ->with($rectangleImage, new Point($x1, $height - $y1));
        
         $this->gc->restoreGS();
-        $this->gc->commit();
-    }
-    
-    /**
-     * @test
-     */
-    public function ignoreEmptyImage()
-    {
-        $image = EmptyImage::getInstance();
-        
-        $this->imagine->expects($this->never())
-                      ->method('paste');
-                      
-        $this->gc->drawImage($image, 50, 50, 100, 10);
         $this->gc->commit();
     }
 }
