@@ -15,4 +15,5 @@
 /.gitattributes
 /.gitignore
 /.travis.yml
+/phpunit.xml
 /vendors.php
