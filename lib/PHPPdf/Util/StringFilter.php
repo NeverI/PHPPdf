@@ -9,5 +9,5 @@ namespace PHPPdf\Util;
  */
 interface StringFilter
 {
-    public function filter(string $value): string;
+    public function filter($value);
 }

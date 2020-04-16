@@ -20,7 +20,7 @@ final class ResourcePathStringFilter implements StringFilter
         $this->path = $path;
     }
 
-    public function filter(string $value): string
+    public function filter($value)
     {
         return str_replace('%resources%', $this->path, $value);
     }
