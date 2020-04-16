@@ -76,20 +76,16 @@ class Table extends Container implements Listener
         $currentWidth = 0;
         for ($i = 0; $i < $colspan; $i++) {
             $realColumnNumber = $columnNumber + $i;
-            $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? $this->widthsOfColumns[$realColumnNumber] : 0;
+            $currentWidth += isset($this->widthsOfColumns[$realColumnNumber]) ? (float) $this->widthsOfColumns[$realColumnNumber] : 0;
         }
 
         $diff = ((float) $width - (float) $currentWidth) / $colspan;
-        
-        if ($isWidthRelative) {
-            $diff .= '%';
-        }
 
         if ($diff >= 0) {
             for ($i=0; $i<$colspan; $i++) {
                 $realColumnNumber = $columnNumber + $i;
-                
-                $this->widthsOfColumns[$realColumnNumber] = isset($this->widthsOfColumns[$realColumnNumber]) ? ($this->widthsOfColumns[$realColumnNumber] + $diff) : $diff;
+
+                $this->widthsOfColumns[$realColumnNumber] = isset($this->widthsOfColumns[$realColumnNumber]) ? ((float) $this->widthsOfColumns[$realColumnNumber] + $diff) : $diff . ($isWidthRelative ? '%' : '');
             }
         }
     }
@@ -111,10 +107,10 @@ class Table extends Container implements Listener
         if ($broken) {
             $height = 0;
             foreach ($this->getChildren() as $row) {
-                $height += $row->getHeight() + $row->getMarginTop() + $row->getMarginBottom();
+                $height += (float) $row->getHeight() + (float) $row->getMarginTop() + (float) $row->getMarginBottom();
             }
 
-            $oldHeight = $this->getHeight();
+            $oldHeight = (float) $this->getHeight();
             $this->setHeight($height);
             $diff = $oldHeight - $height;
 

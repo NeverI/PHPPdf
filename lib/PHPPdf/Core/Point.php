@@ -135,7 +135,7 @@ final class Point implements \ArrayAccess
             return $this;
         }
 
-        return self::getInstance($this->x + $x, $this->y - $y);
+        return self::getInstance((float) $this->x + (float) $x, (float) $this->y - (float) $y);
     }
 
     public function offsetExists($offset)
