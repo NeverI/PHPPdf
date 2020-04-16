@@ -26,8 +26,8 @@ class FirstPointPositionFormatter extends BaseFormatter
 
         list($parentX, $parentY) = $parent->getStartDrawingPoint();
 
-        $startX = $node->getMarginLeft() + $parentX;
-        $startY = $parentY - $node->getMarginTop();
+        $startX = (float) $node->getMarginLeft() + $parentX;
+        $startY = $parentY - (float) $node->getMarginTop();
 
         $this->setNodesPosition($node, $startX, $startY);
 
@@ -46,13 +46,13 @@ class FirstPointPositionFormatter extends BaseFormatter
             list($siblingStartX, $siblingStartY) = $previousSibling->getFirstPoint()->toArray();
 
             if ($this->isNodeInSameRowAsPreviousSibling($node, $previousSibling)) {
-                $preferredXCoord += $previousSibling->getMarginRight() + $siblingEndX - $parentX;
-                $preferredYCoord = $siblingStartY + $previousSibling->getMarginTop() - $node->getMarginTop();
+                $preferredXCoord += (float) $previousSibling->getMarginRight() + $siblingEndX - $parentX;
+                $preferredYCoord = $siblingStartY + (float) $previousSibling->getMarginTop() - (float) $node->getMarginTop();
                 if ($previousSibling instanceof Nodes\Text) {
                     $preferredYCoord -= $previousSibling->getLineHeightRecursively() * (count($previousSibling->getLineSizes()) - 1);
                 }
             } else {
-                $preferredYCoord = $siblingEndY - ($previousSibling->getMarginBottom() + $node->getMarginTop());
+                $preferredYCoord = $siblingEndY - ((float) $previousSibling->getMarginBottom() + (float) $node->getMarginTop());
             }
             
             if ($this->isLineBreak($node, $previousSibling)) {
@@ -73,7 +73,7 @@ class FirstPointPositionFormatter extends BaseFormatter
         $parentBoundary = $parent->getBoundary();
 
         list($prevX) = $previousSibling->getEndDrawingPoint();
-        $endX = $prevX + $previousSibling->getMarginRight() + $node->getMarginLeft() + $node->getWidth();
+        $endX = $prevX + (float) $previousSibling->getMarginRight() + (float) $node->getMarginLeft() + $node->getWidth();
         $parentEndX = $parentBoundary->getFirstPoint()->getX() + $parent->getWidth();
 
         $rowIsOverflowed = !$node instanceof Nodes\Text && $parentEndX < $endX && $previousSibling->getFloat() !== Nodes\Node::FLOAT_RIGHT;

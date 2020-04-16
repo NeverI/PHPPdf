@@ -26,10 +26,10 @@ class ContainerDimensionFormatter extends BaseFormatter
             $firstPoint = $child->getFirstPoint();
             $diagonalPoint = $child->getDiagonalPoint();
 
-            $childMinX = $firstPoint->getX() - $child->getMarginLeft();
-            $childMaxX = $diagonalPoint->getX() + $child->getMarginRight();
-            $childMinY = $diagonalPoint->getY() - $child->getMarginBottom();
-            $childMaxY = $firstPoint->getY() + $child->getMarginTop();
+            $childMinX = $firstPoint->getX() - (float) $child->getMarginLeft();
+            $childMaxX = $diagonalPoint->getX() + (float) $child->getMarginRight();
+            $childMinY = $diagonalPoint->getY() - (float) $child->getMarginBottom();
+            $childMaxY = $firstPoint->getY() + (float) $child->getMarginTop();
 
             $maxX = $this->changeValueIfIsLess($maxX, $childMaxX);
             $maxY = $this->changeValueIfIsLess($maxY, $childMaxY);
@@ -38,8 +38,8 @@ class ContainerDimensionFormatter extends BaseFormatter
             $minY = $this->changeValueIfIsGreater($minY, $childMinY);
         }
 
-        $paddingVertical = $node->getPaddingTop() + $node->getPaddingBottom();
-        $paddingHorizontal = $node->getPaddingLeft() + $node->getPaddingRight();
+        $paddingVertical = (float) $node->getPaddingTop() + (float) $node->getPaddingBottom();
+        $paddingHorizontal = (float) $node->getPaddingLeft() + (float) $node->getPaddingRight();
 
         $realHeight = $paddingVertical + ($maxY - $minY);
         $realWidth = $paddingHorizontal + ($maxX - $minX);

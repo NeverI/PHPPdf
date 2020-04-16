@@ -193,13 +193,14 @@ class Container extends Node
 
     public function getMinWidth()
     {
-        $minWidth = $this->getAttributeDirectly('min-width');
+        $minWidth = (float) $this->getAttributeDirectly('min-width');
 
         foreach ($this->getChildren() as $child) {
             $minWidth = max(array($minWidth, $child->getMinWidth()));
         }
 
-        return $minWidth + $this->getPaddingLeft() + $this->getPaddingRight() + $this->getMarginLeft() + $this->getMarginRight();
+        return $minWidth + (float) $this->getPaddingLeft() + (float) $this->getPaddingRight() + (float) $this->getMarginLeft() + (float) $this->getMarginRight();
+
     }
     
     public function hasLeafDescendants($bottomYCoord = null)
