@@ -577,7 +577,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $width = $this->getWidth();
 
-        $margins = $this->getMarginLeft() + $this->getMarginRight();
+        $margins = (float) $this->getMarginLeft() + (float) $this->getMarginRight();
 
         return ($width + $margins);
     }
@@ -586,7 +586,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $width = $this->getWidth();
 
-        $paddings = $this->getPaddingLeft() + $this->getPaddingRight();
+        $paddings = (float) $this->getPaddingLeft() + (float) $this->getPaddingRight();
 
         return ($width - $paddings);
     }
@@ -595,7 +595,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $height = $this->getHeight();
 
-        $margins = $this->getMarginTop() + $this->getMarginBottom();
+        $margins = (float) $this->getMarginTop() + (float) $this->getMarginBottom();
 
         return ($height + $margins);
     }
@@ -604,7 +604,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         $height = $this->getHeight();
 
-        $paddings = $this->getPaddingTop() + $this->getPaddingBottom();
+        $paddings = (float) $this->getPaddingTop() + (float) $this->getPaddingBottom();
 
         return ($height - $paddings);
     }
@@ -1218,7 +1218,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         list($x, $y) = $this->getFirstPoint()->toArray();
 
-        return array($x + $this->getPaddingLeft(), $y - $this->getPaddingTop());
+        return array($x + (float) $this->getPaddingLeft(), $y - (float) $this->getPaddingTop());
     }
 
     /**
@@ -1246,7 +1246,7 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
     {
         list($x, $y) = $this->getDiagonalPoint()->toArray();
 
-        return array($x - $this->getPaddingRight(), $y + $this->getPaddingBottom());
+        return array($x - (float) $this->getPaddingRight(), $y + (float) $this->getPaddingBottom());
     }
 
     public function getRealMarginLeft()
@@ -1310,8 +1310,8 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
             return;
         }
 
-        $diagonalXCoord = $this->getDiagonalPoint()->getX() - $this->getPaddingRight();
-        $firstXCoord = $this->getFirstPoint()->getX() + $this->getPaddingLeft();
+        $diagonalXCoord = $this->getDiagonalPoint()->getX() - (float) $this->getPaddingRight();
+        $firstXCoord = $this->getFirstPoint()->getX() + (float) $this->getPaddingLeft();
 
         $this->getBoundary()->pointTranslate(1, $x, 0);
         $this->getBoundary()->pointTranslate(2, $x, $y);
@@ -1322,16 +1322,16 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
 
         foreach ($this->getChildren() as $child) {
             if ($child->getFloat() === Node::FLOAT_RIGHT) {
-                $child->translate($x - $this->getPaddingRight(), 0);
+                $child->translate($x - (float) $this->getPaddingRight(), 0);
             } else {
-                $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + $child->getMarginRight();
+                $childDiagonalXCoord = $child->getDiagonalPoint()->getX() + (float) $child->getMarginRight();
                 $childFirstXCoord = $child->getFirstPoint()->getX();
     
                 $relativeWidth = $child->getRelativeWidth();
     
                 if ($relativeWidth !== null) {
                     $relativeWidth = ($x + $diagonalXCoord - $firstXCoord)*((int) $relativeWidth)/100;
-                    $childResize = (($childFirstXCoord + $relativeWidth) + $child->getMarginRight()) - $childDiagonalXCoord;
+                    $childResize = (($childFirstXCoord + $relativeWidth) + (float) $child->getMarginRight()) - $childDiagonalXCoord;
                 } else {
                     $childResize = $x + ($diagonalXCoord - $childDiagonalXCoord);
                     $childResize = $childResize < 0 ? $childResize : 0;

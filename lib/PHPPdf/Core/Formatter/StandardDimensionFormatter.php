@@ -28,8 +28,8 @@ class StandardDimensionFormatter extends BaseFormatter
         if ($node->getWidth() === null && !$node->isInline() && $node->getFloat() === Node::FLOAT_NONE) {
             $parentWidth = $parent->getWidthWithoutPaddings();
 
-            $marginLeft = $node->getMarginLeft();
-            $marginRight = $node->getMarginRight();
+            $marginLeft = (float) $node->getMarginLeft();
+            $marginRight = (float) $node->getMarginRight();
 
             $node->setWidth(min($parentWidth - ($marginLeft + $marginRight), $maxWidth));
             $node->setRelativeWidth('100%');
@@ -41,11 +41,11 @@ class StandardDimensionFormatter extends BaseFormatter
             $node->setHeight(0);
         }
 
-        $paddingLeft = $node->getPaddingLeft();
-        $paddingRight = $node->getPaddingRight();
-        $paddingTop = $node->getPaddingTop();
-        $paddingBottom = $node->getPaddingBottom();
-        
+        $paddingLeft = (float) $node->getPaddingLeft();
+        $paddingRight = (float) $node->getPaddingRight();
+        $paddingTop = (float) $node->getPaddingTop();
+        $paddingBottom = (float) $node->getPaddingBottom();
+
         $prefferedWidth = $node->getRealWidth() + $paddingLeft + $paddingRight;
         
         $parent = $node->getParent();

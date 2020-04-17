@@ -45,7 +45,7 @@ class TableColumnFormatter extends BaseFormatter
                     $newWidth += $columnsWidths[$column+$i];
                 }
 
-                $horizontalPaddings = $cell->getPaddingLeft() + $cell->getPaddingRight();
+                $horizontalPaddings = (float) $cell->getPaddingLeft() + (float) $cell->getPaddingRight();
                 $cell->setWidth($newWidth - $horizontalPaddings);
                 $cell->setMarginLeft($columnsMarginsLeft[$column]);
                 $cell->setMarginRight($columnsMarginsRight[$column + $colspan - 1]);

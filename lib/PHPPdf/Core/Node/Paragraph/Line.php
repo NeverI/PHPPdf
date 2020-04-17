@@ -92,7 +92,7 @@ class Line
     
     private function getRealWidth()
     {
-        return $this->paragraph->getWidth() - $this->paragraph->getParentPaddingLeft() - $this->paragraph->getParentPaddingRight();
+        return $this->paragraph->getWidth() - (float) $this->paragraph->getParentPaddingLeft() - (float) $this->paragraph->getParentPaddingRight();
     }
     
     public function getTotalWidth()
