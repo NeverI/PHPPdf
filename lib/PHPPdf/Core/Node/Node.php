@@ -1079,13 +1079,9 @@ abstract class Node implements Drawable, NodeAware, \ArrayAccess, \Serializable
      */
     public function collectOrderedDrawingTasks(Document $document, DrawingTaskHeap $tasks)
     {
-        try {
-            $this->preDraw($document, $tasks);
-            $this->doDraw($document, $tasks);
-            $this->postDraw($document, $tasks);
-        } catch (\Exception $e) {
-            throw new \PHPPdf\Core\Exception\DrawingException(sprintf('Error while drawing node "%s"', get_class($this)), 0, $e);
-        }
+        $this->preDraw($document, $tasks);
+        $this->doDraw($document, $tasks);
+        $this->postDraw($document, $tasks);
     }
     
     public function collectPostDrawingTasks(Document $document, DrawingTaskHeap $tasks)
