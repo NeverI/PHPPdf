@@ -249,7 +249,7 @@ class GraphicsContext extends AbstractGraphicsContext
 
     protected function doDrawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $fillType = self::SHAPE_DRAW_FILL_AND_STROKE)
     {
-        $this->getPage()->drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, $this->translateFillType($fillType));
+        $this->getPage()->drawRoundedRectangle($x1, $y1, $x2, $y2, (float) $radius, $this->translateFillType($fillType));
     }
     
     private function translateFillType($fillType)
